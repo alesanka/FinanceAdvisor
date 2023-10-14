@@ -1,37 +1,7 @@
-[
-  {
-    "max_loan_id": 1,
-    "user_id": 1,
-    "max_available_amount_of_loan": 68000,
-    "loan_type": "Personal Loan 1-year",
-    "loan_term": 12
-  },
-  {
-    "max_loan_id": 2,
-    "user_id": 1,
-    "max_available_amount_of_loan": 279000,
-    "loan_type": "Personal Loan 3-year",
-    "loan_term": 36
-  },
-  {
-    "max_loan_id": 3,
-    "user_id": 1,
-    "max_available_amount_of_loan": 1012000,
-    "loan_type": "Mortgage Loan",
-    "loan_term": 180
-  },
-  {
-    "max_loan_id": 4,
-    "user_id": 1,
-    "max_available_amount_of_loan": 541000,
-    "loan_type": "Auto Loan",
-    "loan_term": 60
-  },
-  {
-    "max_loan_id": 5,
-    "user_id": 1,
-    "max_available_amount_of_loan": 663000,
-    "loan_type": "Business Loan",
-    "loan_term": 60
-  }
-]
+{
+  "user_id": 1,
+  "max_available_amount_of_loan": 68000,
+  "loan_type": "Personal Loan 1-year",
+  "loan_term": 12,
+  "requested_loan_amount": 40000
+}

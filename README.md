@@ -728,19 +728,20 @@ Content-Type: application/json
 
 ### Endpoint /api/v1/loans
 
-**Calculate and request a new loan.**
+**Create information about new loan.**
 
 Request:
 
 ```
-POST /api/v1/loan HTTP/1.1
+POST /api/v1/loans HTTP/1.1
 Content-Type: application/json
 
 {
-  "principal_amount": 5000,
-  "interest_rate": 5.5,
-  "loan_term_months": 24,
-  "currency": "USD"
+  "user_id": 1,
+  "max_available_amount_of_loan": 68000,
+  "loan_type": "Personal Loan 1-year",
+  "loan_term": 12,
+  "requested_loan_amount": 40000
 }
 
 ```
@@ -752,12 +753,13 @@ HTTP/1.1 201 Created
 Content-Type: application/json
 
 {
-  "loan_id": 1,
-  "loan_amount": 5000,
-  "monthly_payment": 221.27,
-  "total_interest_paid": 114.48,
-  "status": "approved"
-}
+    "loan_id": 1,
+    "user_id": 1,
+    "loan_amount": 40000,
+    "loan_term": 12,
+    "total_interest": 3479,
+    "month_payment": 15948
+  }
 ```
 
 In case of error response:
@@ -767,7 +769,7 @@ HTTP/1.1 400 Bad Request
 Content-Type: application/json
 
 {
-  "error": "Invalid loan parameters. Please check your input."
+  "error": "Requested loan amount is larger than maximal available loan amount."
 }
 ```
 
@@ -784,26 +786,21 @@ Content-Type: application/json
 
 ---
 
-Retrieve loan information.
+**Retrieve loan information.**
 
 Quary parameters:
 
-| Parameter             | Type    | Description                                                        |
-| --------------------- | ------- | ------------------------------------------------------------------ |
-| `principal_amount`    | number  | The principal loan amount.                                         |
-| `interest_rate`       | number  | The annual interest rate as a percentage.                          |
-| `loan_term_months`    | integer | The loan term in months.                                           |
-| `currency`            | string  | The currency in which the loan is requested.                       |
-| `loan_id`             | string  | The unique identifier of the loan application to retrieve details. |
-| `loan_amount`         | number  | The approved loan amount.                                          |
-| `status`              | string  | The status of the loan.                                            |
-| `monthly_payment`     | number  | The monthly repayment amount.                                      |
-| `total_interest_paid` | number  | The total interest paid over the loan term.                        |
+| Parameter     | Type    | Description                |
+| ------------- | ------- | -------------------------- |
+| `loan_amount` | number  | The principal loan amount. |
+| `loan_id`     | number  | The loan ID.               |
+| `loan_term`   | integer | The loan term in months.   |
+| `user_id`     | number  | The loan of user.          |
 
 Request:
 
 ```
-GET /api/v1/loan?status=approved HTTP/1.1
+GET /api/v1/loans?user_id=1&loan_term=12 HTTP/1.1
 ```
 
 In case of successful response:
@@ -813,12 +810,14 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
-  "loan_id": "1",
-  "loan_amount": 5000,
-  "monthly_payment": 221.27,
-  "total_interest_paid": 114.48,
-  "status": "approved"
+  "loan_id": 1,
+  "user_id": 1,
+  "loan_amount": 40000,
+  "loan_term": 12,
+  "total_interest": 3479,
+  "month_payment": 15948
 }
+
 
 ```
 
@@ -846,65 +845,18 @@ Content-Type: application/json
 
 ---
 
-Cancel a loan application.
+**Cancel a loan application.**
 
 Request:
 
 ```
-DELETE /api/v1/loan/1 HTTP/1.1
+DELETE /api/v1/loans/:loan_id HTTP/1.1
 ```
 
 In case of successful response:
 
 ```
 HTTP/1.1 204 No Content
-```
-
-### Endpoint /api/v1/user/{user_id}/loan
-
-Retrieve a list of loans associated with a specific user.
-
-Request:
-
-```
-GET /api/v1/user/1/loans HTTP/1.1
-```
-
-In case of successful response:
-
-```
-HTTP/1.1 200 OK
-Content-Type: application/json
-
-[
-  {
-    "loan_id": "1",
-    "loan_amount": 5000,
-    "monthly_payment": 221.27,
-    "total_interest_paid": 114.48,
-    "status": "approved"
-  },
-  {
-    "loan_id": "2",
-    "loan_amount": 7500,
-    "monthly_payment": 331.91,
-    "total_interest_paid": 171.72,
-    "status": "rejected"
-  }
-]
-
-```
-
-In case of error response:
-
-```
-HTTP/1.1 404 Not Found
-Content-Type: application/json
-
-{
-  "error": "User with ID 1 or their loans were not found."
-}
-
 ```
 
 [⬆ Go Up ⬆](#go-up)
