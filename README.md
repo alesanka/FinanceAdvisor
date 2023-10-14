@@ -2,7 +2,7 @@
 
 ## Description <a name="go-up"></a>
 
-The Financial Advisor API provides the functionality for users to input key financial details such as their salary, preferred currency, and desired annual interest rate, and receive valuable insights, including the maximum loan amount they can obtain, a detailed repayment plan, and the total interest paid over the loan term.
+The Financial Advisor API provides users with the functionality to save their personal data, including details such as name, email, salary, and social group. Users can also specify their desired loan amount and loan term, and the system will provide them with available loan options, including types of loans and the maximum loan amounts they can obtain. If users agree to the loan terms, they can save information about approved loans, which will be taken into consideration in future loan requests.
 
 ## Content:
 
@@ -28,12 +28,13 @@ http://localhost:8000/api/v1/
 - Framework - express
   (- Database - MySQL)????
 - Use 18.18.1 LTS version of Node.js
+  (- Docker)????
 
 ## Endpoints
 
 ### Endpoint /api/v1/login
 
-Register a new user account.
+**Register a new user account.**
 
 Request:
 
@@ -53,35 +54,25 @@ In case of successful response:
 HTTP/1.1 201 Created
 Content-Type: application/json
 {
-  "message": "User registration successful."
+  "message": "User registration is successful."
 }
 ```
 
-In case of error response:
+### Endpoint /api/v1/users
 
-```
-HTTP/1.1 500 Internal Server Error
-Content-Type: application/json
-
-{
-  "error": "Internal server error occurred. Please try again later or contact support."
-}
-```
-
-### Endpoint /api/v1/user
-
-Create a new user account.
+**Create a new user account.**
 
 Request:
 
 ```
-POST /api/v1/user HTTP/1.1
+POST /api/v1/users HTTP/1.1
 Content-Type: application/json
 
 {
   "name": "Edmund Hillary",
   "email": "edmundhillary@example.com",
-  "loans": 1
+  "social_group": "employee",
+  "salary": "100000"
 }
 ```
 
@@ -95,7 +86,8 @@ Content-Type: application/json
   "id": "1",
   "name": "Edmund Hillary",
   "email": "edmundhillary@example.com",
-  "loans": 1
+  "social_group": "employee",
+  "salary": "100000"
 }
 ```
 
@@ -123,12 +115,12 @@ Content-Type: application/json
 
 ---
 
-Retrieve the users profile information.
+**Retrieve the users profile information.**
 
 Request:
 
 ```
-GET /api/v1/user HTTP/1.1
+GET /api/v1/users HTTP/1.1
 ```
 
 Response:
@@ -141,18 +133,19 @@ Content-Type: application/json
   "id": "1",
   "name": "Edmund Hillary",
   "email": "edmundhillary@example.com",
-  "loans": 1
+  "social_group": "employee",
+  "salary": "100000"
 }
 ```
 
 ---
 
-Retrieve a specific user's profile information.
+**Retrieve a specific user's profile information.**
 
 Request:
 
 ```
-GET /api/v1/user/:user_id
+GET /api/v1/users/:user_id
 ```
 
 In case of successful response:
@@ -165,7 +158,8 @@ Content-Type: application/json
   "id": "1",
   "name": "Edmund Hillary",
   "email": "edmundhillary@example.com",
-  "loans": 0
+  "social_group": "employee",
+  "salary": "100000"
 }
 ```
 
@@ -182,19 +176,20 @@ Content-Type: application/json
 
 ---
 
-Retrieve a list of users with optional query parameters for filtering and sorting.
+**Retrieve a list of users with optional query parameters for filtering and sorting.**
 Query Parameters:
 
-| Parameter | Type   | Description                                              |
-| --------- | ------ | -------------------------------------------------------- |
-| `sort`    | string | Sort users by a specific field (e.g., "name," "salary"). |
-| `name`    | string | Filter users by name (e.g., "Edmund Hillary").           |
-| `loans`   | number | Filter users by amount of loans (e.g., 1).               |
+| Parameter      | Type   | Description                                                                  |
+| -------------- | ------ | ---------------------------------------------------------------------------- |
+| `sort`         | string | Sort users by a specific field (e.g., "name," "salary").                     |
+| `name`         | string | Filter users by name (e.g., "Edmund Hillary").                               |
+| `social_group` | string | Filter users by their social group (e.g., "student", "employee", "retiree"). |
+| `salary`       | number | Filter users by their salary.                                                |
 
 Request:
 
 ```
-GET /api/v1/users?loans=1&sort=name HTTP/1.1
+GET /api/v1/users?social_group="employee"&sort=salary HTTP/1.1
 ```
 
 In case of successful response:
@@ -204,17 +199,19 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 [
+    {
+    "id": "2",
+    "name": "Tenzing Norgay",
+    "email": "tenzingnorgay@example.com",
+    "social_group": "employee",
+    "salary": "50000"
+  },
   {
     "id": "1",
     "name": "Edmund Hillary",
     "email": "edmundhillary@example.com",
-    "loans": 1
-  },
-  {
-    "id": "2",
-    "name": "Tenzing Norgay",
-    "email": "tenzingnorgay@example.com",
-     "loans": 1
+    "social_group": "employee",
+    "salary": "100000"
   },
   // Additional user objects...
 ]
