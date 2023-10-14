@@ -26,12 +26,12 @@ http://localhost:8000/api/v1/
 
 - Task should be implemented on JavaScript
 - Framework - express
-- Database - MySQL
-- Use 18.13 LTS version of Node.js
+  (- Database - MySQL)????
+- Use 18.18.1 LTS version of Node.js
 
 ## Endpoints
 
-### Endpoint /api/v1/register
+### Endpoint /api/v1/login
 
 Register a new user account.
 
@@ -42,8 +42,7 @@ POST /api/v1/register
 Content-Type: application/json
 Request Body:
 {
-  "userName": "user123",
-  "email": "user@example.com",
+  "login": "user-shmyser",
   "password": "securepassword123"
 }
 ```
@@ -59,16 +58,6 @@ Content-Type: application/json
 ```
 
 In case of error response:
-
-```
-HTTP/1.1 400 Bad Request
-Content-Type: application/json
-{
-  "error": "Invalid email format."
-}
-```
-
-or
 
 ```
 HTTP/1.1 500 Internal Server Error
@@ -92,8 +81,7 @@ Content-Type: application/json
 {
   "name": "Edmund Hillary",
   "email": "edmundhillary@example.com",
-  "salary": 100000,
-  "preferred_currency": "USD"
+  "loans": 1
 }
 ```
 
@@ -107,8 +95,7 @@ Content-Type: application/json
   "id": "1",
   "name": "Edmund Hillary",
   "email": "edmundhillary@example.com",
-  "salary": 100000,
-  "preferred_currency": "USD"
+  "loans": 1
 }
 ```
 
@@ -136,7 +123,7 @@ Content-Type: application/json
 
 ---
 
-Retrieve the user's profile information.
+Retrieve the users profile information.
 
 Request:
 
@@ -154,8 +141,7 @@ Content-Type: application/json
   "id": "1",
   "name": "Edmund Hillary",
   "email": "edmundhillary@example.com",
-  "salary": 100000,
-  "preferred_currency": "USD"
+  "loans": 1
 }
 ```
 
@@ -166,7 +152,7 @@ Retrieve a specific user's profile information.
 Request:
 
 ```
-GET /api/v1/user/{user_id}
+GET /api/v1/user/:user_id
 ```
 
 In case of successful response:
@@ -179,8 +165,7 @@ Content-Type: application/json
   "id": "1",
   "name": "Edmund Hillary",
   "email": "edmundhillary@example.com",
-  "salary": 100000,
-  "preferred_currency": "USD"
+  "loans": 0
 }
 ```
 
@@ -200,18 +185,16 @@ Content-Type: application/json
 Retrieve a list of users with optional query parameters for filtering and sorting.
 Query Parameters:
 
-| Parameter            | Type   | Description                                               |
-| -------------------- | ------ | --------------------------------------------------------- |
-| `sort`               | string | Sort users by a specific field (e.g., "name," "salary").  |
-| `name`               | string | Filter users by name (e.g., "Edmund Hillary").            |
-| `email`              | string | Filter users by email address (e.g., "user@example.com"). |
-| `salary`             | number | Filter users by annual salary (e.g., 100000).             |
-| `preferred_currency` | string | Filter users by preferred currency (e.g., "USD").         |
+| Parameter | Type   | Description                                              |
+| --------- | ------ | -------------------------------------------------------- |
+| `sort`    | string | Sort users by a specific field (e.g., "name," "salary"). |
+| `name`    | string | Filter users by name (e.g., "Edmund Hillary").           |
+| `loans`   | number | Filter users by amount of loans (e.g., 1).               |
 
 Request:
 
 ```
-GET /api/v1/users?preferred_currency=USD&sort=name HTTP/1.1
+GET /api/v1/users?loans=1&sort=name HTTP/1.1
 ```
 
 In case of successful response:
@@ -225,16 +208,13 @@ Content-Type: application/json
     "id": "1",
     "name": "Edmund Hillary",
     "email": "edmundhillary@example.com",
-    "category": "employee",
-    "salary": 100000",
-    "preferred_currency": "USD"
+    "loans": 1
   },
   {
     "id": "2",
     "name": "Tenzing Norgay",
     "email": "tenzingnorgay@example.com",
-    "salary": 25000,
-    "preferred_currency": "USD"
+     "loans": 1
   },
   // Additional user objects...
 ]
