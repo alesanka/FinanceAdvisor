@@ -177,6 +177,7 @@ Content-Type: application/json
 ---
 
 **Retrieve a list of users with optional query parameters for filtering and sorting.**
+
 Query Parameters:
 
 | Parameter      | Type   | Description                                                                  |
@@ -231,12 +232,12 @@ Content-Type: application/json
 
 ---
 
-Delete a user account.
+**Delete a user account.**
 
 Request:
 
 ```
-DELETE /api/v1/user HTTP/1.1
+DELETE /api/v1/users/:user_id HTTP/1.1
 ```
 
 In case of successful response:
