@@ -1,13 +1,13 @@
 # API Documentation for Personal Finance Advisor
 
-## Description <a name="go-up"></a>
+## Description
 
 The Personal Finance Advisor API is a web service that provides functionality for managing user financial data and loan applications. The API allows access to user, client, administrator, and bank worker data, as well as the ability to create and manage loan applications and loan types. The API also provides information on maximum loan amounts, repayment schedules, and payment notes.
 
 ## Content:
 
-- [Implementation details](##implementation-details)
-- [Technical requirements](##technical-requirements)
+- [Implementation details](#implementation-details)
+- [Technical requirements](#technical-requirements)
 - [Endpoints](#endpoints)
   - [Endpoint /api/v1/login](#endpoint-apiv1login)
   - [Endpoint /api/v1/user](#endpoint-apiv1users)
@@ -33,7 +33,7 @@ http://localhost:5000/api/v1/
 
 ## Endpoints
 
-### Endpoint /api/v1/login
+### Endpoint /api/v1/login [⬆ Back to content ⬆](#content)
 
 **Register a new user account.**
 
@@ -59,7 +59,7 @@ Content-Type: application/json
 }
 ```
 
-### Endpoint /api/v1/users
+### Endpoint /api/v1/users [⬆ Back to content ⬆](#content)
 
 **Create a new user account.**
 
@@ -278,7 +278,7 @@ Content-Type: application/json
 
 ```
 
-### Endpoint /api/v1/loan-types
+### Endpoint /api/v1/loan-types [⬆ Back to content ⬆](#content)
 
 **Create a new type of loan.**
 **(only admin can do this)**
@@ -472,7 +472,7 @@ Content-Type: application/json
 
 ```
 
-### Endpoint /api/v1/applications
+### Endpoint /api/v1/applications [⬆ Back to content ⬆](#content)
 
 **Create a new loan application.**
 **(only bank worker can do this)**
@@ -585,7 +585,7 @@ Content-Type: application/json
 }
 ```
 
-### Endpoint /api/v1/application/1/loan-information
+### Endpoint /api/v1/application/1/loan-information [⬆ Back to content ⬆](#content)
 
 **Get information about loan details on a specific application.**
 
