@@ -12,7 +12,8 @@ The Personal Finance Advisor API is a web service that provides functionality fo
   - [Endpoint /api/v1/login](#endpoint-apiv1login)
   - [Endpoint /api/v1/user](#endpoint-apiv1users)
   - [Endpoint /api/v1/loan-types](#endpoint-apiv1loan-types)
-  - [Endpoint /api/v1/user/{user_id}/loan](#endpoint-apiuseruser_idloan)
+  - [Endpoint /api/v1/applications](#endpoint-apiv1applications)
+  - [Endpoint /api/v1/application/1/loan-information](#endpoint-apiv1application1loan-information)
 
 ## Implementation details
 
@@ -374,6 +375,13 @@ Content-Type: application/json
 **Retrieve a specific loan type information.**
 **(only admin can do this)**
 
+Query Parameters:
+
+| Parameter      | Type   | Description                        |
+| -------------- | ------ | ---------------------------------- |
+| `loan_type_id` | number | Filter loan types by loan_type_id. |
+| `loan_type`    | string | Filter by loan types.              |
+
 Request:
 
 ```
@@ -464,21 +472,23 @@ Content-Type: application/json
 
 ```
 
-### Endpoint /api/v1/loan_types
+### Endpoint /api/v1/applications
 
-**Create a new loan type.**
+**Create a new loan application.**
+**(only bank worker can do this)**
 
 Request:
 
 ```
-POST /api/v1/loan_types HTTP/1.1
+POST /api/v1/applications
 Content-Type: application/json
 
 {
-    "loan_type": "Personal Loan 1-year",
-    "interest_rate": 12,
-    "loan_term": 12
-  }
+  "client_id": 4,
+  "worker_id": 6,
+  "desired_loan_amount": 20000,
+  "loan_type_id": 3
+}
 ```
 
 In case of successful response:
@@ -488,43 +498,23 @@ HTTP/1.1 201 Created
 Content-Type: application/json
 
 {
-    "loan_type_id": 1,
-    "loan_type": "Personal Loan 1-year",
-    "interest_rate": 12,
-    "loan_term": 12
-  }
-```
-
-In case of error response:
-
-```
-HTTP/1.1 400 Bad Request
-Content-Type: application/json
-
-{
-  "error": "Loan type is already exists."
-}
-```
-
-or
-
-```
-HTTP/1.1 500 Internal Server Error
-Content-Type: application/json
-
-{
-  "error": "Internal server error occurred. Please try again later or contact support."
+  "application_id": 3,
+  "client_id": 4,
+  "worker_id": 6,
+  "desired_loan_amount": 20000,
+  "loan_type_id": 3
 }
 ```
 
 ---
 
-**Retrieve the information about existing types of loans.**
+**Retrieve a list of all loan applications.**
+**(only bank worker can do this)**
 
 Request:
 
 ```
-GET /api/v1/loan_types HTTP/1.1
+GET /api/v1/applications
 ```
 
 In case of successful response:
@@ -535,295 +525,38 @@ Content-Type: application/json
 
 [
   {
-    "loan_type_id": 1,
-    "loan_type": "Personal Loan 1-year",
-    "interest_rate": 12,
-    "loan_term": 12
+    "application_id": 1,
+    "client_id": 3,
+    "worker_id": 5,
+    "desired_loan_amount": 10000,
+    "loan_type_id": 2
   },
   {
-    "loan_type_id": 2,
-    "loan_type": "Personal Loan 3-year",
-    "interest_rate": 10,
-    "loan_term": 36
-  },
-  {
-    "loan_type_id": 3,
-    "loan_type": "Mortgage Loan",
-    "interest_rate": 4,
-    "loan_term": 180
-  },
-  {
-    "loan_type_id": 4,
-    "loan_type": "Auto Loan",
-    "interest_rate": 6,
-    "loan_term": 60
-  },
-  {
-    "loan_type_id": 5,
-    "loan_type": "Business Loan",
-    "interest_rate": 1.5,
-    "loan_term": 60
+    "application_id": 2,
+    "client_id": 4,
+    "worker_id": 6,
+    "desired_loan_amount": 15000,
+    "loan_type_id": 1
   }
+  // ... more credit loan applications
 ]
-
 ```
 
 ---
 
-**Retrieve information about a specific type of loan.**
-
-Request:
-
-```
-GET /api/v1/groups/:loan_type_id
-```
-
-In case of successful response:
-
-```
-HTTP/1.1 200 OK
-Content-Type: application/json
-
-{
-    "loan_type_id": {loan_type_id},
-    "loan_type": "Personal Loan 1-year",
-    "interest_rate": 12,
-    "loan_term": 12
-  }
-```
-
-In case of error response:
-
-```
-HTTP/1.1 404 Not Found
-Content-Type: application/json
-
-{
-  "error": "Invalid group's id"
-}
-```
-
----
-
-**Delete a type of loan.**
-
-Request:
-
-```
-DELETE /api/v1/loan_types/:loan_type_id HTTP/1.1
-```
-
-In case of successful response:
-
-```
-HTTP/1.1 204 No Content
-
-```
-
-In case of error response:
-
-```
-HTTP/1.1 500 Internal Server Error
-Content-Type: application/json
-
-{
-  "error": "Internal server error occurred. Please try again later or contact support."
-}
-
-```
-
-### Endpoint /api/v1/max_loans
-
-**Create information about maximum loan available for user.**
-
-Request:
-
-```
-POST /api/v1/max_loans HTTP/1.1
-Content-Type: application/json
-
-{
-    "user_id": 1,
-    "loan_type": "Personal Loan 1-year",
-    "salary": 10000,
-    "loan_term": 12,
-    "interest_rate": 12,
-  }
-```
-
-In case of successful response:
-
-```
-HTTP/1.1 201 Created
-Content-Type: application/json
-
-{
-    "user_id": 1,
-    "max_available_amount_of_loan": 68000,
-    "loan_type": "Personal Loan 1-year",
-    "loan_term": 12
-  }
-```
-
-In case of error response:
-
-```
-HTTP/1.1 400 Bad Request
-Content-Type: application/json
-
-{
-  "error": "User's salary is requered."
-}
-```
-
-or
-
-```
-HTTP/1.1 500 Internal Server Error
-Content-Type: application/json
-
-{
-  "error": "Internal server error occurred. Please try again later or contact support."
-}
-```
-
----
-
-**Retrieve the information about maximal loans available for user.**
+**Retrieve information about a specific loan application.**
+**(only bank worker can do this)**
 
 Query Parameters:
 
-| Parameter | Type   | Description                                                            |
-| --------- | ------ | ---------------------------------------------------------------------- |
-| `sort`    | string | Sort users by a specific field (e.g., "max_available_amount_of_loan"). |
-| `user_id` | number | Filter users by ID.                                                    |
+| Parameter        | Type   | Description                        |
+| ---------------- | ------ | ---------------------------------- |
+| `application_id` | number | Filter loan types by loan_type_id. |
 
 Request:
 
 ```
-GET /api/v1/max_loans?user_id=1 HTTP/1.1
-```
-
-In case of successful response:
-
-```
-HTTP/1.1 200 OK
-Content-Type: application/json
-
-[
-  {
-    "max_loan_id": 1,
-    "user_id": 1,
-    "max_available_amount_of_loan": 68000,
-    "loan_type": "Personal Loan 1-year",
-    "loan_term": 12
-  },
-  {
-    "max_loan_id": 2,
-    "user_id": 1,
-    "max_available_amount_of_loan": 279000,
-    "loan_type": "Personal Loan 3-year",
-    "loan_term": 36
-  },
-  {
-    "max_loan_id": 3,
-    "user_id": 1,
-    "max_available_amount_of_loan": 1012000,
-    "loan_type": "Mortgage Loan",
-    "loan_term": 180
-  },
-  {
-    "max_loan_id": 4,
-    "user_id": 1,
-    "max_available_amount_of_loan": 541000,
-    "loan_type": "Auto Loan",
-    "loan_term": 60
-  },
-  {
-    "max_loan_id": 5,
-    "user_id": 1,
-    "max_available_amount_of_loan": 663000,
-    "loan_type": "Business Loan",
-    "loan_term": 60
-  }
-]
-```
-
-### Endpoint /api/v1/loans
-
-**Create information about new loan.**
-
-Request:
-
-```
-POST /api/v1/loans HTTP/1.1
-Content-Type: application/json
-
-{
-  "user_id": 1,
-  "max_available_amount_of_loan": 68000,
-  "loan_type": "Personal Loan 1-year",
-  "loan_term": 12,
-  "requested_loan_amount": 40000
-}
-
-```
-
-In case of successful response:
-
-```
-HTTP/1.1 201 Created
-Content-Type: application/json
-
-{
-    "loan_id": 1,
-    "user_id": 1,
-    "loan_amount": 40000,
-    "loan_term": 12,
-    "total_interest": 3479,
-    "month_payment": 15948
-  }
-```
-
-In case of error response:
-
-```
-HTTP/1.1 400 Bad Request
-Content-Type: application/json
-
-{
-  "error": "Requested loan amount is larger than maximal available loan amount."
-}
-```
-
-or
-
-```
-HTTP/1.1 500 Internal Server Error
-Content-Type: application/json
-
-{
-  "error": "Internal server error occurred. Please try again later or contact support."
-}
-```
-
----
-
-**Retrieve loan information.**
-
-Quary parameters:
-
-| Parameter     | Type    | Description                |
-| ------------- | ------- | -------------------------- |
-| `loan_amount` | number  | The principal loan amount. |
-| `loan_id`     | number  | The loan ID.               |
-| `loan_term`   | integer | The loan term in months.   |
-| `user_id`     | number  | The loan of user.          |
-
-Request:
-
-```
-GET /api/v1/loans?user_id=1&loan_term=12 HTTP/1.1
+GET /api/v1/applications/:application_id
 ```
 
 In case of successful response:
@@ -833,53 +566,67 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
-  "loan_id": 1,
-  "user_id": 1,
-  "loan_amount": 40000,
-  "loan_term": 12,
-  "total_interest": 3479,
-  "month_payment": 15948
+  "application_id": {application_id},
+  "client_id": 3,
+  "worker_id": 5,
+  "desired_loan_amount": 10000,
+  "loan_type_id": 2
 }
-
-
 ```
 
 In case of error response:
-
-```
-HTTP/1.1 400 Bad Request
-Content-Type: application/json
-
-{
-  "error": "Invalid query parameters. Please check your request."
-}
-```
-
-or
 
 ```
 HTTP/1.1 404 Not Found
 Content-Type: application/json
 
 {
-  "error": "The requested loan was not found."
+  "error": "Invalid application id"
 }
 ```
 
----
+### Endpoint /api/v1/application/1/loan-information
 
-**Cancel a loan application.**
+**Get information about loan details on a specific application.**
 
 Request:
 
 ```
-DELETE /api/v1/loans/:loan_id HTTP/1.1
+GET /api/v1/applications/1/details
 ```
 
 In case of successful response:
 
 ```
-HTTP/1.1 204 No Content
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "application_id": 123,
+  "max_loan_amount": {
+    "max_loan_amount_id": 456,
+    "max_loan_amount": 20000,
+    "total_interest_amount": 3000
+  },
+  "repayment_schedule": {
+    "repayment_schedule_id": 789,
+    "monthly_payment": 1000,
+    "remaining_balance": 7000
+  },
+  "payment_notes": [
+    {
+      "note_id": 1,
+      "payment_date": "2023-10-01",
+      "payment_amount": 1000
+    },
+    {
+      "note_id": 2,
+      "payment_date": "2023-11-01",
+      "payment_amount": 1000
+    }
+    // ... more payment notes
+  ]
+}
 ```
 
 [⬆ Go Up ⬆](#go-up)
