@@ -59,7 +59,7 @@ Content-Type: application/json
 }
 ```
 
-### Endpoint /api/v1/users <a name="endpoints-users"></a> [(Back to content)](#content)
+## Endpoint /api/v1/users <a name="endpoints-users"></a> [(Back to content)](#content)
 
 **Create a new user account.**
 
@@ -278,7 +278,7 @@ Content-Type: application/json
 
 ```
 
-### Endpoint /api/v1/loan-types <a name="endpoints-loan-types"></a> [(Back to content)](#content)
+## Endpoint /api/v1/loan-types <a name="endpoints-loan-types"></a> [(Back to content)](#content)
 
 **Create a new type of loan.**
 **(only admin can do this)**
@@ -472,7 +472,7 @@ Content-Type: application/json
 
 ```
 
-### Endpoint /api/v1/applications <a name="endpoints-applications"></a> [(Back to content)](#content)
+## Endpoint /api/v1/applications <a name="endpoints-applications"></a> [(Back to content)](#content)
 
 **Create a new loan application.**
 **(only bank worker can do this)**
@@ -585,7 +585,7 @@ Content-Type: application/json
 }
 ```
 
-### Endpoint /api/v1/application/1/loan-information <a name="endpoints-applications-details"></a> [(Back to content)](#content)
+## Endpoint /api/v1/application/1/loan-information <a name="endpoints-applications-details"></a> [(Back to content)](#content)
 
 **Get information about loan details on a specific application.**
 
