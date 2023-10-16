@@ -2,7 +2,6 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 
-// Подключаем middleware для обработки JSON-запросов
 app.use(bodyParser.json());
 
 // Хранилище для зарегистрированных приложений
@@ -12,11 +11,9 @@ const registeredApps = {};
 app.post('/register', (req, res) => {
   const { appName, redirectUri } = req.body;
   if (!appName || !redirectUri) {
-    return res
-      .status(400)
-      .json({
-        error: 'Необходимо указать название приложения и URL перенаправления',
-      });
+    return res.status(400).json({
+      error: 'Необходимо указать название приложения и URL перенаправления',
+    });
   }
 
   // Генерируем уникальный Client ID и Client Secret
