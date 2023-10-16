@@ -281,7 +281,7 @@ Content-Type: application/json
 ## Endpoint /api/v1/loan-types <a name="endpoints-loan-types"></a> [(Back to content)](#content)
 
 **Create a new type of loan.**
-**(only admin can do this)**
+(only admin can do this)
 
 Request:
 
@@ -337,7 +337,7 @@ Content-Type: application/json
 ---
 
 **Retrieve the information about existing loan types.**
-**(only admin can do this)**
+(only admin can do this)
 
 Request:
 
@@ -373,7 +373,7 @@ Content-Type: application/json
 ---
 
 **Retrieve a specific loan type information.**
-**(only admin can do this)**
+(only admin can do this)
 
 Query Parameters:
 
@@ -416,7 +416,7 @@ Content-Type: application/json
 ---
 
 **Update loan type information.**
-**(only admin can do this)**
+(only admin can do this)
 
 Request:
 
@@ -445,7 +445,7 @@ Content-Type: application/json
 ---
 
 **Delete a loan type.**
-**(only admin can do this)**
+(only admin can do this)
 
 Request:
 
@@ -475,7 +475,7 @@ Content-Type: application/json
 ## Endpoint /api/v1/applications <a name="endpoints-applications"></a> [(Back to content)](#content)
 
 **Create a new loan application.**
-**(only bank worker can do this)**
+(only bank worker can do this)
 
 Request:
 
@@ -509,7 +509,7 @@ Content-Type: application/json
 ---
 
 **Retrieve a list of all loan applications.**
-**(only bank worker can do this)**
+(only bank worker can do this)
 
 Request:
 
@@ -545,7 +545,7 @@ Content-Type: application/json
 ---
 
 **Retrieve information about a specific loan application.**
-**(only bank worker can do this)**
+(only bank worker can do this)
 
 Query Parameters:
 
