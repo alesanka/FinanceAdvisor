@@ -2,16 +2,16 @@
 
 ## Description <a name="go-up"></a>
 
-The Financial Advisor API provides users with the functionality to save their personal data, including details such as name, email, salary, and social group. Users can also specify their desired loan amount and loan term, and the system will provide them with available loan options, including types of loans and the maximum loan amounts they can obtain. If users agree to the loan terms, they can save information about approved loans, which will be taken into consideration in future loan requests.
+The Personal Finance Advisor API is a web service that provides functionality for managing user financial data and loan applications. The API allows access to user, client, administrator, and bank worker data, as well as the ability to create and manage loan applications and loan types. The API also provides information on maximum loan amounts, repayment schedules, and payment notes.
 
 ## Content:
 
 - [Implementation details](##implementation-details)
 - [Technical requirements](##technical-requirements)
 - [Endpoints](#endpoints)
-  - [Endpoint /api/v1/register](#endpoint-apiregister)
-  - [Endpoint /api/v1/user](#endpoint-apiuser)
-  - [Endpoint /api/v1/loan](#endpoint-apiloan)
+  - [Endpoint /api/v1/login](#endpoint-apiv1login)
+  - [Endpoint /api/v1/user](#endpoint-apiv1users)
+  - [Endpoint /api/v1/loan-types](#endpoint-apiv1loan-types)
   - [Endpoint /api/v1/user/{user_id}/loan](#endpoint-apiuseruser_idloan)
 
 ## Implementation details
@@ -19,16 +19,16 @@ The Financial Advisor API provides users with the functionality to save their pe
 Base URL
 
 ```
-http://localhost:8000/api/v1/
+http://localhost:5000/api/v1/
 ```
 
 ## Technical requirements
 
 - Task should be implemented on JavaScript
 - Framework - express
-  (- Database - MySQL)????
+- (Database - MySQL)????
 - Use 18.18.1 LTS version of Node.js
-  (- Docker)????
+- (Docker)????
 
 ## Endpoints
 
@@ -66,14 +66,6 @@ Request:
 
 ```
 POST /api/v1/users HTTP/1.1
-Content-Type: application/json
-
-{
-  "name": "Edmund Hillary",
-  "email": "edmundhillary@example.com",
-  "social_group": "employee",
-  "salary": "10000"
-}
 ```
 
 In case of successful response:
@@ -83,11 +75,10 @@ HTTP/1.1 201 Created
 Content-Type: application/json
 
 {
-  "id": "1",
-  "name": "Edmund Hillary",
-  "email": "edmundhillary@example.com",
-  "social_group": "employee",
-  "salary": "10000"
+  "user_id": 3,
+  "email": "newuser@example.com",
+  "phone_number": "+9876543210",
+  "role": "worker"
 }
 ```
 
@@ -98,7 +89,7 @@ HTTP/1.1 400 Bad Request
 Content-Type: application/json
 
 {
-  "error": "Email address 'edmundhillary@example.com' is already registered."
+  "error": "Email address 'newuser@example.com' is already registered."
 }
 ```
 
@@ -126,21 +117,32 @@ GET /api/v1/users HTTP/1.1
 Response:
 
 ```
-HTTP/1.1 200 OK
-Content-Type: application/json
-
-{
-  "id": 1,
-  "name": "Edmund Hillary",
-  "email": "edmundhillary@example.com",
-  "social_group": "employee",
-  "salary": "10000"
-}
+[
+  {
+    "user_id": 1,
+    "email": "user1@example.com",
+    "phone_number": "+1234567890",
+    "role": "client"
+  },
+  {
+    "user_id": 2,
+    "email": "user2@example.com",
+    "phone_number": "+9876543210",
+    "role": "worker"
+  }
+  // ... more users
+]
 ```
 
 ---
 
 **Retrieve a specific user's profile information.**
+
+Query Parameters:
+
+| Parameter | Type   | Description              |
+| --------- | ------ | ------------------------ |
+| `user_id` | number | Filter users by user_id. |
 
 Request:
 
@@ -155,12 +157,11 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
-  "id": {user_id},
-  "name": "Edmund Hillary",
-  "email": "edmundhillary@example.com",
-  "social_group": "employee",
-  "salary": "10000"
-}
+    "user_id":{user_id},
+    "email": "user1@example.com",
+    "phone_number": "+1234567890",
+    "role": "client"
+  }
 ```
 
 In case of error response:
@@ -180,17 +181,18 @@ Content-Type: application/json
 
 Query Parameters:
 
-| Parameter      | Type   | Description                                                                  |
-| -------------- | ------ | ---------------------------------------------------------------------------- |
-| `sort`         | string | Sort users by a specific field (e.g., "name," "salary").                     |
-| `name`         | string | Filter users by name (e.g., "Edmund Hillary").                               |
-| `social_group` | string | Filter users by their social group (e.g., "student", "employee", "retiree"). |
-| `salary`       | number | Filter users by their salary.                                                |
+| Parameter   | Type   | Description                                                |
+| ----------- | ------ | ---------------------------------------------------------- |
+| `role`      | string | Filter users by role (e.g., "client").                     |
+| `client_id` | number | Filter users by client_id.                                 |
+| `salary`    | number | Filter users by salary (e.g., "5000").                     |
+| `name`      | string | Filter users by name (e.g., "client").                     |
+| `sort`      | string | Filter users by different parameters (e.g., name, salary). |
 
 Request:
 
 ```
-GET /api/v1/users?social_group="employee"&sort=salary HTTP/1.1
+GET /api/v1/users?role=client&sort=salary HTTP/1.1
 ```
 
 In case of successful response:
@@ -199,24 +201,12 @@ In case of successful response:
 HTTP/1.1 200 OK
 Content-Type: application/json
 
-[
-    {
-    "id": 2,
-    "name": "Tenzing Norgay",
-    "email": "tenzingnorgay@example.com",
-    "social_group": "employee",
-    "salary": "5000"
-  },
-  {
-    "id": 1,
-    "name": "Edmund Hillary",
-    "email": "edmundhillary@example.com",
-    "social_group": "employee",
-    "salary": "10000"
-  },
-  // Additional user objects...
-]
-
+{
+    "user_id": 1,
+    "name": Name Name,
+    "salary": 7000,
+    "role": "client"
+  }
 ```
 
 In case of error response:
@@ -227,6 +217,34 @@ Content-Type: application/json
 
 {
   "error": "Invalid query parameters. Please check your request."
+}
+```
+
+---
+
+**Update user information.**
+
+Request:
+
+```
+PUT /api/v1/users/:userId HTTP/1.1
+Content-Type: application/json
+
+{
+  "phone_number": "+9999999999"
+}
+```
+
+In case of successful response:
+
+```
+HTTP/1.1 200 OK
+Content-Type: application/json
+{
+  "user_id": {userId},
+  "email": "user1@example.com",
+  "phone_number": "+9999999999",
+  "role": "client"
 }
 ```
 
@@ -259,27 +277,23 @@ Content-Type: application/json
 
 ```
 
-### Endpoint /api/v1/groups
+### Endpoint /api/v1/loan-types
 
-**Create a new social group.**
+**Create a new type of loan.**
+**(only admin can do this)**
 
 Request:
 
 ```
-POST /api/v1/groups HTTP/1.1
+POST /api/loan-types
 Content-Type: application/json
 
 {
-    "social_group": "employeee",
-    "available_types_of_loans": [
-      "Personal Loan 1-year",
-      "Personal Loan 3-year",
-      "Mortgage Loan",
-      "Auto Loan",
-      "Student Loan",
-      "Business Loan"
-    ]
-  }
+  "admin_id": 4,
+  "loan_type": "personal loan",
+  "interest_rate": 6.0,
+  "loan_term": 36
+}
 ```
 
 In case of successful response:
@@ -289,17 +303,12 @@ HTTP/1.1 201 Created
 Content-Type: application/json
 
 {
-    "group_id": 1,
-    "social_group": "employeee",
-    "available_types_of_loans": [
-      "Personal Loan 1-year",
-      "Personal Loan 3-year",
-      "Mortgage Loan",
-      "Auto Loan",
-      "Student Loan",
-      "Business Loan"
-    ]
-  }
+  "loan_type_id": 3,
+  "admin_id": 4,
+  "loan_type": "personal loan",
+  "interest_rate": 6.0,
+  "loan_term": 36
+}
 ```
 
 In case of error response:
@@ -309,7 +318,7 @@ HTTP/1.1 400 Bad Request
 Content-Type: application/json
 
 {
-  "error": "Social group is already exists."
+  "error": "Type of loan is already exists."
 }
 ```
 
@@ -326,12 +335,13 @@ Content-Type: application/json
 
 ---
 
-**Retrieve the information about existing social groups.**
+**Retrieve the information about existing loan types.**
+**(only admin can do this)**
 
 Request:
 
 ```
-GET /api/v1/groups HTTP/1.1
+GET /api/v1/loan-types HTTP/1.1
 ```
 
 In case of successful response:
@@ -342,43 +352,32 @@ Content-Type: application/json
 
 [
   {
-    "group_id": 1,
-    "social_group": "employeee",
-    "available_types_of_loans": [
-      "Personal Loan 1-year",
-      "Personal Loan 3-year",
-      "Mortgage Loan",
-      "Auto Loan",
-      "Student Loan",
-      "Business Loan"
-    ]
+    "loan_type_id": 1,
+    "admin_id": 3,
+    "loan_type": "personal loan",
+    "interest_rate": 5.5,
+    "loan_term": 12
   },
   {
-    "group_id": 2,
-    "social_group": "student",
-    "available_types_of_loans": ["Personal Loan 1-year", "Student Loan"]
-  },
-  {
-    "group_id": 3,
-    "social_group": "retiree",
-    "available_types_of_loans": [
-      "Personal Loan 1-year",
-      "Personal Loan 3-year",
-      "Auto Loan",
-      "Business Loan"
-    ]
+    "loan_type_id": 2,
+    "admin_id": 4,
+    "loan_type": "auto loan",
+    "interest_rate": 4.8,
+    "loan_term": 24
   }
+  // ... more loan types
 ]
 ```
 
 ---
 
-**Retrieve a specific social group information.**
+**Retrieve a specific loan type information.**
+**(only admin can do this)**
 
 Request:
 
 ```
-GET /api/v1/groups/:group_id
+GET /api/v1/loan-types/:loan_type_id
 ```
 
 In case of successful response:
@@ -388,17 +387,11 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
-    "group_id": {group_id},
-    "social_group": "employeee",
-    "available_types_of_loans": [
-      "Personal Loan 1-year",
-      "Personal Loan 3-year",
-      "Mortgage Loan",
-      "Auto Loan",
-      "Student Loan",
-      "Business Loan"
-    ]
-  }
+  "loan_type_id": {loan_type_id},
+  "admin_id": 3,
+  "interest_rate": 5.5,
+  "loan_term": 12
+}
 ```
 
 In case of error response:
@@ -408,18 +401,48 @@ HTTP/1.1 404 Not Found
 Content-Type: application/json
 
 {
-  "error": "Invalid group's id"
+  "error": "Invalid loan's type id"
 }
 ```
 
 ---
 
-**Delete a group.**
+**Update loan type information.**
+**(only admin can do this)**
 
 Request:
 
 ```
-DELETE /api/v1/groups/:group_id HTTP/1.1
+PUT /api/loan-types/:loanTypeId
+
+{
+  "interest_rate": 5.2
+}
+```
+
+In case of successful response:
+
+```
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "loan_type_id": 1,
+  "admin_id": 3,
+  "interest_rate": 5.2,
+  "loan_term": 12
+}
+```
+
+---
+
+**Delete a loan type.**
+**(only admin can do this)**
+
+Request:
+
+```
+DELETE /api/v1/loan-types/:loan_type_id
 ```
 
 In case of successful response:
