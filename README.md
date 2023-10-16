@@ -4,10 +4,10 @@
 
 The Personal Finance Advisor API is a web service that provides functionality for managing user financial data and loan applications. The API allows access to user, client, administrator, and bank worker data, as well as the ability to create and manage loan applications and loan types. The API also provides information on maximum loan amounts, repayment schedules, and payment notes.
 
-## Content:
+## Content: <a name="content"></a>
 
-- [Implementation details](#implementation-details)
-- [Technical requirements](#technical-requirements)
+- [Implementation details](#imp-details)
+- [Technical requirements](#tech-details)
 - [Endpoints](#endpoints)
   - [Endpoint /api/v1/login](#endpoint-apiv1login)
   - [Endpoint /api/v1/user](#endpoint-apiv1users)
@@ -15,7 +15,7 @@ The Personal Finance Advisor API is a web service that provides functionality fo
   - [Endpoint /api/v1/applications](#endpoint-apiv1applications)
   - [Endpoint /api/v1/application/1/loan-information](#endpoint-apiv1application1loan-information)
 
-## Implementation details
+## Implementation details <a name="imp-details"></a>
 
 Base URL
 
@@ -23,7 +23,7 @@ Base URL
 http://localhost:5000/api/v1/
 ```
 
-## Technical requirements
+## Technical requirements <a name="tech-details"></a>
 
 - Task should be implemented on JavaScript
 - Framework - express
@@ -31,9 +31,9 @@ http://localhost:5000/api/v1/
 - Use 18.18.1 LTS version of Node.js
 - (Docker)????
 
-## Endpoints
+## Endpoints <a name="endpoints"></a>
 
-### Endpoint /api/v1/login [⬆ Back to content ⬆](#content)
+### Endpoint /api/v1/login
 
 **Register a new user account.**
 
@@ -629,4 +629,4 @@ Content-Type: application/json
 }
 ```
 
-[⬆ Go Up ⬆](#go-up)
+[⬆ Go Up ⬆](#content)
