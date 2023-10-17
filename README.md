@@ -13,7 +13,7 @@ The Personal Finance Advisor API is a web service that provides functionality fo
   - [Endpoint /user](#endpoints-users)
   - [Endpoint /loan-types](#endpoints-loan-types)
   - [Endpoint /applications](#endpoints-applications)
-  - [Endpoint /application/1/loan-information](#endpoints-applications-details)
+  - [Endpoint /application/{application_id}/loan-information](#endpoints-applications-details)
 
 ## Implementation details <a name="imp-details"></a>
 
@@ -29,7 +29,7 @@ http://localhost:5000/api/v1/
 - Framework - express
 - (Database - MySQL)????
 - Use 18.18.1 LTS version of Node.js
-- (Docker)????
+- Docker container
 
 ## Endpoints <a name="endpoints"></a>
 
@@ -585,7 +585,7 @@ Content-Type: application/json
 }
 ```
 
-## Endpoint /application/1/loan-information <a name="endpoints-applications-details"></a> [(Back to content)](#content)
+## Endpoint /application/{application_id}/loan-information <a name="endpoints-applications-details"></a> [(Back to content)](#content)
 
 **Get information about loan details on a specific application.**
 
@@ -602,7 +602,7 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
-  "application_id": 123,
+  "application_id": 1,
   "max_loan_amount": {
     "max_loan_amount_id": 456,
     "max_loan_amount": 20000,
