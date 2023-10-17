@@ -9,11 +9,11 @@ The Personal Finance Advisor API is a web service that provides functionality fo
 - [Implementation details](#imp-details)
 - [Technical requirements](#tech-details)
 - [Endpoints](#endpoints)
-  - [Endpoint /api/v1/login](#endpoints-login)
-  - [Endpoint /api/v1/user](#endpoints-users)
-  - [Endpoint /api/v1/loan-types](#endpoints-loan-types)
-  - [Endpoint /api/v1/applications](#endpoints-applications)
-  - [Endpoint /api/v1/application/1/loan-information](#endpoints-applications-details)
+  - [Endpoint /login](#endpoints-login)
+  - [Endpoint /user](#endpoints-users)
+  - [Endpoint /loan-types](#endpoints-loan-types)
+  - [Endpoint /applications](#endpoints-applications)
+  - [Endpoint /application/1/loan-information](#endpoints-applications-details)
 
 ## Implementation details <a name="imp-details"></a>
 
@@ -33,14 +33,14 @@ http://localhost:5000/api/v1/
 
 ## Endpoints <a name="endpoints"></a>
 
-### Endpoint /api/v1/login <a name="endpoints-login"></a> [(Back to content)](#content)
+### Endpoint /login <a name="endpoints-login"></a> [(Back to content)](#content)
 
 **Register a new user account.**
 
 Request:
 
 ```
-POST /api/v1/register
+POST /register
 Content-Type: application/json
 Request Body:
 {
@@ -59,14 +59,14 @@ Content-Type: application/json
 }
 ```
 
-## Endpoint /api/v1/users <a name="endpoints-users"></a> [(Back to content)](#content)
+## Endpoint /users <a name="endpoints-users"></a> [(Back to content)](#content)
 
 **Create a new user account.**
 
 Request:
 
 ```
-POST /api/v1/users HTTP/1.1
+POST /users HTTP/1.1
 ```
 
 In case of successful response:
@@ -112,7 +112,7 @@ Content-Type: application/json
 Request:
 
 ```
-GET /api/v1/users HTTP/1.1
+GET /users HTTP/1.1
 ```
 
 Response:
@@ -148,7 +148,7 @@ Query Parameters:
 Request:
 
 ```
-GET /api/v1/users/:user_id
+GET /users/:user_id
 ```
 
 In case of successful response:
@@ -193,7 +193,7 @@ Query Parameters:
 Request:
 
 ```
-GET /api/v1/users?role=client&sort=salary HTTP/1.1
+GET /users?role=client&sort=salary HTTP/1.1
 ```
 
 In case of successful response:
@@ -228,7 +228,7 @@ Content-Type: application/json
 Request:
 
 ```
-PUT /api/v1/users/:userId HTTP/1.1
+PUT /users/:userId HTTP/1.1
 Content-Type: application/json
 
 {
@@ -256,7 +256,7 @@ Content-Type: application/json
 Request:
 
 ```
-DELETE /api/v1/users/:user_id HTTP/1.1
+DELETE /users/:user_id HTTP/1.1
 ```
 
 In case of successful response:
@@ -278,7 +278,7 @@ Content-Type: application/json
 
 ```
 
-## Endpoint /api/v1/loan-types <a name="endpoints-loan-types"></a> [(Back to content)](#content)
+## Endpoint /loan-types <a name="endpoints-loan-types"></a> [(Back to content)](#content)
 
 **Create a new type of loan.**
 (only admin can do this)
@@ -342,7 +342,7 @@ Content-Type: application/json
 Request:
 
 ```
-GET /api/v1/loan-types HTTP/1.1
+GET /loan-types HTTP/1.1
 ```
 
 In case of successful response:
@@ -385,7 +385,7 @@ Query Parameters:
 Request:
 
 ```
-GET /api/v1/loan-types/:loan_type_id
+GET /loan-types/:loan_type_id
 ```
 
 In case of successful response:
@@ -450,7 +450,7 @@ Content-Type: application/json
 Request:
 
 ```
-DELETE /api/v1/loan-types/:loan_type_id
+DELETE /loan-types/:loan_type_id
 ```
 
 In case of successful response:
@@ -472,7 +472,7 @@ Content-Type: application/json
 
 ```
 
-## Endpoint /api/v1/applications <a name="endpoints-applications"></a> [(Back to content)](#content)
+## Endpoint /applications <a name="endpoints-applications"></a> [(Back to content)](#content)
 
 **Create a new loan application.**
 (only bank worker can do this)
@@ -480,7 +480,7 @@ Content-Type: application/json
 Request:
 
 ```
-POST /api/v1/applications
+POST /applications
 Content-Type: application/json
 
 {
@@ -514,7 +514,7 @@ Content-Type: application/json
 Request:
 
 ```
-GET /api/v1/applications
+GET /applications
 ```
 
 In case of successful response:
@@ -556,7 +556,7 @@ Query Parameters:
 Request:
 
 ```
-GET /api/v1/applications/:application_id
+GET /applications/:application_id
 ```
 
 In case of successful response:
@@ -585,14 +585,14 @@ Content-Type: application/json
 }
 ```
 
-## Endpoint /api/v1/application/1/loan-information <a name="endpoints-applications-details"></a> [(Back to content)](#content)
+## Endpoint /application/1/loan-information <a name="endpoints-applications-details"></a> [(Back to content)](#content)
 
 **Get information about loan details on a specific application.**
 
 Request:
 
 ```
-GET /api/v1/applications/1/details
+GET /applications/1/details
 ```
 
 In case of successful response:
