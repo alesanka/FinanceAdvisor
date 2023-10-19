@@ -19,8 +19,12 @@
   },
   "homepage": "https://github.com/alesanka/FinanceAdvisor#readme",
   "dependencies": {
+    "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "express-session": "^1.17.3",
     "nodemon": "^3.0.1",
-    "redis": "^4.6.10"
+    "redis": "^4.6.10",
+    "request": "^2.88.2",
+    "request-promise": "^0.0.1"
   }
 }
