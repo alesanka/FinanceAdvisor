@@ -1,4 +1,4 @@
-import { User } from '../blueprints/user';
+import { User } from '../blueprints/userBlueprint';
 import bcrypt from 'bcrypt';
 
 const user = new User();
@@ -6,11 +6,11 @@ const user = new User();
 export class Authorization {
   registerUser = async (req, res) => {
     try {
-      const { login, password } = req.body;
+      const { username, password } = req.body;
 
-      const existingUser = await user.getUserByLogin(login);
+      const existingUser = await user.getUserByUsername(username);
       if (existingUser) {
-        return res.status(409).send(`User with this login already exists`);
+        return res.status(409).send(`User with this username already exists`);
       }
 
       if (password.length < 8) {
@@ -20,7 +20,7 @@ export class Authorization {
         });
       }
 
-      await user.registerUser(login, password);
+      await user.registerUser(username, password);
       res.status(201).send('User was registered successfully');
     } catch (err) {
       console.error(err);
@@ -29,10 +29,10 @@ export class Authorization {
   };
   loginUser = async (req, res) => {
     try {
-      const { login, password } = req.body;
-      const existingUser = await user.getUserByLogin(login);
+      const { username, password } = req.body;
+      const existingUser = await user.getUserByUsername(username);
       if (!existingUser) {
-        return res.status(400).send('Login is incorrect');
+        return res.status(400).send('Username is incorrect');
       }
 
       const validPassword = await bcrypt.compare(
