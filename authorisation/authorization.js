@@ -2,6 +2,7 @@ import { User } from '../blueprints/userBlueprint';
 import bcrypt from 'bcrypt';
 
 const user = new User();
+const saltRounds = 10;
 
 export class Authorization {
   registerUser = async (req, res) => {
@@ -19,8 +20,8 @@ export class Authorization {
           message: 'Password should be at least 8 characters long',
         });
       }
-
-      await user.registerUser(username, password);
+      const hashedPassword = await bcrypt.hash(password, saltRounds);
+      await user.registerUser(username, hashedPassword);
       res.status(201).send('User was registered successfully');
     } catch (err) {
       console.error(err);

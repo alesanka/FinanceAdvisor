@@ -34,4 +34,24 @@ export class User {
     }
     return null;
   }
+  async getUserById(user_id) {
+    try {
+      const result = await pool.query(
+        'SELECT user_id, username, hashedPassword FROM users WHERE user_id = $1;',
+        [user_id]
+      );
+      if (result.rows.length > 0) {
+        const { user_id, username, hashedPassword } = result.rows[0];
+
+        return {
+          user_id: user_id,
+          username: username,
+          password: hashedPassword,
+        };
+      }
+    } catch (err) {
+      throw new Error('Unable to get user');
+    }
+    return null;
+  }
 }

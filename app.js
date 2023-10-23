@@ -16,9 +16,12 @@ app.oauth = oauthServer({
 app.use(bodyParser.json());
 
 app.post('/oauth/token', app.oauth.token());
-app.get('/secret', app.oauth.authorize(), function (req, res) {
-  res.send('Secret area');
+app.oauth.token()(req, res, (err) => {
+  if (err) {
+    res.status(500).send('Failed to generate token');
+  }
 });
+
 app.post('/register', authorization.registerUser);
 app.post('/login', authorization.loginUser);
 
