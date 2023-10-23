@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/alesanka/FinanceAdvisor#readme",
   "dependencies": {
+    "@node-oauth/express-oauth-server": "^3.0.1",
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
     "dotenv": "^16.3.1",
