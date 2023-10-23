@@ -1,7 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import Authorization from './authorisation/authorization';
-import oauthServer from '@node-oauth/oauth2-server';
+import oauthServer from './authorisation/oauth2-server';
 import model from './authorisation/model';
 
 const app = express();
