@@ -1,10 +1,8 @@
 import bluebird from 'bluebird';
 import redis from 'redis';
 import { format } from 'util';
-import { User } from '../blueprints/userBlueprint';
-
+import { pool } from '../db/dbPGConfig.js';
 const db = bluebird.promisify(redis.createClient());
-const user = new User();
 
 const formats = {
   client: 'clients:%s',
@@ -12,34 +10,17 @@ const formats = {
   user: 'users:%s',
 };
 
-// export function getAccessToken(bearerToken) {
-//   return db.hgetall(format(formats.token, bearerToken)).then((token) => {
-//     if (!token) {
-//       return;
-//     }
-
-//     return {
-//       accessToken: token.accessToken,
-//       clientId: token.clientId,
-//       expires: token.accessTokenExpiresOn,
-//       userId: token.userId,
-//     };
-//   });
-// }
-
 export function getAccessToken(bearerToken) {
-  return db.get(`auth:${bearerToken}`).then(async (user_id) => {
-    if (!user_id) {
+  return db.hgetall(format(formats.token, bearerToken)).then((token) => {
+    if (!token) {
       return;
     }
 
-    const userDetails = await user.getUserById(user_id);
-
     return {
-      accessToken: bearerToken,
-      clientId: 'your_client_id',
-      expires: new Date().getTime() + 3600 * 1000, // 1 hour
-      userId: userDetails.user_id,
+      accessToken: token.accessToken,
+      clientId: token.clientId,
+      expires: token.accessTokenExpiresOn,
+      userId: token.userId,
     };
   });
 }
@@ -82,6 +63,17 @@ export function getUser(username, password) {
       id: username,
     };
   });
+}
+
+export function getUser(username, password) {
+  return pool
+    .query('SELECT id FROM users WHERE username = $1 AND password = $2', [
+      username,
+      password,
+    ])
+    .then(function (result) {
+      return result.rowCount ? result.rows[0] : false;
+    });
 }
 
 export function saveToken(token, client, user) {

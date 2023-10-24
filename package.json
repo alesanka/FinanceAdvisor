@@ -1,6 +1,7 @@
 {
   "name": "financeadvisor",
   "version": "1.0.0",
+  "type": "module",
   "description": "The Financial Advisor API provides the functionality for users to input key financial details such as their salary, preferred currency, and desired annual interest rate, and receive valuable insights, including the maximum loan amount they can obtain, a detailed repayment plan, and the total interest paid over the loan term.",
   "main": "index.js",
   "scripts": {

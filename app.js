@@ -1,8 +1,8 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import Authorization from './authorisation/authorization';
-import oauthServer from './authorisation/oauth2-server';
-import model from './authorisation/model';
+import Authorization from './authentication/authorization';
+import oauthServer from '@node-oauth/oauth2-server';
+import model from './authentication/modelRedis';
 
 const app = express();
 const PORT = 5000;

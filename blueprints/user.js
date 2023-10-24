@@ -14,7 +14,7 @@ export class User {
       throw new Error('Unable to create user');
     }
   }
-  async getUserByUsername(username) {
+  async findUserByUsername(username) {
     try {
       const result = await pool.query(
         'SELECT user_id, username, hashedPassword FROM users WHERE username = $1;',
@@ -34,7 +34,7 @@ export class User {
     }
     return null;
   }
-  async getUserById(user_id) {
+  async findUserById(user_id) {
     try {
       const result = await pool.query(
         'SELECT user_id, username, hashedPassword FROM users WHERE user_id = $1;',

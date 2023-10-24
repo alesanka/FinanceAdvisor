@@ -1,15 +1,15 @@
-import { User } from '../blueprints/userBlueprint';
+import { User } from '../blueprints/user.js';
 import bcrypt from 'bcrypt';
 
 const user = new User();
 const saltRounds = 10;
 
-export class Authorization {
+export class Authentication {
   registerUser = async (req, res) => {
     try {
       const { username, password } = req.body;
 
-      const existingUser = await user.getUserByUsername(username);
+      const existingUser = await user.findUserByUsername(username);
       if (existingUser) {
         return res.status(409).send(`User with this username already exists`);
       }
@@ -28,10 +28,10 @@ export class Authorization {
       res.status(500).send('Server error while registration');
     }
   };
-  loginUser = async (req, res) => {
+  authenticateUser = async (req, res) => {
     try {
       const { username, password } = req.body;
-      const existingUser = await user.getUserByUsername(username);
+      const existingUser = await user.findUserByUsername(username);
       if (!existingUser) {
         return res.status(400).send('Username is incorrect');
       }
