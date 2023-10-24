@@ -1,4 +1,4 @@
-export class DB {
+export class DBForTokens {
   constructor() {
     this.clients = [];
     this.accessTokens = new Map();

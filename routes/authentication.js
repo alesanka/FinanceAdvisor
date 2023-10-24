@@ -1,7 +1,10 @@
 import { User } from '../blueprints/user.js';
+import { DBForTokens } from '../db/dbForTokens.js';
+import { createModel } from '../blueprints/model.js';
 import bcrypt from 'bcrypt';
 
 const user = new User();
+const db = new DBForTokens();
 const saltRounds = 10;
 
 export class Authentication {
@@ -50,3 +53,5 @@ export class Authentication {
     }
   };
 }
+
+export const model = createModel(db, user);
