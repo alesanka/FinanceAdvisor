@@ -1,16 +1,17 @@
-import { pool } from './dbConfig';
+import { pool } from '../db/dbPGConfig.js';
 import bcrypt from 'bcrypt';
 
 export class User {
-  async registerUser(username, password) {
-    const hashedPassword = await bcrypt.hash(password, 10);
+  async registerUser(username, passwordRaw) {
+    const password = await bcrypt.hash(passwordRaw, 10);
     try {
       const result = await pool.query(
-        'INSERT INTO users (username, hashedPassword) VALUES ($1, $2) RETURNING id',
-        [username, hashedPassword]
+        'INSERT INTO users (username, password) VALUES ($1, $2) RETURNING id',
+        [username, password]
       );
       return result.rows[0].id;
     } catch (err) {
+      console.error('Error during user creation:', err);
       throw new Error('Unable to create user');
     }
   }
