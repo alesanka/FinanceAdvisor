@@ -1,9 +1,11 @@
-import { pool } from '../db/dbPGConfig.js';
+import { pool } from '../db/dbPool.js';
 import bcrypt from 'bcrypt';
+
+const saltRounds = 10;
 
 export class User {
   async registerUser(username, passwordRaw) {
-    const password = await bcrypt.hash(passwordRaw, 10);
+    const password = await bcrypt.hash(passwordRaw, saltRounds);
     try {
       const result = await pool.query(
         'INSERT INTO users (username, password) VALUES ($1, $2) RETURNING id',
@@ -18,40 +20,30 @@ export class User {
   async findUserByUsername(username) {
     try {
       const result = await pool.query(
-        'SELECT user_id, username, hashedPassword FROM users WHERE username = $1;',
+        'SELECT id, username, password FROM users WHERE username = $1;',
         [username]
       );
       if (result.rows.length > 0) {
-        const { user_id, username, hashedPassword } = result.rows[0];
-
-        return {
-          user_id: user_id,
-          username: username,
-          password: hashedPassword,
-        };
+        return result.rows[0];
       }
     } catch (err) {
-      throw new Error('Unable to get user');
+      console.error('Error during user searching by username', err);
+      throw new Error('Sorry, unable to get user');
     }
     return null;
   }
-  async findUserById(user_id) {
+  async findUserById(id) {
     try {
       const result = await pool.query(
-        'SELECT user_id, username, hashedPassword FROM users WHERE user_id = $1;',
-        [user_id]
+        'SELECT id, username, password FROM users WHERE id = $1;',
+        [id]
       );
       if (result.rows.length > 0) {
-        const { user_id, username, hashedPassword } = result.rows[0];
-
-        return {
-          user_id: user_id,
-          username: username,
-          password: hashedPassword,
-        };
+        return result.rows[0];
       }
     } catch (err) {
-      throw new Error('Unable to get user');
+      console.error('Error during user searching by id', err);
+      throw new Error('Sorry, unable to get user');
     }
     return null;
   }

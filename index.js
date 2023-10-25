@@ -1,14 +1,17 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import { initializeDatabase } from './db/initializeDb.js';
 import OAuthServer from '@node-oauth/oauth2-server';
 import {
   model,
   authentication,
 } from './controllers/authenticationController.js';
 import * as dotenv from 'dotenv';
-dotenv.config();
 
-const PORT = 5000;
+dotenv.config();
+initializeDatabase();
+
+const PORT = process.env.DB_DATABASE_NAME;
 const app = express();
 
 app.oauth = new OAuthServer({
@@ -25,10 +28,7 @@ app.get('/', (req, res) => {
 });
 
 app.post('/register', authentication.registerUser);
-// app.get('/register');
-// app.post(
-//   '/login',
-//   authentication.authenticateUser,
+app.post('/login', authentication.authenticateUser);
 //   app.oauth.token((req, res) => {
 //     const request = new Request(req);
 //     const response = new Response(res);
