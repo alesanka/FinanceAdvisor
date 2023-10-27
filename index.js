@@ -1,48 +1,27 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import { initializeDatabase } from './db/initializeDb.js';
-import OAuthServer from '@node-oauth/oauth2-server';
-import {
-  model,
-  authentication,
-} from './controllers/authenticationController.js';
+import { authentication } from './controllers/authentication.js';
+import { token } from './controllers/token.js';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
 initializeDatabase();
 
-const PORT = process.env.DB_DATABASE_NAME;
+const PORT = process.env.PORT;
 const app = express();
-
-app.oauth = new OAuthServer({
-  model: model,
-});
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// app.use('/token', oauth.token());
+// app.post('/token', token.getToken);
 
 app.get('/', (req, res) => {
-  res.send('My God is in control!');
+  res.send("“It's alive! It's alive!” - Frankenstein, 1931");
 });
 
 app.post('/register', authentication.registerUser);
-app.post('/login', authentication.authenticateUser);
-//   app.oauth.token((req, res) => {
-//     const request = new Request(req);
-//     const response = new Response(res);
-
-//     app.oauth
-//       .token(request, response)
-//       .then((token) => {
-//         res.json(token);
-//       })
-//       .catch((err) => {
-//         res.status(err.code || 500).json(err);
-//       });
-//   })
-// );
+app.post('/login', authentication.authenticateUser, token.getToken);
 
 // in development
 // app.get('/protected_resource', app.oauth.authenticate(), (req, res) => {

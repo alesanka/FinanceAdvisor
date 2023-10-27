@@ -5,7 +5,7 @@ import { pool } from './dbPool.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const absolutePath = path.resolve(__dirname, 'dbSQL.sql');
+const absolutePath = path.resolve(__dirname, 'dbPG.sql');
 
 export const initializeDatabase = () => {
   fs.readFile(absolutePath, 'utf-8', (err, sqlQuery) => {
@@ -15,7 +15,7 @@ export const initializeDatabase = () => {
       if (err) {
         throw err;
       } else {
-        console.log('SQL query executed successfully');
+        console.log('DB created successfully');
       }
     });
   });
