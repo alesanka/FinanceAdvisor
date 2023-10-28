@@ -14,8 +14,6 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// app.post('/token', token.getToken);
-
 app.get('/', (req, res) => {
   res.send("“It's alive! It's alive!” - Frankenstein, 1931");
 });
@@ -23,7 +21,7 @@ app.get('/', (req, res) => {
 app.post('/register', authentication.registerUser);
 app.post('/login', authentication.authenticateUser, token.getToken);
 
-// in development
+// EXAMPLE FOR CHECKING TOKEN
 app.get('/some_page', token.getAuthorization, (req, res) => {
   res.send('Protected resource');
 });

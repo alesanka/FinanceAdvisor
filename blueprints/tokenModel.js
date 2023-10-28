@@ -30,7 +30,6 @@ export const createModel = (db) => {
 
   async function getAccessToken(accessToken) {
     const meta = db.findAccessToken(accessToken);
-    console.log('HERE!!!!!', meta);
     if (!meta) {
       return false;
     }
