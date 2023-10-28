@@ -28,6 +28,22 @@ export const createModel = (db) => {
     }
   }
 
+  async function getAccessToken(accessToken) {
+    const meta = db.findAccessToken(accessToken);
+    console.log('HERE!!!!!', meta);
+    if (!meta) {
+      return false;
+    }
+
+    return {
+      accessToken,
+      accessTokenExpiresAt: meta.accessTokenExpiresAt,
+      user: meta.userId,
+      client: db.findClientById(meta.clientId),
+      scope: meta.scope,
+    };
+  }
+
   async function saveToken(token, client, user) {
     try {
       const meta = {
@@ -95,5 +111,6 @@ export const createModel = (db) => {
     revokeToken,
     validateScope,
     getUser,
+    getAccessToken,
   };
 };

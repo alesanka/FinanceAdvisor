@@ -50,12 +50,32 @@ class Token {
     oauth
       .token(request, response, options)
       .then((token) => {
-        // res.json(token);
+        res.json(token);
         console.log('Authorization token successfully retrieved!');
-        res.status(200).send('User came with peace and token!');
-        return token;
       })
       .catch((err) => {
+        console.error(err);
+        res.status(400).json({ error: err.message });
+      });
+  };
+  getAuthorization = async (req, res, next) => {
+    const request = new Request({
+      method: req.method,
+      headers: req.headers,
+      query: {},
+      body: req.body,
+    });
+    const response = new Response(res);
+
+    oauth
+      .authenticate(request, response)
+      .then(function (token) {
+        res.locals.oauth = { token: token };
+        console.log('Authorization passed!');
+        next();
+      })
+      .catch((err) => {
+        console.error(err);
         res.status(400).json({ error: err.message });
       });
   };

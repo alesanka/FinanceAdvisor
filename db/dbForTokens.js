@@ -26,10 +26,11 @@ export class DBForTokens {
   }
 
   saveAccessToken(accessToken, meta) {
-    this.accessTokens.set(accessToken, meta);
+    return this.accessTokens.set(accessToken, meta);
   }
 
   findAccessToken(accessToken) {
+    console.log(this.accessTokens.get(accessToken));
     return this.accessTokens.get(accessToken);
   }
 

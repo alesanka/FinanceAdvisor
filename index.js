@@ -24,9 +24,9 @@ app.post('/register', authentication.registerUser);
 app.post('/login', authentication.authenticateUser, token.getToken);
 
 // in development
-// app.get('/protected_resource', app.oauth.authenticate(), (req, res) => {
-//   res.send('Protected resource');
-// });
+app.get('/some_page', token.getAuthorization, (req, res) => {
+  res.send('Protected resource');
+});
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

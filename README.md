@@ -9,6 +9,7 @@ The Personal Finance Advisor API is a web service that provides functionality fo
 - [Implementation details](#imp-details)
 - [Technical requirements](#tech-details)
 - [Endpoints](#endpoints)
+  - [Endpoint /register](#endpoint-register)
   - [Endpoint /login](#endpoints-login)
   - [Endpoint /user](#endpoints-users)
   - [Endpoint /loan-types](#endpoints-loan-types)
@@ -27,13 +28,13 @@ http://localhost:5000/api/v1/
 
 - Task should be implemented on JavaScript
 - Framework - express
-- (Database - MySQL)????
+- Database - Postgress
 - Use 18.18.1 LTS version of Node.js
 - Docker container
 
 ## Endpoints <a name="endpoints"></a>
 
-### Endpoint /login <a name="endpoints-login"></a> [(Back to content)](#content)
+### Endpoint /register <a name="endpoints-register"></a> [(Back to content)](#content)
 
 **Register a new user account.**
 
@@ -69,6 +70,79 @@ Content-Type: application/json
 {
    "success": false,
    "message": "Password should be at least 8 characters long"
+}
+```
+
+or
+
+```
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+
+{
+   "success": false,
+   "message": "Server error"
+}
+```
+
+### Endpoint /login <a name="endpoints-login"></a> [(Back to content)](#content)
+
+**Login an existing user.**
+When a user attempts to log into the app, the system initiates a multi-step verification process.
+Initially, the system checks if the provided login (username) exists in the database.
+Upon successful login verification, the system compares the entered password with the stored password for that login.
+If the password matches, the system proceeds to the next step. It communicates with the node-oauth2-server to obtain an access token.
+Both the access token and the refresh token are securely saved in the system for future requests.
+For all subsequent interactions, the user undergoes token-based authentication. The access token remains valid for 1 hour. If any request returns an error indicating that the token has expired, the user is required to initiate a token-refresh request to obtain a new access token.
+
+Request:
+
+```
+POST /login
+Content-Type: application/x-www-form-urlencoded
+Request Body: {
+        grant_type: password,
+        scope: user|admin|worker,
+        client_id: this-client-id-is-for-demo-only,
+        client_secret: this-secret-id-is-for-demo-only,
+        username: daniil,
+        password: abrakadabra,
+      }
+```
+
+In case of successful response:
+
+```
+HTTP/1.1 200 OK
+Content-Type: application/json
+{
+    "accessToken": "9db102b9fe208ddc4bb16c67e487c3068446c085505bddd6e4e65227ee260290",
+    "accessTokenExpiresAt": "2023-10-28T18:21:48.414Z",
+    "refreshToken": "b54442e512075cd68721e9c0796f75ab9db3554be4153ee8ab1a698f23ca45b2",
+    "refreshTokenExpiresAt": "2023-11-11T17:21:48.414Z",
+    "scope": true,
+    "client": {
+        "id": "this-client-id-is-for-demo-only",
+        "secret": "this-secret-id-is-for-demo-only",
+        "grants": [
+            "password"
+        ]
+    },
+    "user": {
+        "id": 2,
+        "username": "daniil"
+    }
+}
+```
+
+In case of error response:
+
+```
+HTTP/1.1 400 Bad Request
+Content-Type: application/json
+
+{
+   "error": "Invalid client: client is invalid"
 }
 ```
 
