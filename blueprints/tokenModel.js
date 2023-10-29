@@ -43,6 +43,22 @@ export const createModel = (db) => {
     };
   }
 
+  async function getRefreshToken(refreshToken) {
+    const meta = db.findRefreshToken(refreshToken);
+
+    if (!meta) {
+      return false;
+    }
+
+    return {
+      refreshToken,
+      refreshTokenExpiresAt: meta.refreshTokenExpiresAt,
+      user: meta.userId,
+      client: db.findClientById(meta.clientId),
+      scope: meta.scope,
+    };
+  }
+
   async function saveToken(token, client, user) {
     try {
       const meta = {
@@ -111,5 +127,6 @@ export const createModel = (db) => {
     validateScope,
     getUser,
     getAccessToken,
+    getRefreshToken,
   };
 };

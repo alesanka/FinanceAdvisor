@@ -17,26 +17,6 @@ let options = {
 };
 
 class Token {
-  /*
- const stringBody =
-    'client_id=this-client-id-is-for-demo-only&client_secret=this-secret-id-is-for-demo-only&grant_type=password&scope=user&username=daniil&password=abrakadabra';
-
-   { !!!
-      method: 'POST',
-      query: {},
-      headers: {
-        'content-type': 'application/x-www-form-urlencoded',
-      },
-      body: {
-        grant_type: password,
-        scope: user|admin|worker,
-        client_id: process.env.CLIENT_ID,
-        client_secret: process.env.CLIENT_SECRET,
-        username: username,
-        password: password,
-      },
-    };
-  */
   getToken = async (req, res) => {
     const request = new Request({
       method: req.method,
