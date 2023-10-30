@@ -12,9 +12,13 @@
   - [Documents](#5-documents)
   - [Applications](#6-applications)
   - [LoanTypes](#7-loantypes)
-  - [RepaymentSchedules](#8-repaymentschedules)
-  - [PaymentNotes](#9-paymentnotes)
-  - [MaximumLoanAmounts](#10-maximumloanamounts)
+  - [Repayment Schedules](#8-repaymentschedules)
+  - [Payment Notes](#9-paymentnotes)
+  - [Maximum Loan Amounts](#10-maximumloanamounts)
+- [Enumeration](#enumeration)
+  - [User roles](#1-user-roles)
+  - [Document types](#2-document-types)
+  - [Loan types](#3-loan-types)
 - [Relationships](#relationships)
 
 ## Technology
@@ -34,9 +38,11 @@ Table for authentication and storing basic user info.
 | Key | Column Name  | Data Type  | Description                     |
 | --- | ------------ | ---------- | ------------------------------- |
 | PK  | user_id      | int        | Primary key for the users table |
+|     | username     | varchar    | User's login                    |
+|     | password     | varchar    | User's password                 |
 |     | email        | varchar    | User's email                    |
-|     | phone_number | int        | User's phone number             |
-|     | role         | roles_enam | Role of the user.               |
+|     | phone_number | varchar    | User's phone number             |
+|     | role         | roles_enum | Role of the user.               |
 
 ### 2. Clients
 
@@ -142,7 +148,7 @@ Maximum loan amounts for applications.
 
 ### 1. User roles
 
-| roles_enam |
+| roles_enum |
 | ---------- |
 | client     |
 | worker     |
@@ -155,29 +161,29 @@ Maximum loan amounts for applications.
 | passport                |
 | employment_verification |
 | business_plan           |
-| purchase_agreemen       |
+| purchase_agreement      |
 
 ### 3. Loan types
 
-| loan_enum               |
-| ----------------------- |
-| passport                |
-| employment_verification |
-| business_plan           |
-| purchase_agreemen       |
+| loan_enum     |
+| ------------- |
+| personal_loan |
+| mortgage      |
+| student_loan  |
+| business_loan |
 
 ## Relationships
 
 The relationships between the tables are:
 
-- One User can have only one role (one-to-one) at `Doctor(id_user)` || `Patient(id_user)` || `Admin(id_user)`.
-- One doctor can have multiple slots associated with them (one-to-many) at `slots(id_doctor)`.
-- One schedule can be in a few slots associated with them (one-to-many) at `slots(id_schedule)`.
-- One Patient have only one Medical History (one-to-one) at `Medical_History(codeMH)`.
-- One Appointment have only one billing (one-to-one) at `appointments(id_appoint)`.
-- One Billing can contain many services (one-to-many) at `billing(id_service)`.
-- One office can be in many appointments (one-to-many) at `appointments(numberOffice)`.
-- One Appointment can have many services (one-to-many) at `appointments(id_services)`.
-- One Patient can have many appointments (one-to-many) at `appointments(id_patient)`.
-- One Admin can create many appointments (one-to-many) at `appointments(id_admin)`.
-- One Doctor can be at many appointments (one-to-many) at `appointments(id_doctor)`.
+- Users to Clients: one User can be associated with one Client (one-to-one) through Clients(user_id).
+- Users to Workers: one User can be associated with one Worker (one-to-one) through Workers(user_id).
+- Users to Admin: one User can be associated with one Admin (one-to-one) through Admin(user_id).
+- Clients to Documents: one Client can have multiple Documents (one-to-many) through client_id.
+- Clients to Applications: one Client can have multiple Applications (one-to-many) through Applications(client_id).
+- Workers to Applications: one Worker can handle multiple Applications (one-to-many) through Applications(worker_id).
+- Admin to LoanTypes: one Admin can define multiple LoanTypes (one-to-many) through LoanTypes(admin_id).
+- LoanTypes to Applications: one LoanType can be associated with multiple Applications (one-to-many) through Applications(loan_type_id).
+- Applications to RepaymentSchedules: one Application can have one RepaymentSchedule (one-to-one) through RepaymentSchedules(application_id).
+- Applications to MaximumLoanAmounts: one Application can have one MaximumLoanAmount (one-to-one) through MaximumLoanAmounts(application_id).
+- RepaymentSchedules to PaymentNotes: one RepaymentSchedule can have multiple PaymentNotes (one-to-many) through PaymentNotes(repayment_schedule_id).
