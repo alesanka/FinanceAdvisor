@@ -26,7 +26,7 @@ app.get('/api/v1/some_page', token.getAuthorization, (req, res) => {
   res.send('Protected resource');
 });
 
-app.post('/refresh_token', token.getToken);
+app.post('/api/v1/refresh_token', token.getToken);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
