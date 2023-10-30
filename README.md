@@ -229,6 +229,8 @@ Request:
 
 ```
 POST /users HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {access_token}
 ```
 
 In case of successful response:
@@ -275,6 +277,7 @@ Request:
 
 ```
 GET /users HTTP/1.1
+Authorization: Bearer {access_token}
 ```
 
 Response:
@@ -311,6 +314,7 @@ Request:
 
 ```
 GET /users/:user_id
+Authorization: Bearer {access_token}
 ```
 
 In case of successful response:
@@ -356,6 +360,7 @@ Request:
 
 ```
 GET /users?role=client&sort=salary HTTP/1.1
+Authorization: Bearer {access_token}
 ```
 
 In case of successful response:
@@ -392,6 +397,7 @@ Request:
 ```
 PUT /users/:userId HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer {access_token}
 
 {
   "phone_number": "+9999999999"
@@ -419,6 +425,7 @@ Request:
 
 ```
 DELETE /users/:user_id HTTP/1.1
+Authorization: Bearer {access_token}
 ```
 
 In case of successful response:
@@ -450,6 +457,7 @@ Request:
 ```
 POST /api/loan-types
 Content-Type: application/json
+Authorization: Bearer {access_token}
 
 {
   "admin_id": 4,
@@ -505,6 +513,7 @@ Request:
 
 ```
 GET /loan-types HTTP/1.1
+Authorization: Bearer {access_token}
 ```
 
 In case of successful response:
@@ -548,6 +557,8 @@ Request:
 
 ```
 GET /loan-types/:loan_type_id
+Content-Type: application/json
+Authorization: Bearer {access_token}
 ```
 
 In case of successful response:
@@ -584,6 +595,8 @@ Request:
 
 ```
 PUT /api/loan-types/:loanTypeId
+Content-Type: application/json
+Authorization: Bearer {access_token}
 
 {
   "interest_rate": 5.2
@@ -613,6 +626,7 @@ Request:
 
 ```
 DELETE /loan-types/:loan_type_id
+Authorization: Bearer {access_token}
 ```
 
 In case of successful response:
@@ -644,6 +658,7 @@ Request:
 ```
 POST /applications
 Content-Type: application/json
+Authorization: Bearer {access_token}
 
 {
   "client_id": 4,
@@ -677,6 +692,7 @@ Request:
 
 ```
 GET /applications
+Authorization: Bearer {access_token}
 ```
 
 In case of successful response:
@@ -719,6 +735,7 @@ Request:
 
 ```
 GET /applications/:application_id
+Authorization: Bearer {access_token}
 ```
 
 In case of successful response:
@@ -755,6 +772,7 @@ Request:
 
 ```
 GET /applications/1/details
+Authorization: Bearer {access_token}
 ```
 
 In case of successful response:
