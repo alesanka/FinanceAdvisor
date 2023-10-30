@@ -1,4 +1,4 @@
-import { User } from '../blueprints/user.js';
+import { User } from '../services/userModel.js';
 
 import bcrypt from 'bcrypt';
 

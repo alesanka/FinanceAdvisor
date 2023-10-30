@@ -1,6 +1,6 @@
 import * as dotenv from 'dotenv';
 import { db } from '../db/client.js';
-import { createModel } from '../blueprints/tokenModel.js';
+import { createModel } from '../services/tokenModel.js';
 import pkg from '@node-oauth/oauth2-server';
 import OAuthServer from '@node-oauth/oauth2-server';
 const { Request, Response } = pkg;
