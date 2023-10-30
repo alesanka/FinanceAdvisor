@@ -10,11 +10,11 @@
   - [Workers](#3-workers)
   - [Admin](#4-admin)
   - [Documents](#5-documents)
-  - [Applications](#6-applications)
+  - [LoanApplications](#6-loan-applications)
   - [LoanTypes](#7-loantypes)
-  - [Repayment Schedules](#8-repaymentschedules)
-  - [Payment Notes](#9-paymentnotes)
-  - [Maximum Loan Amounts](#10-maximumloanamounts)
+  - [RepaymentSchedules](#8-repaymentschedules)
+  - [PaymentNotes](#9-paymentnotes)
+  - [MaximumLoanAmounts](#10-maximumloanamounts)
 - [Enumeration](#enumeration)
   - [User roles](#1-user-roles)
   - [Document types](#2-document-types)
@@ -48,13 +48,12 @@ Table for authentication and storing basic user info.
 
 Information about clients.
 
-| Key | Column Name  | Data Type | Description                                  |
-| --- | ------------ | --------- | -------------------------------------------- |
-| PK  | client_id    | int       | Primary key for the clients table            |
-| FK  | user_id      | int       | Foreign key from the users table             |
-|     | name         | varchar   | Client's name                                |
-|     | salary       | int       | Client's salary                              |
-|     | attached_doc | boolean   | Checking if the client attached any document |
+| Key | Column Name | Data Type | Description                       |
+| --- | ----------- | --------- | --------------------------------- |
+| PK  | client_id   | int       | Primary key for the clients table |
+| FK  | user_id     | int       | Foreign key from the users table  |
+|     | name        | varchar   | Client's name                     |
+|     | salary      | int       | Client's salary                   |
 
 ### 3. Workers
 
@@ -87,7 +86,7 @@ Details of documents associated with clients.
 |     | document_name | varchar   | Name of the document                |
 |     | document_type | doc_enam  | Type of the document                |
 
-### 6. Applications
+### 6. LoanApplications
 
 Loan application details.
 
@@ -179,11 +178,11 @@ The relationships between the tables are:
 - Users to Clients: one User can be associated with one Client (one-to-one) through Clients(user_id).
 - Users to Workers: one User can be associated with one Worker (one-to-one) through Workers(user_id).
 - Users to Admin: one User can be associated with one Admin (one-to-one) through Admin(user_id).
-- Clients to Documents: one Client can have multiple Documents (one-to-many) through client_id.
 - Clients to Applications: one Client can have multiple Applications (one-to-many) through Applications(client_id).
 - Workers to Applications: one Worker can handle multiple Applications (one-to-many) through Applications(worker_id).
 - Admin to LoanTypes: one Admin can define multiple LoanTypes (one-to-many) through LoanTypes(admin_id).
-- LoanTypes to Applications: one LoanType can be associated with multiple Applications (one-to-many) through Applications(loan_type_id).
-- Applications to RepaymentSchedules: one Application can have one RepaymentSchedule (one-to-one) through RepaymentSchedules(application_id).
-- Applications to MaximumLoanAmounts: one Application can have one MaximumLoanAmount (one-to-one) through MaximumLoanAmounts(application_id).
+- LoanTypes to Applications: one LoanType can be associated with multiple LoanApplications (one-to-many) through LoanApplications(loan_type_id).
+- LoanApplications to RepaymentSchedules: one Application can have one RepaymentSchedule (one-to-one) through RepaymentSchedules(application_id).
+- LoanApplications to Documents: one loan application can have multiple Documents (one-to-many) through application_id.
+- LoanApplications to MaximumLoanAmounts: one Application can have one MaximumLoanAmount (one-to-one) through MaximumLoanAmounts(application_id).
 - RepaymentSchedules to PaymentNotes: one RepaymentSchedule can have multiple PaymentNotes (one-to-many) through PaymentNotes(repayment_schedule_id).
