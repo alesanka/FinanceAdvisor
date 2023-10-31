@@ -50,7 +50,7 @@ export class UserModel {
   async getAllUsers() {
     try {
       const result = await pool.query(
-        'SELECT user_id, username, email, phone_number, role FROM users'
+        'SELECT user_id, email, phone_number, role FROM users'
       );
       return result.rows;
     } catch (err) {
