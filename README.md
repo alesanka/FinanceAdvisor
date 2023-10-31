@@ -61,7 +61,6 @@ In case of successful response:
 HTTP/1.1 201 Created
 Content-Type: application/json
 {
-  "success": true
   "message": "User registration is successful."
 }
 ```
@@ -73,7 +72,6 @@ HTTP/1.1 400 Bad Request
 Content-Type: application/json
 
 {
-   "success": false,
    "message": "Password should be at least 8 characters long"
 }
 ```
@@ -85,7 +83,6 @@ HTTP/1.1 500 Internal Server Error
 Content-Type: application/json
 
 {
-   "success": false,
    "message": "Server error"
 }
 ```

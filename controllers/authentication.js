@@ -17,7 +17,6 @@ class Authentication {
 
       if (password.length < 8) {
         return res.status(400).send({
-          success: false,
           message: 'Password should be at least 8 characters long',
         });
       }
@@ -25,7 +24,6 @@ class Authentication {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email)) {
         return res.status(400).send({
-          success: false,
           message: 'Invalid email format',
         });
       }
@@ -33,7 +31,6 @@ class Authentication {
       const cleanedPhoneNumber = phone_number.replace(/\D/g, '');
       if (cleanedPhoneNumber.length !== 10) {
         return res.status(400).send({
-          success: false,
           message: 'Phone number should contain exactly 10 digits',
         });
       }
@@ -41,7 +38,6 @@ class Authentication {
       const validRoles = ['user', 'worker', 'admin'];
       if (!validRoles.includes(role)) {
         return res.status(400).send({
-          success: false,
           message: 'Invalid role. Accepted values are: user, worker, admin',
         });
       }
