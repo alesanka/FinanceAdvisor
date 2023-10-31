@@ -63,7 +63,7 @@ export const createModel = (db) => {
     try {
       const meta = {
         clientId: client.id,
-        userId: user.id,
+        userId: user.user_id,
         accessTokenExpiresAt: token.accessTokenExpiresAt,
         refreshTokenExpiresAt: token.refreshTokenExpiresAt,
       };
@@ -88,7 +88,7 @@ export const createModel = (db) => {
 
   async function getUser(username, password) {
     const result = await pool.query(
-      'SELECT id, username, password FROM users WHERE username = $1;',
+      'SELECT user_id, username, password FROM users WHERE username = $1;',
       [username]
     );
     return {

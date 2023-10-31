@@ -8,10 +8,10 @@ export class User {
     const password = await bcrypt.hash(passwordRaw, saltRounds);
     try {
       const result = await pool.query(
-        'INSERT INTO users (username, password) VALUES ($1, $2) RETURNING id',
+        'INSERT INTO users (username, password) VALUES ($1, $2) RETURNING user_id',
         [username, password]
       );
-      return result.rows[0].id;
+      return result.rows[0].user_id;
     } catch (err) {
       console.error('Error during user creation:', err);
       throw new Error('Unable to create user');
@@ -20,7 +20,7 @@ export class User {
   async findUserByUsername(username) {
     try {
       const result = await pool.query(
-        'SELECT id, username, password FROM users WHERE username = $1;',
+        'SELECT user_id, username, password FROM users WHERE username = $1;',
         [username]
       );
       if (result.rows.length > 0) {
@@ -35,7 +35,7 @@ export class User {
   async findUserById(id) {
     try {
       const result = await pool.query(
-        'SELECT id, username, password FROM users WHERE id = $1;',
+        'SELECT user_id, username, password FROM users WHERE user_id = $1;',
         [id]
       );
       if (result.rows.length > 0) {

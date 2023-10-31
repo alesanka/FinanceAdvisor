@@ -4,4 +4,4 @@ CREATE TABLE IF NOT EXISTS users (
     password VARCHAR(255) NOT NULL
 );
 
-ALTER TABLE users RENAME COLUMN id TO user_id;
+-- ALTER TABLE users RENAME COLUMN id TO user_id;
