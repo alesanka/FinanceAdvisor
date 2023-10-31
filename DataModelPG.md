@@ -10,11 +10,12 @@
   - [Workers](#3-workers)
   - [Admin](#4-admin)
   - [Documents](#5-documents)
-  - [LoanApplications](#6-loan-applications)
-  - [LoanTypes](#7-loantypes)
-  - [RepaymentSchedules](#8-repaymentschedules)
-  - [PaymentNotes](#9-paymentnotes)
-  - [MaximumLoanAmounts](#10-maximumloanamounts)
+  - [LoanApplications](#6-loanapplications)
+  - [LoanTypes_LoanApplications](#7-loantypes_loanapplications)
+  - [LoanTypes](#8-loantypes)
+  - [RepaymentSchedules](#9-repaymentschedules)
+  - [PaymentNotes](#10-paymentnotes)
+  - [MaximumLoanAmounts](#11-maximumloanamounts)
 - [Enumeration](#enumeration)
   - [User roles](#1-user-roles)
   - [Document types](#2-document-types)
@@ -98,7 +99,15 @@ Loan application details.
 | FK  | loan_type_id        | int       | Foreign key from the loantypes table   |
 |     | desired_loan_amount | int       | Desired loan amount by the client      |
 
-### 7. LoanTypes
+### 7. LoanTypes_LoanApplications
+
+| Key | Column Name    | Data Type | Description                                          |
+| --- | -------------- | --------- | ---------------------------------------------------- |
+| PK  | id             | int       | Primary key for the loantypes_loanapplications table |
+| FK  | loan_type_id   | int       | Foreign key from the loantypes table                 |
+| FK  | application_id | int       | Foreign key from the applications table              |
+
+### 8. LoanTypes
 
 Different types of loans available.
 
@@ -110,7 +119,7 @@ Different types of loans available.
 |     | interest_rate | float     | Interest rate for the loan type                |
 |     | loan_term     | int       | Term/duration of the loan (in months or years) |
 
-### 8. RepaymentSchedules
+### 9. RepaymentSchedules
 
 Schedule of repayments for loans.
 
@@ -121,7 +130,7 @@ Schedule of repayments for loans.
 |     | monthly_payment       | float     | Amount to be paid monthly                    |
 |     | remaining_balance     | float     | Remaining balance to be paid                 |
 
-### 9. PaymentNotes
+### 10. PaymentNotes
 
 Notes related to payments.
 
@@ -132,7 +141,7 @@ Notes related to payments.
 |     | payment_date          | date      | Date of the payment                           |
 |     | payment_amount        | float     | Amount paid                                   |
 
-### 10. MaximumLoanAmounts
+### 11. MaximumLoanAmounts
 
 Maximum loan amounts for applications.
 
@@ -181,6 +190,7 @@ The relationships between the tables are:
 - Clients to Applications: one Client can have multiple Applications (one-to-many) through Applications(client_id).
 - Workers to Applications: one Worker can handle multiple Applications (one-to-many) through Applications(worker_id).
 - Admin to LoanTypes: one Admin can define multiple LoanTypes (one-to-many) through LoanTypes(admin_id).
+- LoanTypes to Applications: one LoanType can be associated with multiple LoanApplications and one LoanApplication can be associated with multiple Loantypes (many-to-many) through LoanTypes_LoanApplications table.
 - LoanTypes to Applications: one LoanType can be associated with multiple LoanApplications (one-to-many) through LoanApplications(loan_type_id).
 - LoanApplications to RepaymentSchedules: one Application can have one RepaymentSchedule (one-to-one) through RepaymentSchedules(application_id).
 - LoanApplications to Documents: one loan application can have multiple Documents (one-to-many) through application_id.
