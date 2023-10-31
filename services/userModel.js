@@ -57,6 +57,67 @@ export class UserModel {
       throw new Error(`Unable to get all users because error: ${err}`);
     }
   }
+  async getUserById(userId) {
+    try {
+      const resultRole = await pool.query(
+        'SELECT role FROM users WHERE user_id = $1;',
+        [userId]
+      );
+
+      if (resultRole.rows.length === 0) {
+        throw new Error('Invalid user id');
+      }
+
+      const role = resultRole.rows[0].role;
+
+      const roleMapping = {
+        client: {
+          table: 'clients',
+          fields: ['client_id', 'name', 'salary'],
+        },
+        worker: {
+          table: 'workers',
+          fields: ['worker_id', 'name'],
+        },
+        admin: {
+          table: 'admins',
+          fields: ['admin_id', 'name'],
+        },
+      };
+
+      const roleInfo = roleMapping[role];
+      const fieldsString = roleInfo.fields.join(', ');
+
+      const resultRoleDetails = await pool.query(
+        `SELECT ${fieldsString} FROM ${roleInfo.table} WHERE user_id = $1;`,
+        [userId]
+      );
+
+      if (resultRoleDetails.rows.length === 0) {
+        throw new Error(
+          `${role.charAt(0).toUpperCase() + role.slice(1)} details not found`
+        );
+      }
+
+      const userDetails = await pool.query(
+        'SELECT email, phone_number FROM users WHERE user_id = $1;',
+        [userId]
+      );
+
+      if (userDetails.rows.length === 0) {
+        throw new Error('User details not found');
+      }
+
+      return {
+        ...userDetails.rows[0],
+        ...resultRoleDetails.rows[0],
+        role,
+      };
+    } catch (err) {
+      console.error('Error during user searching by id', err);
+      throw new Error('Sorry, unable to get user');
+    }
+  }
   async findUserByUsername(username) {
     try {
       const result = await pool.query(
@@ -72,11 +133,11 @@ export class UserModel {
     }
     return null;
   }
-  async findUserById(id) {
+  async findUserById(userId) {
     try {
       const result = await pool.query(
         'SELECT user_id, username, password FROM users WHERE user_id = $1;',
-        [id]
+        [userId]
       );
       if (result.rows.length > 0) {
         return result.rows[0];
@@ -86,5 +147,73 @@ export class UserModel {
       throw new Error('Sorry, unable to get user');
     }
     return null;
+  }
+  async filterByParameter(params) {
+    try {
+      let baseQuery = 'SELECT users.user_id, email, phone_number, role, name';
+      let roleQuery;
+      const values = [];
+      const conditions = [];
+
+      switch (params.role) {
+        case 'client':
+          roleQuery =
+            ', salary, client_id FROM users LEFT JOIN clients ON users.user_id = clients.user_id';
+          break;
+        case 'worker':
+          roleQuery =
+            ', worker_id FROM users LEFT JOIN workers ON users.user_id = workers.user_id';
+          break;
+        case 'admin':
+          roleQuery =
+            ', admin_id FROM users LEFT JOIN admins ON users.user_id = admins.user_id';
+          break;
+        default:
+          roleQuery = '';
+          break;
+      }
+
+      baseQuery += roleQuery;
+      console.log('SQL Query:', baseQuery);
+
+      if (params.role) {
+        conditions.push(`users.role = $${values.length + 1}`);
+        values.push(params.role);
+      }
+      if (params.name) {
+        conditions.push(`name ILIKE $${values.length + 1}`);
+        values.push(`%${params.name}%`);
+      }
+      if (params.email) {
+        conditions.push(`users.email = $${values.length + 1}`);
+        values.push(params.email);
+      }
+      if (params.phone) {
+        conditions.push(`users.phone_number = $${values.length + 1}`);
+        values.push(params.phone);
+      }
+      if (params.salary && params.role === 'client') {
+        conditions.push(`clients.salary = $${values.length + 1}`);
+        values.push(params.salary);
+      }
+
+      if (conditions.length) {
+        baseQuery += ' WHERE ' + conditions.join(' AND ');
+      }
+
+      if (params.sort) {
+        if (params.sort === 'name') {
+          baseQuery += ' ORDER BY name';
+        } else if (params.sort === 'salary' && params.role === 'client') {
+          baseQuery += ' ORDER BY clients.salary';
+        }
+      }
+      console.log('Values:', values);
+      const result = await pool.query(baseQuery, values);
+      return result.rows;
+    } catch (err) {
+      console.error(`Unable to get users by parameters`, err);
+      throw new Error(`Unable to get users by parameters`);
+    }
   }
 }

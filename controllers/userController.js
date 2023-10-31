@@ -81,13 +81,36 @@ class AuthenticationController {
 }
 
 class UserController {
-  getAllUsers = async (req, res) => {
+  getUserById = async (req, res) => {
     try {
-      const users = await userModel.getAllUsers();
+      const userId = req.params.userId;
+      const user = await userModel.getUserById(userId);
+      res.status(200).json(user);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Server error while getting user by id');
+    }
+  };
+  filterByParameter = async (req, res) => {
+    try {
+      if (Object.keys(req.query).length === 0) {
+        const users = await userModel.getAllUsers();
+        return res.status(200).json(users);
+      }
+      const params = req.query;
+
+      const users = await userModel.filterByParameter(params);
+
+      if (!users.length) {
+        return res
+          .status(404)
+          .json({ error: 'No users found matching the criteria.' });
+      }
+
       res.status(200).json(users);
     } catch (err) {
       console.error(err);
-      res.status(500).send('Server error while geeting users');
+      res.status(500).send('Server error while filtering users');
     }
   };
 }

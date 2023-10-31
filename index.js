@@ -29,7 +29,16 @@ app.post(
 );
 app.post('/api/v1/refresh_token', token.getToken);
 
-app.get('/api/v1/users', token.getAuthorization, userController.getAllUsers);
+app.get(
+  '/api/v1/users/:userId',
+  token.getAuthorization,
+  userController.getUserById
+);
+app.get(
+  '/api/v1/users',
+  token.getAuthorization,
+  userController.filterByParameter
+);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

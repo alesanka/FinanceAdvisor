@@ -275,10 +275,11 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
-    "user_id":{user_id},
     "email": "user1@example.com",
-    "phone_number": "+1234567890",
+    "phone_number": "1234567890",
     "role": "client"
+    "name": "Name",
+    "client_id": 1
   }
 ```
 
@@ -289,7 +290,7 @@ HTTP/1.1 404 Not Found
 Content-Type: application/json
 
 {
-  "error": "Invalid user's id"
+  "error": "Sorry, unable to get user"
 }
 ```
 
@@ -299,18 +300,19 @@ Content-Type: application/json
 
 Query Parameters:
 
-| Parameter   | Type   | Description                                                |
-| ----------- | ------ | ---------------------------------------------------------- |
-| `role`      | string | Filter users by role (e.g., "client").                     |
-| `client_id` | number | Filter users by client_id.                                 |
-| `salary`    | number | Filter users by salary (e.g., "5000").                     |
-| `name`      | string | Filter users by name (e.g., "client").                     |
-| `sort`      | string | Filter users by different parameters (e.g., name, salary). |
+| Parameter | Type   | Description                                                            |
+| --------- | ------ | ---------------------------------------------------------------------- |
+| `role`    | string | Filter users by role (e.g., "client", "admin", "worker").              |
+| `salary`  | number | Filter users by salary (e.g., "5000")(avaible only for role "client"). |
+| `name`    | string | Filter users by name (e.g., "client").                                 |
+| `email`   | string | Filter users by email (e.g., cool@email.com).                          |
+| `phone`   | string | Filter users by phone (e.g., 1234567890).                              |
+| `sort`    | string | Filter users by parameters name or salary(only for role "client").     |
 
 Request:
 
 ```
-GET /users?role=client&sort=salary HTTP/1.1
+GET /users/filter?role=client&sort=salary HTTP/1.1
 Authorization: Bearer {access_token}
 ```
 
