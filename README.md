@@ -312,7 +312,7 @@ Query Parameters:
 Request:
 
 ```
-GET /users/filter?role=client&sort=salary HTTP/1.1
+GET /users/filter?role=admin&name=alesia HTTP/1.1
 Authorization: Bearer {access_token}
 ```
 
@@ -323,11 +323,13 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
-    "user_id": 1,
-    "name": Name Name,
-    "salary": 7000,
-    "role": "client"
-  }
+        "user_id": 4,
+        "email": "somemail@email.com",
+        "phone_number": "1234567890",
+        "role": "admin",
+        "name": "Alesia P",
+        "admin_id": 1
+    }
 ```
 
 In case of error response:
@@ -353,7 +355,7 @@ Content-Type: application/json
 Authorization: Bearer {access_token}
 
 {
-  "phone_number": "+9999999999"
+  "phone_number": "9999999999"
 }
 ```
 
@@ -363,10 +365,18 @@ In case of successful response:
 HTTP/1.1 200 OK
 Content-Type: application/json
 {
-  "user_id": {userId},
-  "email": "user1@example.com",
-  "phone_number": "+9999999999",
-  "role": "client"
+  message: `User ${userId} data updated successfully.`
+ }
+```
+
+In case of error response:
+
+```
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+
+{
+  "Server error while updating user data."
 }
 ```
 

@@ -113,6 +113,27 @@ class UserController {
       res.status(500).send('Server error while filtering users');
     }
   };
+  changeData = async (req, res) => {
+    const userId = req.params.userId;
+    if (!req.body) {
+      return res
+        .status(400)
+        .json({ error: 'No data provided in request body.' });
+    }
+
+    try {
+      await userModel.changeData(userId, req.body);
+
+      res
+        .status(200)
+        .json({
+          message: `User's data with id - ${userId} was updated successfully.`,
+        });
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Server error while updating user data.');
+    }
+  };
 }
 
 export const authenticationController = new AuthenticationController();

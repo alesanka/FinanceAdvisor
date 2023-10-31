@@ -174,7 +174,6 @@ export class UserModel {
       }
 
       baseQuery += roleQuery;
-      console.log('SQL Query:', baseQuery);
 
       if (params.role) {
         conditions.push(`users.role = $${values.length + 1}`);
@@ -208,12 +207,119 @@ export class UserModel {
           baseQuery += ' ORDER BY clients.salary';
         }
       }
-      console.log('Values:', values);
+
       const result = await pool.query(baseQuery, values);
       return result.rows;
     } catch (err) {
       console.error(`Unable to get users by parameters`, err);
       throw new Error(`Unable to get users by parameters`);
+    }
+  }
+  async changeData(userId, data) {
+    try {
+      const userResult = await pool.query(
+        'SELECT role FROM users WHERE user_id = $1',
+        [userId]
+      );
+
+      if (userResult.rows.length === 0) {
+        throw new Error(`No user found with userId ${userId}`);
+      }
+
+      if (data.phone_number || data.email) {
+        let userQuery = 'UPDATE users SET ';
+        let userValues = [];
+
+        if (data.email) {
+          userQuery += `email = $${userValues.length + 1}, `;
+          userValues.push(data.email);
+        }
+
+        if (data.phone_number) {
+          userQuery += `phone_number = $${userValues.length + 1}, `;
+          userValues.push(data.phone_number);
+        }
+
+        userQuery = userQuery.trim().endsWith(',')
+          ? (userQuery = userQuery.slice(0, -2))
+          : userQuery;
+
+        userQuery += ` WHERE user_id = $${userValues.length + 1}`;
+
+        userValues.push(userId);
+        await pool.query(userQuery, userValues);
+      }
+      if (data.name || data.salary) {
+        const role = userResult.rows[0].role;
+        let query;
+        let values;
+
+        switch (role) {
+          case 'client':
+            query = 'UPDATE clients SET ';
+            values = [];
+
+            if (data.name) {
+              query += `name = $${values.length + 1}, `;
+              values.push(data.name);
+            }
+
+            if (data.salary) {
+              query += `salary = $${values.length + 1}, `;
+              values.push(data.salary);
+            }
+
+            query = query.trim().endsWith(',')
+              ? (query = query.slice(0, -2))
+              : query;
+            query += ` WHERE user_id = $${values.length + 1}`;
+            values.push(userId);
+
+            break;
+
+          case 'worker':
+            query = 'UPDATE workers SET ';
+            values = [];
+            if (data.salary) {
+              throw new Error(
+                `User with id ${userId} is a worker, no salary is required`
+              );
+            }
+            query += `name = $${values.length + 1}`;
+            values.push(data.name);
+
+            query += ` WHERE user_id = $${values.length + 1}`;
+            values.push(userId);
+
+            break;
+
+          case 'admin':
+            query = `UPDATE admins SET `;
+            values = [];
+            if (data.salary) {
+              throw new Error(
+                `User with id ${userId} is an admin, no salary is required`
+              );
+            }
+
+            query += `name = $${values.length + 1}`;
+            values.push(data.name);
+
+            query += ` WHERE user_id = $${values.length + 1}`;
+            values.push(userId);
+
+            break;
+
+          default:
+            throw new Error('Invalid role');
+        }
+
+        await pool.query(query, values);
+      }
+      return;
+    } catch (err) {
+      console.error(`Unable to update data for userId ${userId}`, err);
+      throw new Error(`Unable to update data for userId ${userId}`);
     }
   }
 }

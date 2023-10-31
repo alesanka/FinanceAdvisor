@@ -39,6 +39,11 @@ app.get(
   token.getAuthorization,
   userController.filterByParameter
 );
+app.put(
+  '/api/v1/users/:userId',
+
+  userController.changeData
+);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
