@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 
 const saltRounds = 10;
 
-export class User {
+export class UserModel {
   async registerUser(
     username,
     passwordRaw,
@@ -45,6 +45,16 @@ export class User {
     } catch (err) {
       console.error('Error during user creation:', err);
       throw new Error('Unable to create user');
+    }
+  }
+  async getAllUsers() {
+    try {
+      const result = await pool.query(
+        'SELECT user_id, username, email, phone_number, role FROM users'
+      );
+      return result.rows;
+    } catch (err) {
+      throw new Error(`Unable to get all users because error: ${err}`);
     }
   }
   async findUserByUsername(username) {

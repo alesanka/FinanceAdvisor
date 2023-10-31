@@ -37,7 +37,7 @@ export const createModel = (db) => {
     return {
       accessToken,
       accessTokenExpiresAt: meta.accessTokenExpiresAt,
-      user: meta.userId,
+      user: meta.user_id,
       client: db.findClientById(meta.clientId),
       scope: meta.scope,
     };
@@ -53,7 +53,7 @@ export const createModel = (db) => {
     return {
       refreshToken,
       refreshTokenExpiresAt: meta.refreshTokenExpiresAt,
-      user: meta.userId,
+      user: meta.user_id,
       client: db.findClientById(meta.clientId),
       scope: meta.scope,
     };
@@ -63,7 +63,7 @@ export const createModel = (db) => {
     try {
       const meta = {
         clientId: client.id,
-        userId: user.user_id,
+        user_id: user.user_id,
         accessTokenExpiresAt: token.accessTokenExpiresAt,
         refreshTokenExpiresAt: token.refreshTokenExpiresAt,
       };
@@ -92,7 +92,7 @@ export const createModel = (db) => {
       [username]
     );
     return {
-      id: result.rows[0].id,
+      user_id: result.rows[0].user_id,
       username: result.rows[0].username,
     };
   }

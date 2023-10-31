@@ -157,7 +157,6 @@ HTTP/1.1 500 Internal Server Error
 Content-Type: application/json
 
 {
-   "success": false,
    "message": "Server error"
 }
 ```
@@ -217,7 +216,6 @@ HTTP/1.1 500 Internal Server Error
 Content-Type: application/json
 
 {
-   "success": false,
    "message": "Server error"
 }
 ```

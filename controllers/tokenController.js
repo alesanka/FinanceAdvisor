@@ -16,7 +16,7 @@ let options = {
   alwaysIssueNewRefreshToken: true,
 };
 
-class Token {
+class TokenController {
   getToken = async (req, res) => {
     const request = new Request({
       method: req.method,
@@ -61,4 +61,4 @@ class Token {
   };
 }
 
-export const token = new Token();
+export const token = new TokenController();

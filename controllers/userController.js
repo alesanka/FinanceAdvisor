@@ -1,16 +1,16 @@
-import { User } from '../services/userModel.js';
+import { UserModel } from '../services/userModel.js';
 
 import bcrypt from 'bcrypt';
 
-const user = new User();
+const userModel = new UserModel();
 
-class Authentication {
+class AuthenticationController {
   registerUser = async (req, res) => {
     try {
       const { username, password, email, phone_number, role, name, salary } =
         req.body;
 
-      const existingUser = await user.findUserByUsername(username);
+      const existingUser = await userModel.findUserByUsername(username);
       if (existingUser) {
         return res.status(409).send(`User with this username already exists`);
       }
@@ -42,7 +42,7 @@ class Authentication {
         });
       }
 
-      await user.registerUser(
+      await userModel.registerUser(
         username,
         password,
         email,
@@ -60,7 +60,7 @@ class Authentication {
   authenticateUser = async (req, res, next) => {
     try {
       const { username, password } = req.body;
-      const existingUser = await user.findUserByUsername(username);
+      const existingUser = await userModel.findUserByUsername(username);
       if (!existingUser) {
         return res.status(400).send('Username is incorrect');
       }
@@ -80,4 +80,17 @@ class Authentication {
   };
 }
 
-export const authentication = new Authentication();
+class UserController {
+  getAllUsers = async (req, res) => {
+    try {
+      const users = await userModel.getAllUsers();
+      res.status(200).json(users);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Server error while geeting users');
+    }
+  };
+}
+
+export const authenticationController = new AuthenticationController();
+export const userController = new UserController();
