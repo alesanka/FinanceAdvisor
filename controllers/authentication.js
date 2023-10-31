@@ -7,7 +7,7 @@ const user = new User();
 class Authentication {
   registerUser = async (req, res) => {
     try {
-      const { username, password } = req.body;
+      const { username, password, email, phoneNumber, role } = req.body;
 
       const existingUser = await user.findUserByUsername(username);
       if (existingUser) {
@@ -20,7 +20,32 @@ class Authentication {
           message: 'Password should be at least 8 characters long',
         });
       }
-      await user.registerUser(username, password);
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        return res.status(400).send({
+          success: false,
+          message: 'Invalid email format',
+        });
+      }
+
+      const cleanedPhoneNumber = phoneNumber.replace(/\D/g, '');
+      if (cleanedPhoneNumber.length !== 10) {
+        return res.status(400).send({
+          success: false,
+          message: 'Phone number should contain exactly 10 digits',
+        });
+      }
+
+      const validRoles = ['user', 'worker', 'admin'];
+      if (!validRoles.includes(role)) {
+        return res.status(400).send({
+          success: false,
+          message: 'Invalid role. Accepted values are: user, worker, admin',
+        });
+      }
+
+      await user.registerUser(username, password, email, phoneNumber, role);
       res.status(201).send('User was registered successfully');
     } catch (err) {
       console.error(err);

@@ -4,12 +4,13 @@ import bcrypt from 'bcrypt';
 const saltRounds = 10;
 
 export class User {
-  async registerUser(username, passwordRaw) {
+  async registerUser(username, passwordRaw, email, phone_number, role) {
     const password = await bcrypt.hash(passwordRaw, saltRounds);
+
     try {
       const result = await pool.query(
-        'INSERT INTO users (username, password) VALUES ($1, $2) RETURNING user_id',
-        [username, password]
+        'INSERT INTO users (username, password, email, phone_number, role) VALUES ($1, $2, $3, $4, $5) RETURNING user_id',
+        [username, password, email, phone_number, role]
       );
       return result.rows[0].user_id;
     } catch (err) {
