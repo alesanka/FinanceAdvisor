@@ -46,8 +46,11 @@ POST /register
 Content-Type: application/json
 Request Body:
 {
-  "login": "user-shmyser",
-  "password": "securepassword123"
+  "username": "alesia",
+  "password": "abrakadabra",
+  "email": "thebest@email.com",
+  "phone_number": "1234567890",
+  "role": "admin"
 }
 ```
 
@@ -105,10 +108,10 @@ POST /login
 Content-Type: application/x-www-form-urlencoded
 Request Body: {
         grant_type: password,
-        scope: user|admin|worker,
+        scope: admin,
         client_id: this-client-id-is-for-demo-only,
         client_secret: this-secret-id-is-for-demo-only,
-        username: daniil,
+        username: alesia,
         password: abrakadabra,
       }
 ```

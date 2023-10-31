@@ -1,4 +1,8 @@
-CREATE TYPE roles_enum AS ENUM ('user', 'worker', 'admin');
+DO $$ BEGIN
+    CREATE TYPE roles_enum AS ENUM ('user', 'worker', 'admin');
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 
 CREATE TABLE IF NOT EXISTS Users (
     user_id SERIAL PRIMARY KEY,
@@ -8,5 +12,6 @@ CREATE TABLE IF NOT EXISTS Users (
     phone_number VARCHAR(255),
     role roles_enum NOT NULL
 );
+
 
 

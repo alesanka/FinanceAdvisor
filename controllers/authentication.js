@@ -7,7 +7,7 @@ const user = new User();
 class Authentication {
   registerUser = async (req, res) => {
     try {
-      const { username, password, email, phoneNumber, role } = req.body;
+      const { username, password, email, phone_number, role } = req.body;
 
       const existingUser = await user.findUserByUsername(username);
       if (existingUser) {
@@ -29,7 +29,7 @@ class Authentication {
         });
       }
 
-      const cleanedPhoneNumber = phoneNumber.replace(/\D/g, '');
+      const cleanedPhoneNumber = phone_number.replace(/\D/g, '');
       if (cleanedPhoneNumber.length !== 10) {
         return res.status(400).send({
           success: false,
@@ -45,7 +45,7 @@ class Authentication {
         });
       }
 
-      await user.registerUser(username, password, email, phoneNumber, role);
+      await user.registerUser(username, password, email, phone_number, role);
       res.status(201).send('User was registered successfully');
     } catch (err) {
       console.error(err);
