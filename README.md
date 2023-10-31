@@ -46,11 +46,12 @@ POST /register
 Content-Type: application/json
 Request Body:
 {
-  "username": "alesia",
+  "username": "anna",
   "password": "abrakadabra",
-  "email": "thebest@email.com",
+  "email": "thebestanna@email.com",
   "phone_number": "1234567890",
-  "role": "admin"
+  "role": "admin",
+  "name": "Anna Hanna",
 }
 ```
 
@@ -225,54 +226,6 @@ Content-Type: application/json
 ```
 
 ## Endpoint /users <a name="endpoints-users"></a> [(Back to content)](#content)
-
-**Create a new user account.**
-
-Request:
-
-```
-POST /users HTTP/1.1
-Content-Type: application/json
-Authorization: Bearer {access_token}
-```
-
-In case of successful response:
-
-```
-HTTP/1.1 201 Created
-Content-Type: application/json
-
-{
-  "user_id": 3,
-  "email": "newuser@example.com",
-  "phone_number": "+9876543210",
-  "role": "worker"
-}
-```
-
-In case of error response:
-
-```
-HTTP/1.1 400 Bad Request
-Content-Type: application/json
-
-{
-  "error": "Email address 'newuser@example.com' is already registered."
-}
-```
-
-or
-
-```
-HTTP/1.1 500 Internal Server Error
-Content-Type: application/json
-
-{
-  "error": "Internal server error occurred. Please try again later or contact support."
-}
-```
-
----
 
 **Retrieve the users profile information.**
 

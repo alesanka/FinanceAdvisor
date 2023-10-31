@@ -7,7 +7,8 @@ const user = new User();
 class Authentication {
   registerUser = async (req, res) => {
     try {
-      const { username, password, email, phone_number, role } = req.body;
+      const { username, password, email, phone_number, role, name, salary } =
+        req.body;
 
       const existingUser = await user.findUserByUsername(username);
       if (existingUser) {
@@ -45,7 +46,15 @@ class Authentication {
         });
       }
 
-      await user.registerUser(username, password, email, phone_number, role);
+      await user.registerUser(
+        username,
+        password,
+        email,
+        phone_number,
+        role,
+        name,
+        salary
+      );
       res.status(201).send('User was registered successfully');
     } catch (err) {
       console.error(err);

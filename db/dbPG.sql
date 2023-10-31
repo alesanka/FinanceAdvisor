@@ -13,5 +13,28 @@ CREATE TABLE IF NOT EXISTS Users (
     role roles_enum NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS Clients (
+    client_id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES Users(user_id),
+    name VARCHAR(255) NOT NULL,
+    salary INT NOT NULL,
+    UNIQUE(user_id)
+);
+
+CREATE TABLE IF NOT EXISTS Workers (
+    worker_id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES Users(user_id),
+    name VARCHAR(255) NOT NULL,
+    UNIQUE(user_id)
+);
+
+CREATE TABLE IF NOT EXISTS Admins (
+    admin_id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES Users(user_id),
+    name VARCHAR(255) NOT NULL,
+    UNIQUE(user_id)
+);
+
+
 
 
