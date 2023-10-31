@@ -346,6 +346,7 @@ Content-Type: application/json
 ---
 
 **Update user information.**
+There is a possibillity to update user's email, name, phone_number, salary (if user is a client).
 
 Request:
 
