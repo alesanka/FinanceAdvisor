@@ -217,11 +217,12 @@ Content-Type: application/json
 
 **Retrieve the users profile information.**
 
+\*public request
+
 Request:
 
 ```
 GET /users HTTP/1.1
-Authorization: Bearer {access_token}
 ```
 
 Response:
@@ -230,14 +231,14 @@ Response:
 [
   {
     "user_id": 1,
-    "email": "user1@example.com",
-    "phone_number": "+1234567890",
+    "first_name": "Anna",
+    "last_name": "Smith",
     "role": "client"
   },
   {
     "user_id": 2,
-    "email": "user2@example.com",
-    "phone_number": "+9876543210",
+    "first_name": "George",
+    "last_name": "Baker",
     "role": "worker"
   }
   // ... more users
@@ -247,6 +248,8 @@ Response:
 ---
 
 **Retrieve a specific user's profile information by user id.**
+
+\*protected request (available only for admin and worker with access_token)
 
 Query Parameters:
 
@@ -268,11 +271,14 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
-    "email": "user1@example.com",
+    "first_name": "Anna",
+    "last_name": "Smith",
+    "email": "user@example.com",
     "phone_number": "1234567890",
+    "client_id": 1,
+    "salary": 30000,
+    "credit_story": false,
     "role": "client"
-    "name": "Name",
-    "client_id": 1
   }
 ```
 

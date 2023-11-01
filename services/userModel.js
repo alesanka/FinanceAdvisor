@@ -49,7 +49,7 @@ class UserModel {
   async findUserByUsername(username) {
     try {
       const result = await pool.query(
-        'SELECT user_id FROM users WHERE username = $1;',
+        'SELECT user_id, username, password FROM users WHERE username = $1;',
         [username]
       );
       if (result.rows.length > 0) {
@@ -61,14 +61,30 @@ class UserModel {
     }
     return null;
   }
+  async findUserById(userId) {
+    try {
+      const result = await pool.query(
+        'SELECT user_id, username, password FROM users WHERE user_id = $1;',
+        [userId]
+      );
+      if (result.rows.length > 0) {
+        return result.rows[0];
+      }
+    } catch (err) {
+      console.error(`Unable to get user by id: ${err}`);
+      throw new Error(`Unable to get user by id.`);
+    }
+    return null;
+  }
   async getAllUsers() {
     try {
       const result = await pool.query(
-        'SELECT user_id, email, phone_number, role FROM users'
+        'SELECT user_id, first_name, last_name, role FROM users'
       );
       return result.rows;
     } catch (err) {
-      throw new Error(`Unable to get all users: ${err}`);
+      console.error(`Unable to get all users: ${err}`);
+      throw new Error(`Unable to get all users.`);
     }
   }
   async getUserById(userId) {
@@ -83,52 +99,29 @@ class UserModel {
       }
 
       const role = resultRole.rows[0].role;
+      let clientDetails = {};
 
-      const roleMapping = {
-        client: {
-          table: 'clients',
-          fields: ['client_id', 'name', 'salary'],
-        },
-        worker: {
-          table: 'workers',
-          fields: ['worker_id', 'name'],
-        },
-        admin: {
-          table: 'admins',
-          fields: ['admin_id', 'name'],
-        },
-      };
-
-      const roleInfo = roleMapping[role];
-      const fieldsString = roleInfo.fields.join(', ');
-
-      const resultRoleDetails = await pool.query(
-        `SELECT ${fieldsString} FROM ${roleInfo.table} WHERE user_id = $1;`,
-        [userId]
-      );
-
-      if (resultRoleDetails.rows.length === 0) {
-        throw new Error(
-          `${role.charAt(0).toUpperCase() + role.slice(1)} details not found`
+      if (role === 'client') {
+        const resultClient = await pool.query(
+          `SELECT client_id, salary, credit_story FROM clients WHERE user_id = $1;`,
+          [userId]
         );
+        clientDetails = resultClient.rows[0];
       }
 
       const userDetails = await pool.query(
-        'SELECT email, phone_number FROM users WHERE user_id = $1;',
+        'SELECT first_name, last_name, email, phone_number FROM users WHERE user_id = $1;',
         [userId]
       );
 
-      if (userDetails.rows.length === 0) {
-        throw new Error('User details not found');
-      }
-
       return {
         ...userDetails.rows[0],
-        ...resultRoleDetails.rows[0],
+        ...clientDetails,
         role,
       };
     } catch (err) {
-      throw new Error(`Unable to get user by id: ${err}`);
+      console.error(`Unable to get user by id: ${err}`);
+      throw new Error(`Unable to get user by id.`);
     }
   }
 
@@ -153,20 +146,7 @@ class UserModel {
       throw new Error(`Unable to get user by role id: ${err}`);
     }
   }
-  async findUserById(userId) {
-    try {
-      const result = await pool.query(
-        'SELECT user_id, username, password FROM users WHERE user_id = $1;',
-        [userId]
-      );
-      if (result.rows.length > 0) {
-        return result.rows[0];
-      }
-    } catch (err) {
-      throw new Error(`Unable to get user by id: ${err}`);
-    }
-    return null;
-  }
+
   async filterByParameter(params) {
     try {
       let baseQuery = 'SELECT users.user_id, email, phone_number, role, name';

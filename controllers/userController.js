@@ -145,17 +145,7 @@ class AuthenticationController {
 }
 
 class UserController {
-  getUserById = async (req, res) => {
-    try {
-      const userId = req.params.userId;
-      const user = await userModel.getUserById(userId);
-      res.status(200).json(user);
-    } catch (err) {
-      console.error(err);
-      res.status(404).json({ error: err.message });
-    }
-  };
-
+  // to get all users in this method as well
   filterByParameter = async (req, res) => {
     try {
       if (Object.keys(req.query).length === 0) {
@@ -177,6 +167,17 @@ class UserController {
       res.status(500).json({ error: err.message });
     }
   };
+  getUserById = async (req, res) => {
+    try {
+      const userId = req.params.userId;
+      const user = await userModel.getUserById(userId);
+      res.status(200).json(user);
+    } catch (err) {
+      console.error(err);
+      res.status(404).json({ error: err.message });
+    }
+  };
+
   changeData = async (req, res) => {
     const userId = req.params.userId;
     if (!req.body) {
