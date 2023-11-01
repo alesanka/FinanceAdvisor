@@ -8,11 +8,19 @@ DO $$ BEGIN
 EXCEPTION
     WHEN duplicate_object THEN null;
 END $$;
+DO $$ BEGIN
+    CREATE TYPE docs_enum AS ENUM ('passport', 'purchase_agreement', 'student_verification', 'business_plan');
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
+
 
 CREATE TABLE IF NOT EXISTS Users (
     user_id SERIAL PRIMARY KEY,
     username VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
+    first_name VARCHAR(255) NOT NULL,
+    last_name VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     phone_number VARCHAR(255),
     role roles_enum NOT NULL
@@ -21,30 +29,7 @@ CREATE TABLE IF NOT EXISTS Users (
 CREATE TABLE IF NOT EXISTS Clients (
     client_id SERIAL PRIMARY KEY,
     user_id INT REFERENCES Users(user_id) ON DELETE CASCADE,
-    name VARCHAR(255) NOT NULL,
+    credit_story BOOLEAN DEFAULT false,
     salary INT NOT NULL,
     UNIQUE(user_id)
 );
-
-CREATE TABLE IF NOT EXISTS Workers (
-    worker_id SERIAL PRIMARY KEY,
-    user_id INT REFERENCES Users(user_id) ON DELETE CASCADE,
-    name VARCHAR(255) NOT NULL,
-    UNIQUE(user_id)
-);
-
-CREATE TABLE IF NOT EXISTS Admins (
-    admin_id SERIAL PRIMARY KEY,
-    user_id INT REFERENCES Users(user_id) ON DELETE CASCADE,
-    name VARCHAR(255) NOT NULL,
-    UNIQUE(user_id)
-);
-
-CREATE TABLE IF NOT EXISTS LoanTypes (
-    loan_type_id SERIAL PRIMARY KEY,
-    admin_id INT REFERENCES Admins(admin_id),
-    loan_type loans_enum UNIQUE NOT NULL,
-    interest_rate DECIMAL(5, 2) NOT NULL CHECK (interest_rate > 0),
-    loan_term INT NOT NULL CHECK (loan_term > 0)
-);
-

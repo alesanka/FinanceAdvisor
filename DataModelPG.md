@@ -145,12 +145,12 @@ Maximum loan amounts for applications.
 
 ### 2. Document types
 
-| docs_enum               |
-| ----------------------- |
-| passport                |
-| employment_verification |
-| business_plan           |
-| purchase_agreement      |
+| docs_enum            |
+| -------------------- |
+| passport             |
+| student_verification |
+| business_plan        |
+| purchase_agreement   |
 
 ### 3. Loan types
 
