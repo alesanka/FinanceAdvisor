@@ -505,10 +505,9 @@ Content-Type: application/json
 
 Query Parameters:
 
-| Parameter      | Type   | Description                    |
-| -------------- | ------ | ------------------------------ |
-| `loan_type_id` | number | Get loan type by loan_type_id. |
-| `loan_type`    | string | Get loan type by loan_type.    |
+| Parameter   | Type   | Description                 |
+| ----------- | ------ | --------------------------- |
+| `loan_type` | string | Get loan type by loan_type. |
 
 Request:
 
@@ -539,7 +538,7 @@ In case of error response:
 HTTP/1.1 400 Bad Request
 Content-Type: text/html; charset=utf-8
 
-`No valid loan_type_id or loan_type are provided`
+`No valid loan_type is provided`
 ```
 
 or

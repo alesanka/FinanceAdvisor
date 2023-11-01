@@ -61,16 +61,14 @@ class LoanTypeController {
   };
   getSpecificLoanType = async (req, res) => {
     try {
-      const params = req.query;
-      if (params.loan_type_id) {
-        const loanType = await loanTypeModel.findLoanById(params.loan_type_id);
-        res.status(200).json(loanType);
+      const loanType = req.params.loan_type;
+
+      if (!loanType) {
+        return res.status(400).send(`No valid loan_type is provided`);
       }
-      if (params.loan_type) {
-        const loanType = await loanTypeModel.findLoanByType(params.loan_type);
-        res.status(200).json(loanType);
-      }
-      res.status(400).send(`No valid loan_type_id or loan_type are provided`);
+
+      const loanData = await loanTypeModel.findLoanByType(loanType);
+      res.status(200).json(loanData);
     } catch (err) {
       console.error(err);
       res.status(500).json({ error: err.message });
