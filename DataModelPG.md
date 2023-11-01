@@ -80,12 +80,12 @@ Information about admins.
 
 Details of documents associated with clients.
 
-| Key | Column Name   | Data Type | Description                         |
-| --- | ------------- | --------- | ----------------------------------- |
-| PK  | document_id   | int       | Primary key for the documents table |
-| FK  | client_id     | int       | Foreign key from the clients table  |
-|     | document_name | varchar   | Name of the document                |
-|     | document_type | doc_enam  | Type of the document                |
+| Key | Column Name    | Data Type | Description                                 |
+| --- | -------------- | --------- | ------------------------------------------- |
+| PK  | document_id    | int       | Primary key for the documents table         |
+| FK  | application_id | int       | Foreign key from the loan application table |
+|     | document_name  | varchar   | Name of the document                        |
+|     | document_type  | doc_enam  | Type of the document                        |
 
 ### 6. LoanApplications
 
