@@ -7,15 +7,13 @@
 - [Tables](#tables)
   - [Users](#1-users)
   - [Clients](#2-clients)
-  - [Workers](#3-workers)
-  - [Admin](#4-admin)
-  - [Documents](#5-documents)
-  - [LoanApplications](#6-loanapplications)
-  - [LoanTypes_LoanApplications](#7-loantypes_loanapplications)
-  - [LoanTypes](#8-loantypes)
-  - [RepaymentSchedules](#9-repaymentschedules)
-  - [PaymentNotes](#10-paymentnotes)
-  - [MaximumLoanAmounts](#11-maximumloanamounts)
+  - [LoanApplications](#3-loanapplications)
+  - [Documents](#4-documents)
+  - [LoanTypes_LoanApplications](#5-loantypes_loanapplications)
+  - [LoanTypes](#6-loantypes)
+  - [RepaymentSchedules](#7-repaymentschedules)
+  - [PaymentNotes](#8-paymentnotes)
+  - [MaximumLoanAmounts](#9-maximumloanamounts)
 - [Enumeration](#enumeration)
   - [User roles](#1-user-roles)
   - [Document types](#2-document-types)
@@ -41,6 +39,8 @@ Table for authentication and storing basic user info.
 | PK  | user_id      | int        | Primary key for the users table |
 |     | username     | varchar    | User's login                    |
 |     | password     | varchar    | User's password                 |
+|     | first_name   | varchar    | User's first name               |
+|     | last_name    | varchar    | User's last name                |
 |     | email        | varchar    | User's email                    |
 |     | phone_number | varchar    | User's phone number             |
 |     | role         | roles_enum | Role of the user.               |
@@ -49,36 +49,27 @@ Table for authentication and storing basic user info.
 
 Information about clients.
 
-| Key | Column Name | Data Type | Description                       |
-| --- | ----------- | --------- | --------------------------------- |
-| PK  | client_id   | int       | Primary key for the clients table |
-| FK  | user_id     | int       | Foreign key from the users table  |
-|     | name        | varchar   | Client's name                     |
-|     | salary      | int       | Client's salary                   |
+| Key | Column Name  | Data Type | Description                       |
+| --- | ------------ | --------- | --------------------------------- |
+| PK  | client_id    | int       | Primary key for the clients table |
+| FK  | user_id      | int       | Foreign key from the users table  |
+|     | name         | varchar   | Client's name                     |
+|     | credit_story | boolean   | Does a client has a credit story  |
+|     | salary       | int       | Client's salary                   |
 
-### 3. Workers
+### 3. LoanApplications
 
-Information about workers.
+Loan application details.
 
-| Key | Column Name | Data Type | Description                       |
-| --- | ----------- | --------- | --------------------------------- |
-| PK  | worker_id   | int       | Primary key for the workers table |
-| FK  | user_id     | int       | Foreign key from the users table  |
-|     | name        | varchar   | Worker's name                     |
+| Key | Column Name         | Data Type | Description                            |
+| --- | ------------------- | --------- | -------------------------------------- |
+| PK  | application_id      | int       | Primary key for the applications table |
+| FK  | client_id           | int       | Foreign key from the clients table     |
+|     | desired_loan_amount | int       | Desired loan amount by the client      |
 
-### 4. Admin
+### 4. Documents
 
-Information about admins.
-
-| Key | Column Name | Data Type | Description                      |
-| --- | ----------- | --------- | -------------------------------- |
-| PK  | admin_id    | int       | Primary key for the admin table  |
-| FK  | user_id     | int       | Foreign key from the users table |
-|     | name        | varchar   | Admin's name                     |
-
-### 5. Documents
-
-Details of documents associated with clients.
+Details of documents associated with loan application.
 
 | Key | Column Name    | Data Type | Description                                 |
 | --- | -------------- | --------- | ------------------------------------------- |
@@ -87,19 +78,9 @@ Details of documents associated with clients.
 |     | document_name  | varchar   | Name of the document                        |
 |     | document_type  | docs_enam | Type of the document                        |
 
-### 6. LoanApplications
+### 5. LoanTypes_LoanApplications
 
-Loan application details.
-
-| Key | Column Name         | Data Type | Description                            |
-| --- | ------------------- | --------- | -------------------------------------- |
-| PK  | application_id      | int       | Primary key for the applications table |
-| FK  | client_id           | int       | Foreign key from the clients table     |
-| FK  | worker_id           | int       | Foreign key from the workers table     |
-| FK  | loan_type_id        | int       | Foreign key from the loantypes table   |
-|     | desired_loan_amount | int       | Desired loan amount by the client      |
-
-### 7. LoanTypes_LoanApplications
+Loan types assosiated with loan applications.
 
 | Key | Column Name    | Data Type | Description                                          |
 | --- | -------------- | --------- | ---------------------------------------------------- |
@@ -107,19 +88,19 @@ Loan application details.
 | FK  | loan_type_id   | int       | Foreign key from the loantypes table                 |
 | FK  | application_id | int       | Foreign key from the applications table              |
 
-### 8. LoanTypes
+### 6. LoanTypes
 
 Different types of loans available.
 
-| Key | Column Name   | Data Type  | Description                                    |
-| --- | ------------- | ---------- | ---------------------------------------------- |
-| PK  | loan_type_id  | int        | Primary key for the loantypes table            |
-| FK  | admin_id      | int        | Foreign key from the admin table               |
-|     | loan_type     | loans_enum | Type of loan                                   |
-|     | interest_rate | float      | Interest rate for the loan type                |
-|     | loan_term     | int        | Term/duration of the loan (in months or years) |
+| Key | Column Name   | Data Type  | Description                           |
+| --- | ------------- | ---------- | ------------------------------------- |
+| PK  | loan_type_id  | int        | Primary key for the loantypes table   |
+|     | loan_type     | loans_enum | Type of loan                          |
+|     | interest_rate | float      | Interest rate for the loan type       |
+|     | loan_term     | int        | Term/duration of the loan (in months) |
+|     | required_doc  | docs_enum  | Type of doc required for loan type    |
 
-### 9. RepaymentSchedules
+### 7. RepaymentSchedules
 
 Schedule of repayments for loans.
 
@@ -130,7 +111,7 @@ Schedule of repayments for loans.
 |     | monthly_payment       | float     | Amount to be paid monthly                    |
 |     | remaining_balance     | float     | Remaining balance to be paid                 |
 
-### 10. PaymentNotes
+### 8. PaymentNotes
 
 Notes related to payments.
 
@@ -141,7 +122,7 @@ Notes related to payments.
 |     | payment_date          | date      | Date of the payment                           |
 |     | payment_amount        | float     | Amount paid                                   |
 
-### 11. MaximumLoanAmounts
+### 9. MaximumLoanAmounts
 
 Maximum loan amounts for applications.
 
@@ -184,15 +165,10 @@ Maximum loan amounts for applications.
 
 The relationships between the tables are:
 
-- Users to Clients: one User can be associated with one Client (one-to-one) through Clients(user_id).
-- Users to Workers: one User can be associated with one Worker (one-to-one) through Workers(user_id).
-- Users to Admin: one User can be associated with one Admin (one-to-one) through Admin(user_id).
-- Clients to Applications: one Client can have multiple Applications (one-to-many) through Applications(client_id).
-- Workers to Applications: one Worker can handle multiple Applications (one-to-many) through Applications(worker_id).
-- Admin to LoanTypes: one Admin can define multiple LoanTypes (one-to-many) through LoanTypes(admin_id).
-- LoanTypes to Applications: one LoanType can be associated with multiple LoanApplications and one LoanApplication can be associated with multiple Loantypes (many-to-many) through LoanTypes_LoanApplications table.
-- LoanTypes to Applications: one LoanType can be associated with multiple LoanApplications (one-to-many) through LoanApplications(loan_type_id).
-- LoanApplications to RepaymentSchedules: one Application can have one RepaymentSchedule (one-to-one) through RepaymentSchedules(application_id).
-- LoanApplications to Documents: one loan application can have multiple Documents (one-to-many) through application_id.
-- LoanApplications to MaximumLoanAmounts: one Application can have one MaximumLoanAmount (one-to-one) through MaximumLoanAmounts(application_id).
-- RepaymentSchedules to PaymentNotes: one RepaymentSchedule can have multiple PaymentNotes (one-to-many) through PaymentNotes(repayment_schedule_id).
+- Users to Clients: One User can be associated with one Client (one-to-one) through Clients(user_id).
+- Clients to LoanApplications: One Client can have multiple Applications (one-to-many) through LoanApplications(client_id).
+- LoanTypes to LoanApplications: One LoanType can be associated with multiple LoanApplications and one LoanApplication can be associated with multiple LoanTypes (many-to-many) through LoanTypes_LoanApplications table.
+- LoanApplications to Documents: One LoanApplication can have multiple Documents (one-to-many) through Documents(application_id).
+- LoanApplications to RepaymentSchedules: One LoanApplication can have one RepaymentSchedule (one-to-one) through RepaymentSchedules(application_id).
+- LoanApplications to MaximumLoanAmounts: One LoanApplication can have one MaximumLoanAmount (one-to-one) through MaximumLoanAmounts(application_id).
+- RepaymentSchedules to PaymentNotes: One RepaymentSchedule can have multiple PaymentNotes (one-to-many) through PaymentNotes(repayment_schedule_id).
