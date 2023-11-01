@@ -60,21 +60,19 @@ In case of successful response:
 
 ```
 HTTP/1.1 201 Created
-Content-Type: application/json
-{
-  "message": "User registration is successful."
-}
+Content-Type: text/html; charset=utf-8
+
+'User was registered successfully'
+
 ```
 
 In case of error response:
 
 ```
 HTTP/1.1 400 Bad Request
-Content-Type: application/json
+Content-Type: text/html; charset=utf-8
 
-{
-   "message": "Password should be at least 8 characters long"
-}
+'Password should be at least 8 characters long'
 ```
 
 or
@@ -84,7 +82,7 @@ HTTP/1.1 500 Internal Server Error
 Content-Type: application/json
 
 {
-   "message": "Server error"
+   "error": err.message
 }
 ```
 
@@ -93,12 +91,12 @@ Content-Type: application/json
 **Login an existing user.**
 When a user attempts to log into the app, the system initiates a multi-step verification process.
 Initially, the system checks if the provided login (username) exists in the database.
-Upon successful login verification, the system compares the entered password with the stored password for that login.
+Upon successful login verification, the system compares the entered password with the stored password for that login (username).
 If the password matches, the system proceeds to the next step. It communicates with the node-oauth2-server to obtain an access token.
 Both the access token and the refresh token are securely saved in the system for future requests.
 For all subsequent interactions, the user undergoes token-based authentication. The access token remains valid for 1 hour. If any request returns an error indicating that the token has expired, the user is required to initiate a token-refresh request to obtain a new access token.
 
-Each future request must contain Authorization: Bearer {{token}}
+Each future request after log in must contain Header Authorization: Bearer {{token}}
 
 Request:
 
@@ -110,7 +108,7 @@ Request Body: {
         scope: admin,
         client_id: this-client-id-is-for-demo-only,
         client_secret: this-secret-id-is-for-demo-only,
-        username: alesia,
+        username: anna,
         password: abrakadabra,
       }
 ```
@@ -134,8 +132,8 @@ Content-Type: application/json
         ]
     },
     "user": {
-        "id": 2,
-        "username": "daniil"
+        "id": 1,
+        "username": "anna"
     }
 }
 ```
@@ -144,11 +142,10 @@ In case of error response:
 
 ```
 HTTP/1.1 400 Bad Request
-Content-Type: application/json
+Content-Type: text/html; charset=utf-8
 
-{
-   "error": "Invalid client: client is invalid"
-}
+'Password is incorrect'
+
 ```
 
 or
@@ -158,8 +155,8 @@ HTTP/1.1 500 Internal Server Error
 Content-Type: application/json
 
 {
-   "message": "Server error"
-}
+  "error": err.message
+ }
 ```
 
 ---
@@ -208,18 +205,7 @@ HTTP/1.1 400 Bad Request
 Content-Type: application/json
 
 {
-   "error": "Invalid client: client is invalid"
-}
-```
-
-or
-
-```
-HTTP/1.1 500 Internal Server Error
-Content-Type: application/json
-
-{
-   "message": "Server error"
+   "error": err.message
 }
 ```
 
