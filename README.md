@@ -509,10 +509,10 @@ Content-Type: application/json
 
 Query Parameters:
 
-| Parameter      | Type   | Description                        |
-| -------------- | ------ | ---------------------------------- |
-| `loan_type_id` | number | Filter loan types by loan_type_id. |
-| `loan_type`    | string | Filter by loan types.              |
+| Parameter      | Type   | Description                    |
+| -------------- | ------ | ------------------------------ |
+| `loan_type_id` | number | Get loan type by loan_type_id. |
+| `loan_type`    | string | Get loan type by loan_type.    |
 
 Request:
 
@@ -530,6 +530,7 @@ Content-Type: application/json
 
 {
   "loan_type_id": {loan_type_id},
+  "loan_type": "personal_type",
   "admin_id": 3,
   "interest_rate": 5.5,
   "loan_term": 12
@@ -576,37 +577,6 @@ Content-Type: application/json
   "interest_rate": 5.2,
   "loan_term": 12
 }
-```
-
----
-
-**Delete a loan type.**
-(only admin can do this)
-
-Request:
-
-```
-DELETE /loan_types/:loan_type_id
-Authorization: Bearer {access_token}
-```
-
-In case of successful response:
-
-```
-HTTP/1.1 204 No Content
-
-```
-
-In case of error response:
-
-```
-HTTP/1.1 500 Internal Server Error
-Content-Type: application/json
-
-{
-  "error": "Internal server error occurred. Please try again later or contact support."
-}
-
 ```
 
 ## Endpoint /applications <a name="endpoints-applications"></a> [(Back to content)](#content)
