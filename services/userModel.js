@@ -140,7 +140,7 @@ class UserModel {
     );
     return result.rows.length > 0;
   }
-  async findUserByRoleId(role_type, role_id) {
+  async findUserByRoleId(role_id, role_type) {
     try {
       if (role_type == 'client_id') {
         return await this.findUserInTable('clients', 'client_id', role_id);
