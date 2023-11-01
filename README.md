@@ -11,7 +11,6 @@ The Personal Finance Advisor API is a web service that provides functionality fo
 - [Endpoints](#endpoints)
   - [Endpoint /register](#endpoints-register)
   - [Endpoint /login](#endpoints-login)
-  - [Endpoint /refresh_token](#endpoints-refresh)
   - [Endpoint /user](#endpoints-users)
   - [Endpoint /loan-types](#endpoints-loan-types)
   - [Endpoint /applications](#endpoints-applications)
@@ -161,12 +160,14 @@ Content-Type: application/json
 }
 ```
 
-### Endpoint /refresh_token <a name="endpoints-refresh"></a> [(Back to content)](#content)
+---
+
+**Get refresh token.**
 
 Request:
 
 ```
-POST /refresh_token
+POST login/refresh_token
 Content-Type: application/x-www-form-urlencoded
 Request Body: {
         grant_type: refresh_token,

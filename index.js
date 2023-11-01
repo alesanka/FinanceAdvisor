@@ -1,12 +1,10 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import { initializeDatabase } from './db/initializeDb.js';
-import {
-  authenticationController,
-  userController,
-} from './controllers/userController.js';
-import { token } from './controllers/tokenController.js';
 import * as dotenv from 'dotenv';
+import userRouter from './routers/userRouter.js';
+import registerRouter from './routers/registrationRouter.js';
+import authRouter from './routers/authRouter.js';
 
 dotenv.config();
 initializeDatabase();
@@ -21,30 +19,9 @@ app.get('/api/v1/', (req, res) => {
   res.send("“It's alive! It's alive!” - Frankenstein, 1931");
 });
 
-app.post('/api/v1/register', authenticationController.registerUser);
-app.post(
-  '/api/v1/login',
-  authenticationController.authenticateUser,
-  token.getToken
-);
-app.post('/api/v1/refresh_token', token.getToken);
-
-app.get(
-  '/api/v1/users/:userId',
-  token.getAuthorization,
-  userController.getUserById
-);
-app.get(
-  '/api/v1/users',
-  token.getAuthorization,
-  userController.filterByParameter
-);
-app.put(
-  '/api/v1/users/:userId',
-  token.getAuthorization,
-  userController.changeData
-);
-app.delete('/api/v1/users/:userId', userController.deleteUser);
+app.use('/api/v1/register', registerRouter);
+app.use('/api/v1/login', authRouter);
+app.use('/api/v1/users', userRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
