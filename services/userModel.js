@@ -10,44 +10,56 @@ class UserModel {
   async registerUser(
     username,
     passwordRaw,
+    firstName,
+    lastName,
     email,
-    phone_number,
+    phoneNumber,
     role,
-    name,
-    salary
+    salary,
+    isCreditStory
   ) {
     const password = await bcrypt.hash(passwordRaw, SALTY);
 
     try {
       const result = await pool.query(
-        'INSERT INTO users (username, password, email, phone_number, role) VALUES ($1, $2, $3, $4, $5) RETURNING user_id',
-        [username, password, email, phone_number, role]
+        'INSERT INTO users (username, password, first_name, last_name, email, phone_number, role) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING user_id',
+        [username, password, email, firstName, lastName, phoneNumber, role]
       );
-      let id = result.rows[0].user_id;
+      let userId = result.rows[0].user_id;
       if (role === 'client') {
-        const resultClient = await pool.query(
-          'INSERT INTO clients (user_id, name, salary) VALUES ($1, $2, $3) RETURNING client_id',
-          [id, name, salary]
-        );
+        let resultClient;
+        if (typeof isCreditStory !== 'undefined') {
+          resultClient = await pool.query(
+            'INSERT INTO clients (user_id, salary, credit_story) VALUES ($1, $2, $3) RETURNING client_id',
+            [userId, salary, isCreditStory]
+          );
+        } else {
+          resultClient = await pool.query(
+            'INSERT INTO clients (user_id, salary) VALUES ($1, $2) RETURNING client_id',
+            [userId, salary]
+          );
+        }
         return resultClient.rows[0].client_id;
       }
-      if (role === 'worker') {
-        const resultWorker = await pool.query(
-          'INSERT INTO workers (user_id, name) VALUES ($1, $2) RETURNING worker_id',
-          [id, name]
-        );
-        return resultWorker.rows[0].worker_id;
-      }
-      if (role === 'admin') {
-        const resultAdmin = await pool.query(
-          'INSERT INTO admins (user_id, name) VALUES ($1, $2) RETURNING admin_id',
-          [id, name]
-        );
-        return resultAdmin.rows[0].admin_id;
+    } catch (err) {
+      console.error(`Unable to register new user: ${err}`);
+      throw new Error('Unable to register new user. Please try again.');
+    }
+  }
+  async findUserByUsername(username) {
+    try {
+      const result = await pool.query(
+        'SELECT user_id FROM users WHERE username = $1;',
+        [username]
+      );
+      if (result.rows.length > 0) {
+        return result.rows[0];
       }
     } catch (err) {
-      throw new Error(`Unable to register new user: ${err}`);
+      console.error(`Unable to get user by username: ${err}`);
+      throw new Error(`Unable to get user by username.`);
     }
+    return null;
   }
   async getAllUsers() {
     try {
@@ -119,20 +131,7 @@ class UserModel {
       throw new Error(`Unable to get user by id: ${err}`);
     }
   }
-  async findUserByUsername(username) {
-    try {
-      const result = await pool.query(
-        'SELECT user_id, username, password FROM users WHERE username = $1;',
-        [username]
-      );
-      if (result.rows.length > 0) {
-        return result.rows[0];
-      }
-    } catch (err) {
-      throw new Error(`Unable to get user by username: ${err}`);
-    }
-    return null;
-  }
+
   async findUserInTable(tableName, roleType, roleId) {
     const result = await pool.query(
       `SELECT user_id FROM ${tableName} WHERE ${roleType} = $1;`,

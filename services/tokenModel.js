@@ -1,6 +1,6 @@
 import { pool } from '../db/dbPool.js';
 
-const enabledScopes = ['user', 'admin', 'worker'];
+const enabledScopes = ['admin', 'worker'];
 
 export const createModel = (db) => {
   async function getClient(clientId, clientSecret) {

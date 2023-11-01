@@ -49,10 +49,13 @@ Request Body:
 {
   "username": "anna",
   "password": "abrakadabra",
+  "first_name": "Anna",
+  "last_name": "Smith",
   "email": "thebestanna@email.com",
   "phone_number": "1234567890",
-  "role": "admin",
-  "name": "Anna Hanna",
+  "role": "client",
+  "salary": 15000,
+  "credit_story": true
 }
 ```
 
@@ -89,14 +92,15 @@ Content-Type: application/json
 ### Endpoint /login <a name="endpoints-login"></a> [(Back to content)](#content)
 
 **Login an existing user.**
-When a user attempts to log into the app, the system initiates a multi-step verification process.
-Initially, the system checks if the provided login (username) exists in the database.
-Upon successful login verification, the system compares the entered password with the stored password for that login (username).
-If the password matches, the system proceeds to the next step. It communicates with the node-oauth2-server to obtain an access token.
-Both the access token and the refresh token are securely saved in the system for future requests.
-For all subsequent interactions, the user undergoes token-based authentication. The access token remains valid for 1 hour. If any request returns an error indicating that the token has expired, the user is required to initiate a token-refresh request to obtain a new access token.
-
-Each future request after log in must contain Header Authorization: Bearer {{token}}
+When a user attempts to authenticate:
+The system first verifies if the provided username exists within the database.
+If the username is validated, the system compares the provided password with the one stored against that username.
+On successful password validation, the system checks the user's scope.
+If the scope is either 'worker' or 'admin', the system engages with the node-oauth2-server to retrieve an access token. Both the access and refresh tokens are then stored securely for subsequent interactions.
+If the scope is neither 'worker' nor 'admin', only the password and username are verified.
+Post-authentication, interactions involve token-based authorization. Users with 'worker' or 'admin' scope can access protected endpoints. Others are limited to public endpoints.
+Each authorized request must include: Authorization: Bearer {{token}}.
+Access tokens are valid for 1 hour. If an access token expires, a token-refresh process is mandated to obtain a new one.
 
 Request:
 
@@ -108,7 +112,7 @@ Request Body: {
         scope: admin,
         client_id: this-client-id-is-for-demo-only,
         client_secret: this-secret-id-is-for-demo-only,
-        username: anna,
+        username: maria,
         password: abrakadabra,
       }
 ```
@@ -132,8 +136,8 @@ Content-Type: application/json
         ]
     },
     "user": {
-        "id": 1,
-        "username": "anna"
+        "id": 2,
+        "username": "maria"
     }
 }
 ```
