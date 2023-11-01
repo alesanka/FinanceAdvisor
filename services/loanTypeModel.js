@@ -10,8 +10,7 @@ class LoanTypeModel {
 
       return result.rows[0].loan_type_id;
     } catch (err) {
-      console.error('Error during loan type creation:', err);
-      throw new Error('Unable to create loan type');
+      throw new Error(`Unable to create loan type:${err}`);
     }
   }
   async findLoanByType(loan_type) {
@@ -24,8 +23,21 @@ class LoanTypeModel {
         return result.rows[0];
       }
     } catch (err) {
-      console.error('Error during loan type searching by loan type', err);
-      throw new Error('Sorry, unable to get loan type');
+      throw new Error(`Sorry, unable to get loan type by loan_type:${err}`);
+    }
+    return null;
+  }
+  async findLoanById(loan_id) {
+    try {
+      const result = await pool.query(
+        'SELECT * FROM loanTypes WHERE loan_type_id = $1;',
+        [loan_id]
+      );
+      if (result.rows.length > 0) {
+        return result.rows[0];
+      }
+    } catch (err) {
+      throw new Error(`Sorry, unable to get loan type by loan_id:${err}`);
     }
     return null;
   }

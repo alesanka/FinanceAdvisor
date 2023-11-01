@@ -14,30 +14,28 @@ class AuthenticationController {
       }
 
       if (password.length < 8) {
-        return res.status(400).send({
-          message: 'Password should be at least 8 characters long',
-        });
+        return res
+          .status(400)
+          .send('Password should be at least 8 characters long');
       }
 
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email)) {
-        return res.status(400).send({
-          message: 'Invalid email format',
-        });
+        return res.status(400).send('Invalid email format');
       }
 
       const cleanedPhoneNumber = phone_number.replace(/\D/g, '');
       if (cleanedPhoneNumber.length !== 10) {
-        return res.status(400).send({
-          message: 'Phone number should contain exactly 10 digits',
-        });
+        return res
+          .status(400)
+          .send('Phone number should contain exactly 10 digits');
       }
 
       const validRoles = ['client', 'worker', 'admin'];
       if (!validRoles.includes(role)) {
-        return res.status(400).send({
-          message: 'Invalid role. Accepted values are: client, worker, admin',
-        });
+        return res
+          .status(400)
+          .send('Invalid role. Accepted values are: client, worker, admin');
       }
 
       await userModel.registerUser(
@@ -52,7 +50,7 @@ class AuthenticationController {
       res.status(201).send('User was registered successfully');
     } catch (err) {
       console.error(err);
-      res.status(500).send('Server error while registration');
+      res.status(500).json({ error: err.message });
     }
   };
   authenticateUser = async (req, res, next) => {
@@ -73,7 +71,7 @@ class AuthenticationController {
       next();
     } catch (err) {
       console.error(err);
-      res.status(500).send('Server error while log in');
+      res.status(500).json({ error: err.message });
     }
   };
 }
@@ -86,7 +84,7 @@ class UserController {
       res.status(200).json(user);
     } catch (err) {
       console.error(err);
-      res.status(500).send('Server error while getting user by id');
+      res.status(500).json({ error: err.message });
     }
   };
 

@@ -61,6 +61,27 @@ class LoanTypeController {
       res.status(500).send(`Server error while getting loan types: ${err}`);
     }
   };
+  getSpecificLoanType = async (req, res) => {
+    try {
+      const params = req.query;
+      if (params.loan_type_id) {
+        const loanType = await loanTypeModel.findLoanById(params.loan_type_id);
+        res.status(200).json(loanType);
+      }
+      if (params.loan_type) {
+        const loanType = await loanTypeModel.findLoanByType(params.loan_type);
+        res.status(200).json(loanType);
+      }
+      res.status(400).send(`No valid loan_type_id or loan_type is provided`);
+    } catch (err) {
+      console.error(err);
+      res
+        .status(500)
+        .send(
+          `Server error while getting loan types by loan_type_id or loan_type: ${err}`
+        );
+    }
+  };
 }
 
 export const loanTypeController = new LoanTypeController();

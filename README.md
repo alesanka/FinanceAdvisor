@@ -2,7 +2,7 @@
 
 ## Description
 
-The Personal Finance Advisor API is a web service that provides functionality for managing user financial data and loan applications. The API allows access to user, client, administrator, and bank worker data, as well as the ability to create and manage loan applications and loan types. The API also provides information on maximum loan amounts, repayment schedules, and payment notes.
+The Personal Finance Advisor API is a web service that provides functionality for managing user financial data and loan applications. The API allows access to user's (which can be a client, a bank worker or an administrator) data, as well as the ability to create and manage loan applications. An administator can create different loan types for calculating loan details. The API also provides information on maximum loan amounts, repayment schedules, and payment notes.
 
 ## Content: <a name="content"></a>
 
@@ -26,9 +26,9 @@ http://localhost:5000/api/v1/
 
 ## Technical requirements <a name="tech-details"></a>
 
-- Task should be implemented on JavaScript
-- Framework - express
-- Database - Postgress
+- Implementation language: JavaScript
+- Framework: Express
+- Database: PostgresSQL
 - Use 18.18.1 LTS version of Node.js
 - Docker container
 
@@ -37,6 +37,8 @@ http://localhost:5000/api/v1/
 ### Endpoint /register <a name="endpoints-register"></a> [(Back to content)](#content)
 
 **Register a new user account.**
+
+\*In case of registering user with the role 'client' - the "salary" field in request body is required.
 
 Request:
 
@@ -497,7 +499,6 @@ Content-Type: application/json
 ---
 
 **Retrieve a specific loan type information.**
-(only admin can do this)
 
 Query Parameters:
 
