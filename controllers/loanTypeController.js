@@ -18,7 +18,7 @@ class LoanTypeController {
         return res.status(403).send('Only admins can create loan types.');
       }
       const { loan_type, interest_rate, loan_term } = req.body;
-      console.log('types - ', loan_type, interest_rate, loan_term);
+
       const validLoanTypes = [
         'personal_loan',
         'mortgage',
@@ -26,10 +26,11 @@ class LoanTypeController {
         'business_loan',
       ];
       if (!validLoanTypes.includes(loan_type)) {
-        return res.status(400).send({
-          message:
-            'Invalid loan type. Accepted values are: personal_loan, mortgage, student_loan, business_loan',
-        });
+        return res
+          .status(400)
+          .send(
+            'Invalid loan type. Accepted values are: personal_loan, mortgage, student_loan, business_loan'
+          );
       }
 
       const existingLoanType = await loanTypeModel.findLoanByType(loan_type);
@@ -43,7 +44,9 @@ class LoanTypeController {
         interest_rate,
         loan_term
       );
-      res.status(201).send('Loan type was created successfully');
+      res.status(201).send({
+        message: 'Loan type was created successfully',
+      });
     } catch (err) {
       console.error(err);
       res.status(500).send(`Server error while creation loan type: ${err}`);

@@ -427,7 +427,7 @@ Authorization: Bearer {access_token}
 {
   "admin_id": 4,
   "loan_type": "personal_loan",
-  "interest_rate": 6.0,
+  "interest_rate": 6,
   "loan_term": 36
 }
 ```
@@ -437,14 +437,10 @@ In case of successful response:
 ```
 HTTP/1.1 201 Created
 Content-Type: application/json
-
 {
-  "loan_type_id": 3,
-  "admin_id": 4,
-  "loan_type": "personal loan",
-  "interest_rate": 6.0,
-  "loan_term": 36
-}
+  message: 'Loan type was created successfully'
+ }
+
 ```
 
 In case of error response:
@@ -465,7 +461,7 @@ HTTP/1.1 500 Internal Server Error
 Content-Type: application/json
 
 {
-  "error": "Internal server error occurred. Please try again later or contact support."
+  `Server error while creation loan type: ${err}`
 }
 ```
 
