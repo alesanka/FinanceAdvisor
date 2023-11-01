@@ -46,7 +46,7 @@ class UserModel {
         return resultAdmin.rows[0].admin_id;
       }
     } catch (err) {
-      throw new Error(`Unable to create user: ${err}`);
+      throw new Error(`Unable to register new user: ${err}`);
     }
   }
   async getAllUsers() {
@@ -116,7 +116,7 @@ class UserModel {
         role,
       };
     } catch (err) {
-      throw new Error(`Sorry, unable to get user: ${err}`);
+      throw new Error(`Unable to get user by id: ${err}`);
     }
   }
   async findUserByUsername(username) {
@@ -129,7 +129,7 @@ class UserModel {
         return result.rows[0];
       }
     } catch (err) {
-      throw new Error(`Sorry, unable to get user by username: ${err}`);
+      throw new Error(`Unable to get user by username: ${err}`);
     }
     return null;
   }
@@ -140,7 +140,7 @@ class UserModel {
     );
     return result.rows.length > 0;
   }
-  async findUserRoleById(role_type, role_id) {
+  async findUserByRoleId(role_type, role_id) {
     try {
       if (role_type == 'client_id') {
         return await this.findUserInTable('clients', 'client_id', role_id);
@@ -151,40 +151,7 @@ class UserModel {
       }
       return null;
     } catch (err) {
-      throw new Error(`Sorry, unable to get user by role id: ${err}`);
-    }
-  }
-
-  async findUserByRoleId(role_id, role_type) {
-    try {
-      if (role_type == 'client_id') {
-        const result = await pool.query(
-          'SELECT user_id FROM clients WHERE client_id = $1;',
-          [role_id]
-        );
-        if (result.rows.length > 0) {
-          return true;
-        }
-      } else if (role_type == 'admin_id') {
-        const result = await pool.query(
-          'SELECT user_id FROM admins WHERE admin_id = $1;',
-          [role_id]
-        );
-        if (result.rows.length > 0) {
-          return true;
-        }
-      } else if (role_type == 'worker_id') {
-        const result = await pool.query(
-          'SELECT user_id FROM workers WHERE worker_id = $1;',
-          [role_id]
-        );
-        if (result.rows.length > 0) {
-          return true;
-        }
-      }
-      return false;
-    } catch (err) {
-      throw new Error('Sorry, unable to get user by role id');
+      throw new Error(`Unable to get user by role id: ${err}`);
     }
   }
   async findUserById(userId) {
@@ -197,7 +164,7 @@ class UserModel {
         return result.rows[0];
       }
     } catch (err) {
-      throw new Error(`Sorry, unable to get user by id: ${err}`);
+      throw new Error(`Unable to get user by id: ${err}`);
     }
     return null;
   }

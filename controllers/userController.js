@@ -13,6 +13,26 @@ class AuthenticationController {
         return res.status(409).send(`User with this username already exists`);
       }
 
+      const requiredFields = [
+        'username',
+        'password',
+        'email',
+        'phone_number',
+        'role',
+        'name',
+      ];
+      for (const field of requiredFields) {
+        if (!req.body[field]) {
+          return res.status(400).send(`Missing required field: ${field}`);
+        }
+      }
+
+      if (role == 'client' && !req.body.salary) {
+        return res
+          .status(400)
+          .send(`Missing required for client field "salary"`);
+      }
+
       if (password.length < 8) {
         return res
           .status(400)
@@ -106,28 +126,24 @@ class UserController {
       res.status(200).json(users);
     } catch (err) {
       console.error(err);
-      res.status(500).json({
-        error: err.message,
-      });
+      res.status(500).json({ error: err.message });
     }
   };
   changeData = async (req, res) => {
     const userId = req.params.userId;
     if (!req.body) {
-      return res
-        .status(400)
-        .json({ error: 'No data provided in request body.' });
+      return res.status(400).send('No data provided in request body.');
     }
 
     try {
       await userModel.changeData(userId, req.body);
 
-      res.status(200).json({
-        message: `User's data with id - ${userId} was updated successfully.`,
-      });
+      res
+        .status(200)
+        .send(`User's data with id - ${userId} was updated successfully.`);
     } catch (err) {
       console.error(err);
-      res.status(500).send('Server error while updating user data.');
+      res.status(500).json({ error: err.message });
     }
   };
   deleteUser = async (req, res) => {
@@ -135,11 +151,10 @@ class UserController {
 
     try {
       await userModel.deleteUser(userId);
-
       res.status(204).end();
     } catch (err) {
       console.error(err);
-      res.status(500).send('Server error while deleting user profile.');
+      res.status(500).json({ error: err.message });
     }
   };
 }

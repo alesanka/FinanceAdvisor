@@ -362,10 +362,10 @@ In case of successful response:
 
 ```
 HTTP/1.1 200 OK
-Content-Type: application/json
-{
-  message: `User ${userId} data updated successfully.`
- }
+Content-Type: text/html; charset=utf-8
+
+`User ${userId} data updated successfully.`
+
 ```
 
 In case of error response:
@@ -375,7 +375,7 @@ HTTP/1.1 500 Internal Server Error
 Content-Type: application/json
 
 {
-  "Server error while updating user data."
+  "error": err.message
 }
 ```
 
@@ -404,7 +404,7 @@ HTTP/1.1 500 Internal Server Error
 Content-Type: application/json
 
 {
-  "error": "Internal server error occurred. Please try again later or contact support."
+  "error": err.message
 }
 
 ```
