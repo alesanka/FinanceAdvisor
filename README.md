@@ -450,7 +450,7 @@ HTTP/1.1 400 Bad Request
 Content-Type: application/json
 
 {
-  "error": "Type of loan is already exists."
+  'Invalid loan type. Accepted values are: personal_loan, mortgage, student_loan, business_loan'
 }
 ```
 
