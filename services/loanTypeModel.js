@@ -29,5 +29,14 @@ class LoanTypeModel {
     }
     return null;
   }
+  async getAllLoanTypes() {
+    try {
+      const result = await pool.query('SELECT * FROM loanTypes');
+
+      return result.rows;
+    } catch (err) {
+      throw new Error(`Unable to get loan types:${err}`);
+    }
+  }
 }
 export const loanTypeModel = new LoanTypeModel();

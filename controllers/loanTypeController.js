@@ -52,6 +52,15 @@ class LoanTypeController {
       res.status(500).send(`Server error while creation loan type: ${err}`);
     }
   };
+  getAllLoanTypes = async (req, res) => {
+    try {
+      const loanTypes = await loanTypeModel.getAllLoanTypes();
+      res.status(200).json(loanTypes);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send(`Server error while getting loan types: ${err}`);
+    }
+  };
 }
 
 export const loanTypeController = new LoanTypeController();

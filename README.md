@@ -468,7 +468,6 @@ Content-Type: application/json
 ---
 
 **Retrieve the information about existing loan types.**
-(only admin can do this)
 
 Request:
 
