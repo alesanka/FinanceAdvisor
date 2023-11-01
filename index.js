@@ -41,9 +41,10 @@ app.get(
 );
 app.put(
   '/api/v1/users/:userId',
-
+  token.getAuthorization,
   userController.changeData
 );
+app.delete('/api/v1/users/:userId', userController.deleteUser);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

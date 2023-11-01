@@ -35,10 +35,10 @@ class AuthenticationController {
         });
       }
 
-      const validRoles = ['user', 'worker', 'admin'];
+      const validRoles = ['client', 'worker', 'admin'];
       if (!validRoles.includes(role)) {
         return res.status(400).send({
-          message: 'Invalid role. Accepted values are: user, worker, admin',
+          message: 'Invalid role. Accepted values are: client, worker, admin',
         });
       }
 
@@ -124,14 +124,24 @@ class UserController {
     try {
       await userModel.changeData(userId, req.body);
 
-      res
-        .status(200)
-        .json({
-          message: `User's data with id - ${userId} was updated successfully.`,
-        });
+      res.status(200).json({
+        message: `User's data with id - ${userId} was updated successfully.`,
+      });
     } catch (err) {
       console.error(err);
       res.status(500).send('Server error while updating user data.');
+    }
+  };
+  deleteUser = async (req, res) => {
+    const userId = req.params.userId;
+
+    try {
+      await userModel.deleteUser(userId);
+
+      res.status(204).end();
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Server error while deleting user profile.');
     }
   };
 }

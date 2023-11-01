@@ -1,5 +1,5 @@
 DO $$ BEGIN
-    CREATE TYPE roles_enum AS ENUM ('user', 'worker', 'admin');
+    CREATE TYPE roles_enum AS ENUM ('client', 'worker', 'admin');
 EXCEPTION
     WHEN duplicate_object THEN null;
 END $$;
@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS Users (
 
 CREATE TABLE IF NOT EXISTS Clients (
     client_id SERIAL PRIMARY KEY,
-    user_id INT REFERENCES Users(user_id),
+    user_id INT REFERENCES Users(user_id) ON DELETE CASCADE,
     name VARCHAR(255) NOT NULL,
     salary INT NOT NULL,
     UNIQUE(user_id)
@@ -23,18 +23,16 @@ CREATE TABLE IF NOT EXISTS Clients (
 
 CREATE TABLE IF NOT EXISTS Workers (
     worker_id SERIAL PRIMARY KEY,
-    user_id INT REFERENCES Users(user_id),
+    user_id INT REFERENCES Users(user_id) ON DELETE CASCADE,
     name VARCHAR(255) NOT NULL,
     UNIQUE(user_id)
 );
 
 CREATE TABLE IF NOT EXISTS Admins (
     admin_id SERIAL PRIMARY KEY,
-    user_id INT REFERENCES Users(user_id),
+    user_id INT REFERENCES Users(user_id) ON DELETE CASCADE,
     name VARCHAR(255) NOT NULL,
     UNIQUE(user_id)
 );
-
-
 
 
