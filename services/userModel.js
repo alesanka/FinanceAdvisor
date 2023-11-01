@@ -4,7 +4,7 @@ import * as dotenv from 'dotenv';
 
 dotenv.config();
 
-const SALT = process.env.SALT;
+const SALTY = parseInt(process.env.SALT);
 
 class UserModel {
   async registerUser(
@@ -16,7 +16,7 @@ class UserModel {
     name,
     salary
   ) {
-    const password = await bcrypt.hash(passwordRaw, SALT);
+    const password = await bcrypt.hash(passwordRaw, SALTY);
 
     try {
       const result = await pool.query(
@@ -393,4 +393,4 @@ class UserModel {
   }
 }
 
-export const userModel = new UserModel()
+export const userModel = new UserModel();
