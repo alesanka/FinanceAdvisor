@@ -484,11 +484,12 @@ Content-Type: application/json
 
 **Retrieve the information about existing loan types.**
 
+\*public request
+
 Request:
 
 ```
 GET /loan_types HTTP/1.1
-Authorization: Bearer {access_token}
 ```
 
 In case of successful response:
@@ -500,24 +501,13 @@ Content-Type: application/json
 [
   {
         "loan_type_id": 1,
-        "admin_id": 2,
         "loan_type": "mortgage",
         "interest_rate": "4.00",
-        "loan_term": 360
+        "loan_term": 360,
+        "required_doc": "purcase_agreement"
     }
     // ... more loan types
 ]
-```
-
-In case of error response:
-
-```
-HTTP/1.1 500 Internal Server Error
-Content-Type: application/json
-
-{
-  "error": err.message
-}
 ```
 
 ---

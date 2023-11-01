@@ -5,7 +5,7 @@ import { token } from '../controllers/tokenController.js';
 const router = Router();
 
 router.post('/', token.getAuthorization, loanTypeController.createLoanType); // protected
-router.get('/', token.getAuthorization, loanTypeController.getAllLoanTypes);
+router.get('/', loanTypeController.getAllLoanTypes); // public
 router.get(
   '/:loan_type',
   token.getAuthorization,

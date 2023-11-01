@@ -39,7 +39,8 @@ class LoanTypeModel {
         return result.rows[0];
       }
     } catch (err) {
-      throw new Error(`Unable to get loan type by loan_id:${err}`);
+      console.error(`Unable to get loan type by loan_id: ${err}`);
+      throw new Error(`Unable to get loan type by loan_id.`);
     }
     return null;
   }
@@ -49,7 +50,8 @@ class LoanTypeModel {
 
       return result.rows;
     } catch (err) {
-      throw new Error(`Unable to get all loan types:${err}`);
+      console.error(`Unable to get all loan types: ${err}`);
+      throw new Error(`Unable to get all loan types.`);
     }
   }
   async updateLoanTypeData(loan_type_id, data) {
