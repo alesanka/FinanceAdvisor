@@ -85,7 +85,7 @@ Details of documents associated with clients.
 | PK  | document_id    | int       | Primary key for the documents table         |
 | FK  | application_id | int       | Foreign key from the loan application table |
 |     | document_name  | varchar   | Name of the document                        |
-|     | document_type  | doc_enam  | Type of the document                        |
+|     | document_type  | docs_enam | Type of the document                        |
 
 ### 6. LoanApplications
 
@@ -111,13 +111,13 @@ Loan application details.
 
 Different types of loans available.
 
-| Key | Column Name   | Data Type | Description                                    |
-| --- | ------------- | --------- | ---------------------------------------------- |
-| PK  | loan_type_id  | int       | Primary key for the loantypes table            |
-| FK  | admin_id      | int       | Foreign key from the admin table               |
-|     | loan_type     | loan_enum | Type of loan                                   |
-|     | interest_rate | float     | Interest rate for the loan type                |
-|     | loan_term     | int       | Term/duration of the loan (in months or years) |
+| Key | Column Name   | Data Type  | Description                                    |
+| --- | ------------- | ---------- | ---------------------------------------------- |
+| PK  | loan_type_id  | int        | Primary key for the loantypes table            |
+| FK  | admin_id      | int        | Foreign key from the admin table               |
+|     | loan_type     | loans_enum | Type of loan                                   |
+|     | interest_rate | float      | Interest rate for the loan type                |
+|     | loan_term     | int        | Term/duration of the loan (in months or years) |
 
 ### 9. RepaymentSchedules
 
@@ -164,7 +164,7 @@ Maximum loan amounts for applications.
 
 ### 2. Document types
 
-| doc_enum                |
+| docs_enum               |
 | ----------------------- |
 | passport                |
 | employment_verification |
@@ -173,7 +173,7 @@ Maximum loan amounts for applications.
 
 ### 3. Loan types
 
-| loan_enum     |
+| loans_enum    |
 | ------------- |
 | personal_loan |
 | mortgage      |
