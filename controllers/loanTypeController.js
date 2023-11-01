@@ -74,6 +74,34 @@ class LoanTypeController {
       res.status(500).json({ error: err.message });
     }
   };
+  updateLoanTypeData = async (req, res) => {
+    try {
+      const loanTypeId = req.params.loan_type_id;
+      if (!loanTypeId) {
+        return res.status(400).send(`No valid loan_type_id is provided`);
+      }
+      if (!req.body) {
+        return res.status(400).send('No data provided in request body.');
+      }
+      if (!req.body.admin_id) {
+        return res
+          .status(400)
+          .send(
+            'Only admin can update loan type data, so admin_id is required.'
+          );
+      }
+      await loanTypeModel.updateLoanTypeData(loanTypeId, req.body);
+
+      res
+        .status(200)
+        .send(
+          `Loan type's data with id - ${loanTypeId} was updated successfully.`
+        );
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: err.message });
+    }
+  };
 }
 
 export const loanTypeController = new LoanTypeController();

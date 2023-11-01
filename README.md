@@ -555,7 +555,7 @@ Content-Type: application/json
 ---
 
 **Update loan type information.**
-(only admin can do this)
+(only admin can do this, so admin_id in body request is required)
 
 Request:
 
@@ -565,6 +565,7 @@ Content-Type: application/json
 Authorization: Bearer {access_token}
 
 {
+  "admin_id": 2,
   "interest_rate": 5.2
 }
 ```
@@ -573,13 +574,28 @@ In case of successful response:
 
 ```
 HTTP/1.1 200 OK
+Content-Type: text/html; charset=utf-8
+
+`Loan type's data with id - ${loanTypeId} was updated successfully.`
+```
+
+In case of error response:
+
+```
+HTTP/1.1 400 Bad Request
+Content-Type: text/html; charset=utf-8
+
+'Only admin can update loan type data, so admin_id is required.'
+```
+
+or
+
+```
+HTTP/1.1 500 Internal Server Error
 Content-Type: application/json
 
 {
-  "loan_type_id": 1,
-  "admin_id": 3,
-  "interest_rate": 5.2,
-  "loan_term": 12
+  "error": err.message
 }
 ```
 

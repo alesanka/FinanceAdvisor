@@ -50,5 +50,46 @@ class LoanTypeModel {
       throw new Error(`Unable to get all loan types:${err}`);
     }
   }
+  async updateLoanTypeData(loan_type_id, data) {
+    try {
+      const loanResult = await pool.query(
+        'SELECT loan_type_id FROM loanTypes WHERE loan_type_id = $1',
+        [loan_type_id]
+      );
+
+      if (loanResult.rows.length === 0) {
+        throw new Error(
+          `No loan type was found with provided loan_type_id ${userId}`
+        );
+      }
+
+      let query = 'UPDATE loanTypes SET ';
+      let values = [];
+
+      if (data.admin_id) {
+        query += `admin_id = $${values.length + 1}, `;
+        values.push(data.admin_id);
+      }
+
+      if (data.interest_rate) {
+        query += `interest_rate = $${values.length + 1}, `;
+        values.push(data.interest_rate);
+      }
+
+      if (data.loan_term) {
+        query += `loan_term = $${values.length + 1}, `;
+        values.push(data.loan_term);
+      }
+
+      query = query.trim().endsWith(',') ? (query = query.slice(0, -2)) : query;
+
+      query += ` WHERE loan_type_id = $${values.length + 1}`;
+
+      values.push(loan_type_id);
+      await pool.query(query, values);
+    } catch (err) {
+      throw new Error(`Unable to update loan type:${err}`);
+    }
+  }
 }
 export const loanTypeModel = new LoanTypeModel();

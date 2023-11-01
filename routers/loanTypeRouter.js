@@ -11,4 +11,9 @@ router.get(
   token.getAuthorization,
   loanTypeController.getSpecificLoanType
 );
+router.put(
+  '/:loan_type_id',
+  token.getAuthorization,
+  loanTypeController.updateLoanTypeData
+);
 export default router;
