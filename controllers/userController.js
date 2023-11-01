@@ -84,7 +84,7 @@ class UserController {
       res.status(200).json(user);
     } catch (err) {
       console.error(err);
-      res.status(500).json({ error: err.message });
+      res.status(404).json({ error: err.message });
     }
   };
 
@@ -94,20 +94,21 @@ class UserController {
         const users = await userModel.getAllUsers();
         return res.status(200).json(users);
       }
+
       const params = req.query;
 
       const users = await userModel.filterByParameter(params);
 
       if (!users.length) {
-        return res
-          .status(404)
-          .json({ error: 'No users found matching the criteria.' });
+        return res.status(404).send('No users found matching the criteria.');
       }
 
       res.status(200).json(users);
     } catch (err) {
       console.error(err);
-      res.status(500).send('Server error while filtering users');
+      res.status(500).json({
+        error: err.message,
+      });
     }
   };
   changeData = async (req, res) => {

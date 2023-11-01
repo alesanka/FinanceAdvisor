@@ -242,7 +242,7 @@ Response:
 
 ---
 
-**Retrieve a specific user's profile information.**
+**Retrieve a specific user's profile information by user id.**
 
 Query Parameters:
 
@@ -279,7 +279,7 @@ HTTP/1.1 404 Not Found
 Content-Type: application/json
 
 {
-  "error": "Sorry, unable to get user"
+  "error": err.message
 }
 ```
 
@@ -289,19 +289,19 @@ Content-Type: application/json
 
 Query Parameters:
 
-| Parameter | Type   | Description                                                            |
-| --------- | ------ | ---------------------------------------------------------------------- |
-| `role`    | string | Filter users by role (e.g., "client", "admin", "worker").              |
-| `salary`  | number | Filter users by salary (e.g., "5000")(avaible only for role "client"). |
-| `name`    | string | Filter users by name (e.g., "client").                                 |
-| `email`   | string | Filter users by email (e.g., cool@email.com).                          |
-| `phone`   | string | Filter users by phone (e.g., 1234567890).                              |
-| `sort`    | string | Filter users by parameters name or salary(only for role "client").     |
+| Parameter | Type   | Description                                                          |
+| --------- | ------ | -------------------------------------------------------------------- |
+| `role`    | string | Filter users by role (e.g., "client", "admin", "worker").            |
+| `salary`  | number | Filter users by salary (e.g., 5000)(avaible only for role "client"). |
+| `name`    | string | Filter users by name (e.g., "client").                               |
+| `email`   | string | Filter users by email (e.g., cool@email.com).                        |
+| `phone`   | string | Filter users by phone (e.g., "1234567890").                          |
+| `sort`    | string | Filter users by parameters name or salary(only for role "client").   |
 
 Request:
 
 ```
-GET /users/filter?role=admin&name=alesia HTTP/1.1
+GET /users/filter?role=admin&name=anna HTTP/1.1
 Authorization: Bearer {access_token}
 ```
 
@@ -312,23 +312,32 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
-        "user_id": 4,
-        "email": "somemail@email.com",
-        "phone_number": "1234567890",
-        "role": "admin",
-        "name": "Alesia P",
-        "admin_id": 1
-    }
+  "user_id": 1,
+  "email": "thebestanna@email.com",
+  "phone_number": "1234567890",
+  "role": "admin",
+  "name": "Anna Hanna",
+  "admin_id": 1
+}
 ```
 
 In case of error response:
 
 ```
-HTTP/1.1 400 Bad Request
+HTTP/1.1 404 Not Found
+Content-Type: text/html; charset=utf-8
+
+'No users found matching the criteria.'
+```
+
+or
+
+```
+HTTP/1.1 500 Internal Server Error
 Content-Type: application/json
 
 {
-  "error": "Invalid query parameters. Please check your request."
+  "error": err.message
 }
 ```
 
