@@ -1,9 +1,12 @@
 import { pool } from '../db/dbPool.js';
 import bcrypt from 'bcrypt';
+import * as dotenv from 'dotenv';
 
-const saltRounds = 10;
+dotenv.config();
 
-export class UserModel {
+const SALT = process.env.SALT;
+
+class UserModel {
   async registerUser(
     username,
     passwordRaw,
@@ -13,7 +16,7 @@ export class UserModel {
     name,
     salary
   ) {
-    const password = await bcrypt.hash(passwordRaw, saltRounds);
+    const password = await bcrypt.hash(passwordRaw, SALT);
 
     try {
       const result = await pool.query(
@@ -43,8 +46,7 @@ export class UserModel {
         return resultAdmin.rows[0].admin_id;
       }
     } catch (err) {
-      console.error('Error during user creation:', err);
-      throw new Error('Unable to create user');
+      throw new Error(`Unable to create user: ${err}`);
     }
   }
   async getAllUsers() {
@@ -54,7 +56,7 @@ export class UserModel {
       );
       return result.rows;
     } catch (err) {
-      throw new Error(`Unable to get all users because error: ${err}`);
+      throw new Error(`Unable to get all users: ${err}`);
     }
   }
   async getUserById(userId) {
@@ -114,8 +116,7 @@ export class UserModel {
         role,
       };
     } catch (err) {
-      console.error('Error during user searching by id', err);
-      throw new Error('Sorry, unable to get user');
+      throw new Error(`Sorry, unable to get user: ${err}`);
     }
   }
   async findUserByUsername(username) {
@@ -128,10 +129,63 @@ export class UserModel {
         return result.rows[0];
       }
     } catch (err) {
-      console.error('Error during user searching by username', err);
-      throw new Error('Sorry, unable to get user');
+      throw new Error(`Sorry, unable to get user by username: ${err}`);
     }
     return null;
+  }
+  async findUserInTable(tableName, roleType, roleId) {
+    const result = await pool.query(
+      `SELECT user_id FROM ${tableName} WHERE ${roleType} = $1;`,
+      [roleId]
+    );
+    return result.rows.length > 0;
+  }
+  async findUserRoleById(role_type, role_id) {
+    try {
+      if (role_type == 'client_id') {
+        return await this.findUserInTable('clients', 'client_id', role_id);
+      } else if (role_type == 'worker_id') {
+        return await this.findUserInTable('workers', 'worker_id', role_id);
+      } else if (role_type == 'admin_id') {
+        return await this.findUserInTable('admins', 'admin_id', role_id);
+      }
+      return null;
+    } catch (err) {
+      throw new Error(`Sorry, unable to get user by role id: ${err}`);
+    }
+  }
+
+  async findUserByRoleId(role_id, role_type) {
+    try {
+      if (role_type == client_id) {
+        const result = await pool.query(
+          'SELECT user_id FROM clients WHERE client_id = $1;',
+          [role_id]
+        );
+        if (result.rows.length > 0) {
+          return true;
+        }
+      } else if (role_type == admin_id) {
+        const result = await pool.query(
+          'SELECT user_id FROM admins WHERE admin_id = $1;',
+          [role_id]
+        );
+        if (result.rows.length > 0) {
+          return true;
+        }
+      } else if (role_type == worker_id) {
+        const result = await pool.query(
+          'SELECT user_id FROM workers WHERE worker_id = $1;',
+          [role_id]
+        );
+        if (result.rows.length > 0) {
+          return true;
+        }
+      }
+      return false;
+    } catch (err) {
+      throw new Error('Sorry, unable to get user by role id');
+    }
   }
   async findUserById(userId) {
     try {
@@ -143,8 +197,7 @@ export class UserModel {
         return result.rows[0];
       }
     } catch (err) {
-      console.error('Error during user searching by id', err);
-      throw new Error('Sorry, unable to get user');
+      throw new Error(`Sorry, unable to get user by id: ${err}`);
     }
     return null;
   }
@@ -211,8 +264,7 @@ export class UserModel {
       const result = await pool.query(baseQuery, values);
       return result.rows;
     } catch (err) {
-      console.error(`Unable to get users by parameters`, err);
-      throw new Error(`Unable to get users by parameters`);
+      throw new Error(`Unable to get users by parameters: ${err}`);
     }
   }
   async changeData(userId, data) {
@@ -318,8 +370,7 @@ export class UserModel {
       }
       return;
     } catch (err) {
-      console.error(`Unable to update data for userId ${userId}`, err);
-      throw new Error(`Unable to update data for userId ${userId}`);
+      throw new Error(`Unable to update data for userId ${userId}: ${err}`);
     }
   }
   async deleteUser(userId) {
@@ -337,8 +388,9 @@ export class UserModel {
 
       return;
     } catch (err) {
-      console.error(`Unable to delete userId ${userId}`, err);
-      throw new Error(`Unable to delete userId ${userId}`);
+      throw new Error(`Unable to delete userId ${userId}: ${err}`);
     }
   }
 }
+
+export const userModel = new UserModel()

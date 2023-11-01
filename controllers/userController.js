@@ -1,8 +1,6 @@
-import { UserModel } from '../services/userModel.js';
+import { userModel } from '../services/userModel.js';
 
 import bcrypt from 'bcrypt';
-
-const userModel = new UserModel();
 
 class AuthenticationController {
   registerUser = async (req, res) => {
@@ -91,6 +89,7 @@ class UserController {
       res.status(500).send('Server error while getting user by id');
     }
   };
+
   filterByParameter = async (req, res) => {
     try {
       if (Object.keys(req.query).length === 0) {
