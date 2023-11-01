@@ -220,9 +220,24 @@ class UserModel {
         throw new Error(`No user found with userId ${userId}`);
       }
 
-      if (data.phone_number || data.email) {
+      if (
+        data.first_name ||
+        data.last_name ||
+        data.phone_number ||
+        data.email
+      ) {
         let userQuery = 'UPDATE users SET ';
         let userValues = [];
+
+        if (data.first_name) {
+          userQuery += `first_name = $${userValues.length + 1}, `;
+          userValues.push(data.first_name);
+        }
+
+        if (data.last_name) {
+          userQuery += `last_name = $${userValues.length + 1}, `;
+          userValues.push(data.last_name);
+        }
 
         if (data.email) {
           userQuery += `email = $${userValues.length + 1}, `;
@@ -243,76 +258,35 @@ class UserModel {
         userValues.push(userId);
         await pool.query(userQuery, userValues);
       }
-      if (data.name || data.salary) {
-        const role = userResult.rows[0].role;
+      if (data.credit_story || data.salary) {
         let query;
         let values;
 
-        switch (role) {
-          case 'client':
-            query = 'UPDATE clients SET ';
-            values = [];
+        query = 'UPDATE clients SET ';
+        values = [];
 
-            if (data.name) {
-              query += `name = $${values.length + 1}, `;
-              values.push(data.name);
-            }
-
-            if (data.salary) {
-              query += `salary = $${values.length + 1}, `;
-              values.push(data.salary);
-            }
-
-            query = query.trim().endsWith(',')
-              ? (query = query.slice(0, -2))
-              : query;
-            query += ` WHERE user_id = $${values.length + 1}`;
-            values.push(userId);
-
-            break;
-
-          case 'worker':
-            query = 'UPDATE workers SET ';
-            values = [];
-            if (data.salary) {
-              throw new Error(
-                `User with id ${userId} is a worker, no salary is required`
-              );
-            }
-            query += `name = $${values.length + 1}`;
-            values.push(data.name);
-
-            query += ` WHERE user_id = $${values.length + 1}`;
-            values.push(userId);
-
-            break;
-
-          case 'admin':
-            query = `UPDATE admins SET `;
-            values = [];
-            if (data.salary) {
-              throw new Error(
-                `User with id ${userId} is an admin, no salary is required`
-              );
-            }
-
-            query += `name = $${values.length + 1}`;
-            values.push(data.name);
-
-            query += ` WHERE user_id = $${values.length + 1}`;
-            values.push(userId);
-
-            break;
-
-          default:
-            throw new Error('Invalid role');
+        if (data.credit_story) {
+          query += `credit_story = $${values.length + 1}, `;
+          values.push(data.credit_story);
         }
+
+        if (data.salary) {
+          query += `salary = $${values.length + 1}, `;
+          values.push(data.salary);
+        }
+
+        query = query.trim().endsWith(',')
+          ? (query = query.slice(0, -2))
+          : query;
+        query += ` WHERE user_id = $${values.length + 1}`;
+        values.push(userId);
 
         await pool.query(query, values);
       }
       return;
     } catch (err) {
-      throw new Error(`Unable to update data for userId ${userId}: ${err}`);
+      console.error(`Unable to update data for userId ${userId}: ${err}`);
+      throw new Error(`Unable to update data for userId ${userId}.`);
     }
   }
   async deleteUser(userId) {
@@ -330,7 +304,8 @@ class UserModel {
 
       return;
     } catch (err) {
-      throw new Error(`Unable to delete userId ${userId}: ${err}`);
+      console.error(`Unable to delete userId ${userId}: ${err}`);
+      throw new Error(`Unable to delete userId ${userId}.`);
     }
   }
 }

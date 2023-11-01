@@ -358,7 +358,9 @@ Content-Type: application/json
 ---
 
 **Update user information.**
-There is a possibillity to update user's email, name, phone_number, salary (if user is a client).
+
+\*protected request (available only for admin and worker with access_token)
+There is a possibillity to update user's first_name, last_name, email, phone_number, salary and client_story (if user is a client).
 
 Request:
 
@@ -396,6 +398,8 @@ Content-Type: application/json
 ---
 
 **Delete a user account.**
+
+\*protected request (available only for admin and worker with access_token)
 
 Request:
 
