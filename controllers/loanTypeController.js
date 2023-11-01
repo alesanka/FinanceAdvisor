@@ -4,19 +4,21 @@ import { userModel } from '../services/userModel.js';
 class LoanTypeController {
   createLoanType = async (req, res) => {
     try {
-      const admin_id = req.body;
+      const admin_id = req.body.admin_id;
       if (!admin_id) {
         return res.status(400).send('admin_id is required.');
       }
-      const adminExists = await userModel.findUserRoleById(
+
+      const adminExists = await userModel.findUserByRoleId(
         admin_id,
         'admin_id'
       );
+
       if (!adminExists) {
         return res.status(403).send('Only admins can create loan types.');
       }
       const { loan_type, interest_rate, loan_term } = req.body;
-
+      console.log('types - ', loan_type, interest_rate, loan_term);
       const validLoanTypes = [
         'personal_loan',
         'mortgage',

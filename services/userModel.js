@@ -157,7 +157,7 @@ class UserModel {
 
   async findUserByRoleId(role_id, role_type) {
     try {
-      if (role_type == client_id) {
+      if (role_type == 'client_id') {
         const result = await pool.query(
           'SELECT user_id FROM clients WHERE client_id = $1;',
           [role_id]
@@ -165,7 +165,7 @@ class UserModel {
         if (result.rows.length > 0) {
           return true;
         }
-      } else if (role_type == admin_id) {
+      } else if (role_type == 'admin_id') {
         const result = await pool.query(
           'SELECT user_id FROM admins WHERE admin_id = $1;',
           [role_id]
@@ -173,7 +173,7 @@ class UserModel {
         if (result.rows.length > 0) {
           return true;
         }
-      } else if (role_type == worker_id) {
+      } else if (role_type == 'worker_id') {
         const result = await pool.query(
           'SELECT user_id FROM workers WHERE worker_id = $1;',
           [role_id]

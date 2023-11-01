@@ -12,7 +12,7 @@ The Personal Finance Advisor API is a web service that provides functionality fo
   - [Endpoint /register](#endpoints-register)
   - [Endpoint /login](#endpoints-login)
   - [Endpoint /user](#endpoints-users)
-  - [Endpoint /loan-types](#endpoints-loan-types)
+  - [Endpoint /loan_types](#endpoints-loan-types)
   - [Endpoint /applications](#endpoints-applications)
   - [Endpoint /application/{application_id}/loan-information](#endpoints-applications-details)
 
@@ -412,7 +412,7 @@ Content-Type: application/json
 
 ```
 
-## Endpoint /loan-types <a name="endpoints-loan-types"></a> [(Back to content)](#content)
+## Endpoint /loan_types <a name="endpoints-loan-types"></a> [(Back to content)](#content)
 
 **Create a new type of loan.**
 (only admin can do this)
@@ -420,13 +420,13 @@ Content-Type: application/json
 Request:
 
 ```
-POST /api/loan-types
+POST /api/loan_types
 Content-Type: application/json
 Authorization: Bearer {access_token}
 
 {
   "admin_id": 4,
-  "loan_type": "personal loan",
+  "loan_type": "personal_loan",
   "interest_rate": 6.0,
   "loan_term": 36
 }
@@ -477,7 +477,7 @@ Content-Type: application/json
 Request:
 
 ```
-GET /loan-types HTTP/1.1
+GET /loan_types HTTP/1.1
 Authorization: Bearer {access_token}
 ```
 
@@ -521,7 +521,7 @@ Query Parameters:
 Request:
 
 ```
-GET /loan-types/:loan_type_id
+GET /loan_types/:loan_type_id
 Content-Type: application/json
 Authorization: Bearer {access_token}
 ```
@@ -559,7 +559,7 @@ Content-Type: application/json
 Request:
 
 ```
-PUT /api/loan-types/:loanTypeId
+PUT /api/loan_types/:loanTypeId
 Content-Type: application/json
 Authorization: Bearer {access_token}
 
@@ -590,7 +590,7 @@ Content-Type: application/json
 Request:
 
 ```
-DELETE /loan-types/:loan_type_id
+DELETE /loan_types/:loan_type_id
 Authorization: Bearer {access_token}
 ```
 
