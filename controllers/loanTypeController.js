@@ -4,20 +4,18 @@ import { userModel } from '../services/userModel.js';
 class LoanTypeController {
   createLoanType = async (req, res) => {
     try {
-      const admin_id = req.body.admin_id;
-      if (!admin_id) {
-        return res.status(400).send('admin_id is required.');
+      const userId = req.body.user_id;
+      if (!userId) {
+        return res.status(400).send('User id is required for checking role.');
       }
 
-      const adminExists = await userModel.findUserByRoleId(
-        admin_id,
-        'admin_id'
-      );
+      const isAdmin = await userModel.checkRoleByUserId(userId);
 
-      if (!adminExists) {
+      if (!isAdmin) {
         return res.status(403).send('Only admins can create loan types.');
       }
-      const { loan_type, interest_rate, loan_term } = req.body;
+
+      const { loan_type, interest_rate, loan_term, required_doc } = req.body;
 
       const validLoanTypes = [
         'personal_loan',
@@ -33,16 +31,30 @@ class LoanTypeController {
           );
       }
 
+      const validDocs = [
+        'passport',
+        'student_verification',
+        'business_plan',
+        'purchase_agreement',
+      ];
+      if (!validDocs.includes(required_doc)) {
+        return res
+          .status(400)
+          .send(
+            'Invalid required document. Accepted values are: passport, student_verification, business_plan, purchase_agreement'
+          );
+      }
+
       const existingLoanType = await loanTypeModel.findLoanByType(loan_type);
       if (existingLoanType) {
         return res.status(409).send(`Loan type ${loan_type} already exists`);
       }
 
       await loanTypeModel.createLoanType(
-        admin_id,
         loan_type,
         interest_rate,
-        loan_term
+        loan_term,
+        required_doc
       );
       res.status(201).send('Loan type was created successfully');
     } catch (err) {

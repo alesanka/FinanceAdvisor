@@ -124,29 +124,6 @@ class UserModel {
       throw new Error(`Unable to get user by id.`);
     }
   }
-
-  async findUserInTable(tableName, roleType, roleId) {
-    const result = await pool.query(
-      `SELECT user_id FROM ${tableName} WHERE ${roleType} = $1;`,
-      [roleId]
-    );
-    return result.rows.length > 0;
-  }
-  async findUserByRoleId(role_id, role_type) {
-    try {
-      if (role_type == 'client_id') {
-        return await this.findUserInTable('clients', 'client_id', role_id);
-      } else if (role_type == 'worker_id') {
-        return await this.findUserInTable('workers', 'worker_id', role_id);
-      } else if (role_type == 'admin_id') {
-        return await this.findUserInTable('admins', 'admin_id', role_id);
-      }
-      return null;
-    } catch (err) {
-      throw new Error(`Unable to get user by role id: ${err}`);
-    }
-  }
-
   async filterByParameter(params) {
     try {
       let baseQuery =
@@ -306,6 +283,22 @@ class UserModel {
     } catch (err) {
       console.error(`Unable to delete userId ${userId}: ${err}`);
       throw new Error(`Unable to delete userId ${userId}.`);
+    }
+  }
+  async checkRoleByUserId(userId) {
+    try {
+      const result = await pool.query(
+        `SELECT role FROM users WHERE user_id = $1;`,
+        [userId]
+      );
+      if (!result.rows.length) {
+        throw new Error('User not found.');
+      }
+
+      return result.rows[0].role === 'admin';
+    } catch (err) {
+      console.error(`Unable to get role by user id: ${err}`);
+      throw new Error(`Unable to get role by user id.`);
     }
   }
 }

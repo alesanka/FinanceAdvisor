@@ -33,3 +33,11 @@ CREATE TABLE IF NOT EXISTS Clients (
     salary INT NOT NULL,
     UNIQUE(user_id)
 );
+
+CREATE TABLE IF NOT EXISTS LoanTypes (
+    loan_type_id SERIAL PRIMARY KEY,
+    loan_type loans_enum UNIQUE NOT NULL,
+    interest_rate DECIMAL(5, 2) NOT NULL CHECK (interest_rate > 0),
+    loan_term INT NOT NULL CHECK (loan_term > 0),
+    required_doc docs_enum NOT NULL
+);

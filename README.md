@@ -430,7 +430,9 @@ Content-Type: application/json
 ## Endpoint /loan_types <a name="endpoints-loan-types"></a> [(Back to content)](#content)
 
 **Create a new type of loan.**
-(only admin can do this)
+
+\*protected request (available only for admin and worker with access_token)
+\*(only admins can do this, user_id is required for checking user's role)
 
 Request:
 
@@ -440,10 +442,11 @@ Content-Type: application/json
 Authorization: Bearer {access_token}
 
 {
-  "admin_id": 4,
+  "user_id": 4,
   "loan_type": "personal_loan",
   "interest_rate": 6,
-  "loan_term": 36
+  "loan_term": 36,
+  "required_doc": "passport"
 }
 ```
 

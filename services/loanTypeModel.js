@@ -1,16 +1,17 @@
 import { pool } from '../db/dbPool.js';
 
 class LoanTypeModel {
-  async createLoanType(admin_id, loan_type, interest_rate, loan_term) {
+  async createLoanType(loanType, interestRate, loanTerm, requiredDoc) {
     try {
       const result = await pool.query(
-        'INSERT INTO loanTypes (admin_id, loan_type, interest_rate, loan_term) VALUES ($1, $2, $3, $4) RETURNING loan_type_id',
-        [admin_id, loan_type, interest_rate, loan_term]
+        'INSERT INTO loanTypes (loan_type, interest_rate, loan_term, required_doc) VALUES ($1, $2, $3, $4) RETURNING loan_type_id',
+        [loanType, interestRate, loanTerm, requiredDoc]
       );
 
       return result.rows[0].loan_type_id;
     } catch (err) {
-      throw new Error(`Unable to create loan type:${err}`);
+      console.error(`Unable to create loan type: ${err}`);
+      throw new Error(`Unable to create loan type.`);
     }
   }
   async findLoanByType(loan_type) {
@@ -23,7 +24,8 @@ class LoanTypeModel {
         return result.rows[0];
       }
     } catch (err) {
-      throw new Error(`Unable to get loan type by loan_type:${err}`);
+      console.error(`Unable to get loan type by loan_type: ${err}`);
+      throw new Error(`Unable to get loan type by loan_type.`);
     }
     return null;
   }
