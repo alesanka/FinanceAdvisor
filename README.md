@@ -514,6 +514,8 @@ Content-Type: application/json
 
 **Retrieve a specific loan type information.**
 
+\*public request
+
 Query Parameters:
 
 | Parameter   | Type   | Description                 |
@@ -524,8 +526,6 @@ Request:
 
 ```
 GET /loan_types/:loan_type_id
-Content-Type: application/json
-Authorization: Bearer {access_token}
 ```
 
 In case of successful response:
@@ -537,9 +537,9 @@ Content-Type: application/json
 {
   "loan_type_id": {loan_type_id},
   "loan_type": "personal_type",
-  "admin_id": 3,
   "interest_rate": 5.5,
-  "loan_term": 12
+  "loan_term": 12,
+  "required_doc": "passport"
 }
 ```
 
