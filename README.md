@@ -433,22 +433,19 @@ In case of successful response:
 
 ```
 HTTP/1.1 201 Created
-Content-Type: application/json
-{
-  message: 'Loan type was created successfully'
- }
+Content-Type: text/html; charset=utf-8
+
+'Loan type was created successfully'
 
 ```
 
 In case of error response:
 
 ```
-HTTP/1.1 400 Bad Request
-Content-Type: application/json
+HTTP/1.1 409 Conflict
+Content-Type: text/html; charset=utf-8
 
-{
-  'Invalid loan type. Accepted values are: personal_loan, mortgage, student_loan, business_loan'
-}
+`Loan type ${loan_type} already exists`
 ```
 
 or
@@ -458,7 +455,7 @@ HTTP/1.1 500 Internal Server Error
 Content-Type: application/json
 
 {
-  `Server error while creation loan type: ${err}`
+  "error": err.message
 }
 ```
 
@@ -489,6 +486,17 @@ Content-Type: application/json
     }
     // ... more loan types
 ]
+```
+
+In case of error response:
+
+```
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+
+{
+  "error": err.message
+}
 ```
 
 ---
@@ -528,11 +536,20 @@ Content-Type: application/json
 In case of error response:
 
 ```
-HTTP/1.1 404 Not Found
+HTTP/1.1 400 Bad Request
+Content-Type: text/html; charset=utf-8
+
+`No valid loan_type_id or loan_type are provided`
+```
+
+or
+
+```
+HTTP/1.1 500 Internal Server Error
 Content-Type: application/json
 
 {
-  "error": "Invalid loan's type id"
+  "error": err.message
 }
 ```
 

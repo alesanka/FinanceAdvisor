@@ -23,7 +23,7 @@ class LoanTypeModel {
         return result.rows[0];
       }
     } catch (err) {
-      throw new Error(`Sorry, unable to get loan type by loan_type:${err}`);
+      throw new Error(`Unable to get loan type by loan_type:${err}`);
     }
     return null;
   }
@@ -37,7 +37,7 @@ class LoanTypeModel {
         return result.rows[0];
       }
     } catch (err) {
-      throw new Error(`Sorry, unable to get loan type by loan_id:${err}`);
+      throw new Error(`Unable to get loan type by loan_id:${err}`);
     }
     return null;
   }
@@ -47,7 +47,7 @@ class LoanTypeModel {
 
       return result.rows;
     } catch (err) {
-      throw new Error(`Unable to get loan types:${err}`);
+      throw new Error(`Unable to get all loan types:${err}`);
     }
   }
 }

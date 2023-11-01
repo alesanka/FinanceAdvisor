@@ -44,12 +44,10 @@ class LoanTypeController {
         interest_rate,
         loan_term
       );
-      res.status(201).send({
-        message: 'Loan type was created successfully',
-      });
+      res.status(201).send('Loan type was created successfully');
     } catch (err) {
       console.error(err);
-      res.status(500).send(`Server error while creation loan type: ${err}`);
+      res.status(500).json({ error: err.message });
     }
   };
   getAllLoanTypes = async (req, res) => {
@@ -58,7 +56,7 @@ class LoanTypeController {
       res.status(200).json(loanTypes);
     } catch (err) {
       console.error(err);
-      res.status(500).send(`Server error while getting loan types: ${err}`);
+      res.status(500).json({ error: err.message });
     }
   };
   getSpecificLoanType = async (req, res) => {
@@ -72,14 +70,10 @@ class LoanTypeController {
         const loanType = await loanTypeModel.findLoanByType(params.loan_type);
         res.status(200).json(loanType);
       }
-      res.status(400).send(`No valid loan_type_id or loan_type is provided`);
+      res.status(400).send(`No valid loan_type_id or loan_type are provided`);
     } catch (err) {
       console.error(err);
-      res
-        .status(500)
-        .send(
-          `Server error while getting loan types by loan_type_id or loan_type: ${err}`
-        );
+      res.status(500).json({ error: err.message });
     }
   };
 }
