@@ -23,7 +23,7 @@ class UserModel {
     try {
       const result = await pool.query(
         'INSERT INTO users (username, password, first_name, last_name, email, phone_number, role) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING user_id',
-        [username, password, email, firstName, lastName, phoneNumber, role]
+        [username, password, firstName, lastName, email, phoneNumber, role]
       );
       let userId = result.rows[0].user_id;
       if (role === 'client') {
@@ -149,27 +149,18 @@ class UserModel {
 
   async filterByParameter(params) {
     try {
-      let baseQuery = 'SELECT users.user_id, email, phone_number, role, name';
-      let roleQuery;
+      let baseQuery =
+        'SELECT users.user_id, first_name, last_name, email, phone_number, role';
+      let roleQuery = '';
+
       const values = [];
       const conditions = [];
 
-      switch (params.role) {
-        case 'client':
-          roleQuery =
-            ', salary, client_id FROM users LEFT JOIN clients ON users.user_id = clients.user_id';
-          break;
-        case 'worker':
-          roleQuery =
-            ', worker_id FROM users LEFT JOIN workers ON users.user_id = workers.user_id';
-          break;
-        case 'admin':
-          roleQuery =
-            ', admin_id FROM users LEFT JOIN admins ON users.user_id = admins.user_id';
-          break;
-        default:
-          roleQuery = '';
-          break;
+      if (params.role === 'client') {
+        roleQuery =
+          ', salary, client_id, credit_story FROM users LEFT JOIN clients ON users.user_id = clients.user_id';
+      } else {
+        roleQuery = ' FROM users';
       }
 
       baseQuery += roleQuery;
@@ -178,9 +169,13 @@ class UserModel {
         conditions.push(`users.role = $${values.length + 1}`);
         values.push(params.role);
       }
-      if (params.name) {
-        conditions.push(`name ILIKE $${values.length + 1}`);
-        values.push(`%${params.name}%`);
+      if (params.first_name) {
+        conditions.push(`first_name ILIKE $${values.length + 1}`);
+        values.push(`%${params.first_name}%`);
+      }
+      if (params.last_name) {
+        conditions.push(`last_name ILIKE $${values.length + 1}`);
+        values.push(`%${params.last_name}%`);
       }
       if (params.email) {
         conditions.push(`users.email = $${values.length + 1}`);
@@ -190,9 +185,13 @@ class UserModel {
         conditions.push(`users.phone_number = $${values.length + 1}`);
         values.push(params.phone);
       }
-      if (params.salary && params.role === 'client') {
+      if (params.salary) {
         conditions.push(`clients.salary = $${values.length + 1}`);
         values.push(params.salary);
+      }
+      if (params.credit_story) {
+        conditions.push(`clients.credit_story = $${values.length + 1}`);
+        values.push(params.credit_story);
       }
 
       if (conditions.length) {
@@ -200,17 +199,14 @@ class UserModel {
       }
 
       if (params.sort) {
-        if (params.sort === 'name') {
-          baseQuery += ' ORDER BY name';
-        } else if (params.sort === 'salary' && params.role === 'client') {
-          baseQuery += ' ORDER BY clients.salary';
-        }
+        baseQuery += ' ORDER BY clients.salary';
       }
 
       const result = await pool.query(baseQuery, values);
       return result.rows;
     } catch (err) {
-      throw new Error(`Unable to get users by parameters: ${err}`);
+      console.error(`Unable to get users by parameters: ${err}`);
+      throw new Error(`Unable to get users by parameters.`);
     }
   }
   async changeData(userId, data) {

@@ -297,16 +297,20 @@ Content-Type: application/json
 
 **Retrieve a list of users with optional query parameters for filtering and sorting.**
 
+\*protected request (available only for admin and worker with access_token)
+
 Query Parameters:
 
-| Parameter | Type   | Description                                                          |
-| --------- | ------ | -------------------------------------------------------------------- |
-| `role`    | string | Filter users by role (e.g., "client", "admin", "worker").            |
-| `salary`  | number | Filter users by salary (e.g., 5000)(avaible only for role "client"). |
-| `name`    | string | Filter users by name (e.g., "client").                               |
-| `email`   | string | Filter users by email (e.g., cool@email.com).                        |
-| `phone`   | string | Filter users by phone (e.g., "1234567890").                          |
-| `sort`    | string | Filter users by parameters name or salary(only for role "client").   |
+| Parameter      | Type    | Description                                                                         |
+| -------------- | ------- | ----------------------------------------------------------------------------------- |
+| `role`         | string  | Filter users by role (e.g., "client", "admin", "worker").                           |
+| `salary`       | number  | Filter users by salary (e.g., 5000)(avaible only for role "client").                |
+| `credit_story` | boolean | Filter users by provided credit story (e.g., true)(avaible only for role "client"). |
+| `email`        | string  | Filter users by email (e.g., cool@email.com).                                       |
+| `first_name`   | string  | Filter users by first name (e.g., "anna").                                          |
+| `last_name`    | string  | Filter users by last name (e.g., "smith").                                          |
+| `phone`        | string  | Filter users by phone (e.g., "1234567890").                                         |
+| `sort`         | string  | Filter users by salary (only for role "client").                                    |
 
 Request:
 
@@ -323,11 +327,11 @@ Content-Type: application/json
 
 {
   "user_id": 1,
+  "first_name": "Anna",
+  "last_name": "Smith",
   "email": "thebestanna@email.com",
   "phone_number": "1234567890",
   "role": "admin",
-  "name": "Anna Hanna",
-  "admin_id": 1
 }
 ```
 
