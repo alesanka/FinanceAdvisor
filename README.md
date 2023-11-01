@@ -484,20 +484,13 @@ Content-Type: application/json
 
 [
   {
-    "loan_type_id": 1,
-    "admin_id": 3,
-    "loan_type": "personal loan",
-    "interest_rate": 5.5,
-    "loan_term": 12
-  },
-  {
-    "loan_type_id": 2,
-    "admin_id": 4,
-    "loan_type": "auto loan",
-    "interest_rate": 4.8,
-    "loan_term": 24
-  }
-  // ... more loan types
+        "loan_type_id": 1,
+        "admin_id": 2,
+        "loan_type": "mortgage",
+        "interest_rate": "4.00",
+        "loan_term": 360
+    }
+    // ... more loan types
 ]
 ```
 
