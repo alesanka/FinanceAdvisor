@@ -74,6 +74,7 @@ class LoanApplicationModel {
       if (!credit_story) {
         maxLoanAmount *= 0.95;
       }
+
       const calculateTotalInterest = (
         principalAmount,
         interestRate,
