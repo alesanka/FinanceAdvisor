@@ -61,3 +61,19 @@ CREATE TABLE IF NOT EXISTS Documents (
     document_name VARCHAR(255) NOT NULL,
     document_type docs_enum NOT NULL
 );
+
+
+CREATE TABLE IF NOT EXISTS RepaymentSchedules (
+    repayment_schedule_id SERIAL PRIMARY KEY,
+    application_id INT REFERENCES LoanApplications(application_id) ON DELETE CASCADE,
+    monthly_payment DECIMAL(20,2) NOT NULL,
+    remaining_balance DECIMAL(20,2) NOT NULL
+);
+
+
+CREATE TABLE IF NOT EXISTS MaximumLoanAmounts (
+    max_loan_amount_id SERIAL PRIMARY KEY,
+    application_id INT REFERENCES LoanApplications(application_id) ON DELETE CASCADE,
+    max_loan_amount INT NOT NULL,
+    total_interest_amount DECIMAL(20,2) NOT NULL
+);

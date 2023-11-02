@@ -30,21 +30,63 @@ class LoanApplicationModel {
     return null;
   }
 
-  async findLoanByType(loan_type) {
+  async saveApplicationWithLoanType(loantypeId, applicationId) {
     try {
       const result = await pool.query(
-        'SELECT * FROM loanTypes WHERE loan_type = $1;',
-        [loan_type]
+        `SELECT lt.interest_rate, lt.loan_term, lt.required_doc, 
+                d.document_type, 
+                la.client_id, 
+                c.salary, c.credit_story
+         FROM LoanTypes AS lt 
+         LEFT JOIN Documents AS d ON d.application_id = $2 
+         LEFT JOIN loanApplication AS la ON la.application_id = $2 
+         LEFT JOIN clients AS c ON c.client_id = la.client_id 
+         WHERE lt.loan_type_id = $1;`,
+        [loantypeId, applicationId]
       );
-      if (result.rows.length > 0) {
-        return result.rows[0];
+
+      if (!result.rows[0]) {
+        throw new Error('Data not found.');
       }
+
+      const {
+        interest_rate: rate,
+        loan_term: term,
+        required_doc: docReq,
+        document_type: docAvail,
+        salary,
+        credit_story,
+      } = result.rows[0];
+
+      if (docAvail !== docReq) {
+        throw new Error(
+          `The loan application does not contain required doc ${docReq}`
+        );
+      }
+
+      const maxMonthlyPayment = salary * 0.5;
+      const i = rate / 12 / 100;
+      let maxLoanAmount =
+        maxMonthlyPayment *
+        ((Math.pow(1 + i, term) - 1) / (i * Math.pow(1 + i, term)));
+
+      // If client does not have a credit story - his max loan amount is decreased by 5%
+      if (!credit_story) {
+        maxLoanAmount *= 0.95;
+      }
+
+      const resultConnect = await pool.query(
+        'INSERT INTO LoanTypes_LoanApplications (loan_type_id, application_id) VALUES ($1, $2) RETURNING id',
+        [loantypeId, applicationId]
+      );
+
+      return resultConnect.rows[0].id;
     } catch (err) {
-      console.error(`Unable to get loan type by loan_type: ${err}`);
-      throw new Error(`Unable to get loan type by loan_type.`);
+      console.error(`Unable to save application with loan type: ${err}`);
+      throw new Error(`Unable to save application with loan type.`);
     }
-    return null;
   }
+
   async findLoanById(loan_id) {
     try {
       const result = await pool.query(

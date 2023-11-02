@@ -775,14 +775,21 @@ Content-Type: application/json
 
 ---
 
-**Retrieve a list of all loan applications.**
-(only bank worker can do this)
+**Save information about a specific loan application with a specific loan type.**
+
+\*protected request (available only for admin and worker with access_token)
+\*(only bank worker can do this, user_id is required for checking user's role)
 
 Request:
 
 ```
-GET /applications
+POST /applications?application_id=1&loan_type_id=1
+Content-Type: application/json
 Authorization: Bearer {access_token}
+
+{
+  "user_id": 7
+}
 ```
 
 In case of successful response:
