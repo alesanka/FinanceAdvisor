@@ -566,7 +566,9 @@ Content-Type: application/json
 ---
 
 **Update loan type information.**
-(only admin can do this, so admin_id in body request is required)
+
+\*protected request (available only for admin and worker with access_token)
+\*(only admins can do this, user_id is required for checking user's role)
 
 Request:
 
@@ -576,7 +578,7 @@ Content-Type: application/json
 Authorization: Bearer {access_token}
 
 {
-  "admin_id": 2,
+  "user_id": 2,
   "interest_rate": 5.2
 }
 ```

@@ -89,19 +89,36 @@ class LoanTypeController {
   updateLoanTypeData = async (req, res) => {
     try {
       const loanTypeId = req.params.loan_type_id;
-      if (!loanTypeId) {
-        return res.status(400).send(`No valid loan_type_id is provided`);
-      }
       if (!req.body) {
         return res.status(400).send('No data provided in request body.');
       }
-      if (!req.body.admin_id) {
-        return res
-          .status(400)
-          .send(
-            'Only admin can update loan type data, so admin_id is required.'
-          );
+      const userId = req.body.user_id;
+      if (!userId) {
+        return res.status(400).send('User id is required for checking role.');
       }
+
+      const isAdmin = await userModel.checkRoleByUserId(userId);
+
+      if (!isAdmin) {
+        return res.status(403).send('Only admins can update loan types.');
+      }
+
+      if (req.body.required_doc) {
+        const validDocs = [
+          'passport',
+          'student_verification',
+          'business_plan',
+          'purchase_agreement',
+        ];
+        if (!validDocs.includes(req.body.required_doc)) {
+          return res
+            .status(400)
+            .send(
+              'Invalid required document. Accepted values are: passport, student_verification, business_plan, purchase_agreement'
+            );
+        }
+      }
+
       await loanTypeModel.updateLoanTypeData(loanTypeId, req.body);
 
       res
