@@ -26,6 +26,25 @@ class RepaymentScheduleModel {
       throw new Error(`Unable to create repayment schedule.`);
     }
   }
+  async getRepaymentScheduleById(repaymentScheduleId) {
+    try {
+      const result = await pool.query(
+        `SELECT * FROM RepaymentSchedules WHERE repayment_schedule_id = $1;`,
+        [repaymentScheduleId]
+      );
+
+      if (result.rows.length === 0) {
+        throw new Error(
+          `Repayment schedule with ID ${repaymentScheduleId} does not exist.`
+        );
+      }
+
+      return result.rows[0];
+    } catch (err) {
+      console.error(`Unable to get repayment schedule by ID: ${err}`);
+      throw new Error(`Unable to get repayment schedule by ID.`);
+    }
+  }
 }
 
 export const repaymentScheduleModel = new RepaymentScheduleModel();

@@ -78,3 +78,10 @@ CREATE TABLE IF NOT EXISTS MaximumLoanAmounts (
     total_interest_amount DECIMAL(20,2) NOT NULL,
     loan_app_loan_type_id INT REFERENCES LoanTypes_LoanApplications(id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS PaymentNotes (
+    note_id SERIAL PRIMARY KEY,
+    repayment_schedule_id INT REFERENCES RepaymentSchedules(repayment_schedule_id) ON DELETE CASCADE,
+    payment_date DATE NOT NULL,
+    payment_amount DECIMAL(20,2) NOT NULL
+);

@@ -17,7 +17,7 @@ class LoanApplicationModel {
   async findApplicationById(applicationId) {
     try {
       const result = await pool.query(
-        'SELECT application_id FROM loanapplications WHERE application_id = $1;',
+        'SELECT * FROM loanapplications WHERE application_id = $1;',
         [applicationId]
       );
       if (result.rows.length > 0) {
@@ -120,7 +120,7 @@ class LoanApplicationModel {
   async changeApprovement(applicationId) {
     try {
       const updateResult = await pool.query(
-        'UPDATE loanapplications SET is_approved = true, application_date = CURRENT_DATE WHERE application_id = $1 RETURNING *;',
+        'UPDATE loanapplications SET is_approved = true WHERE application_id = $1 RETURNING *;',
         [applicationId]
       );
 
@@ -132,6 +132,23 @@ class LoanApplicationModel {
     } catch (err) {
       console.error(`Unable to change approvement status: ${err}`);
       throw new Error(`Unable to change approvement status.`);
+    }
+  }
+  async checkApprovement(applicationId) {
+    try {
+      const result = await pool.query(
+        'SELECT is_approved FROM loanapplications WHERE application_id = $1;',
+        [applicationId]
+      );
+
+      if (result.rows.length > 0) {
+        return result.rows[0].is_approved;
+      } else {
+        throw new Error(`Application with ID ${applicationId} does not exist.`);
+      }
+    } catch (err) {
+      console.error(`Unable to check approvement status: ${err}`);
+      throw new Error(`Unable to check approvement status.`);
     }
   }
 }

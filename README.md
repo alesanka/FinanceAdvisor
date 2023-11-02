@@ -17,6 +17,7 @@ The Personal Finance Advisor API is a web service that provides functionality fo
   - [Endpoint /applications](#endpoints-applications)
   - [Endpoint /application/{application_id}/max_available_amount](#endpoints-applications-details)
   - [Endpoint /application/{application_id}/approved](#endpoints-applications-approved)
+  - [Endpoint /repayment_notes](#endpoints-repayment-notes)
 
 ## Implementation details <a name="imp-details"></a>
 
@@ -976,5 +977,7 @@ Content-Type: application/json
   "error": err.message
 }
 ```
+
+## Endpoint /repayment_notes <a name="endpoints-repayment-notes"></a> [(Back to content)](#content)
 
 [⬆ Go Up ⬆](#content)

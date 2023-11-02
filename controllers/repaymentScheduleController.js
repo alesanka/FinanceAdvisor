@@ -25,7 +25,7 @@ class RepaymentScheduleController {
           application_id
         );
 
-      const isApproved = await loanApplicationModel.changeApprovement(
+      const isApproved = await loanApplicationModel.checkApprovement(
         application_id
       );
 
