@@ -46,7 +46,8 @@ CREATE TABLE IF NOT EXISTS LoanApplications(
     application_id SERIAL PRIMARY KEY,
     client_id INT REFERENCES Clients(client_id) ON DELETE CASCADE,
     desired_loan_amount INT NOT NULL,
-    application_date DATE NOT NULL
+    application_date DATE NOT NULL,
+    is_approved BOOLEAN DEFAULT false
 );
 
 CREATE TABLE IF NOT EXISTS LoanTypes_LoanApplications(

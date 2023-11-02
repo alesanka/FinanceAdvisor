@@ -67,6 +67,7 @@ Loan application details.
 | FK  | client_id           | int       | Foreign key from the clients table     |
 |     | desired_loan_amount | int       | Desired loan amount by the client      |
 |     | application_date    | date      | The application's creation date.       |
+|     | is_approved         | boolean   | Loan approvement (false default).      |
 
 ### 4. Documents
 

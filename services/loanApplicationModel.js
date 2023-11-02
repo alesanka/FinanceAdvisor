@@ -117,5 +117,22 @@ class LoanApplicationModel {
       throw new Error(`Unable to save application with loan type.`);
     }
   }
+  async changeApprovement(applicationId) {
+    try {
+      const updateResult = await pool.query(
+        'UPDATE loanapplications SET is_approved = true, application_date = CURRENT_DATE WHERE application_id = $1 RETURNING *;',
+        [applicationId]
+      );
+
+      if (updateResult.rows[0]) {
+        return true;
+      } else {
+        throw new Error(`Application with ID ${applicationId} does not exist.`);
+      }
+    } catch (err) {
+      console.error(`Unable to change approvement status: ${err}`);
+      throw new Error(`Unable to change approvement status.`);
+    }
+  }
 }
 export const loanApplicationModel = new LoanApplicationModel();

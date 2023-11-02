@@ -16,8 +16,13 @@ router.post(
   loanApplicationController.createLoanApplication
 ); // protected
 router.get(
-  '/:max_loan_amount_id/loan-information',
+  '/:max_loan_amount_id/max_available_amount',
   maxLoanAmountController.getMaxLoanAmount
 ); // public
+router.put(
+  '/:application_id/approved',
+  token.getAuthorization,
+  loanApplicationController.changeApprovement
+); // protected
 
 export default router;

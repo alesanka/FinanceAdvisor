@@ -15,7 +15,8 @@ The Personal Finance Advisor API is a web service that provides functionality fo
   - [Endpoint /loan_types](#endpoints-loan-types)
   - [Endpoint /documents](#endpoints-documents)
   - [Endpoint /applications](#endpoints-applications)
-  - [Endpoint /application/{application_id}/loan-information](#endpoints-applications-details)
+  - [Endpoint /application/{application_id}/max_available_amount](#endpoints-applications-details)
+  - [Endpoint /application/{application_id}/approved](#endpoints-applications-approved)
 
 ## Implementation details <a name="imp-details"></a>
 
@@ -823,7 +824,7 @@ Content-Type: application/json
 }
 ```
 
-## Endpoint /application/{application_id}/loan-information <a name="endpoints-applications-details"></a> [(Back to content)](#content)
+## Endpoint /application/{application_id}/max_available_amount <a name="endpoints-applications-details"></a> [(Back to content)](#content)
 
 **User can get information about all max avaibale for him amounts of loans regarding his application (if before worker created his application and connected it with desired loan types).**
 
@@ -832,7 +833,7 @@ Content-Type: application/json
 Request:
 
 ```
-GET /application/{max_loan_amount_id}/loan-information
+GET /application/{max_loan_amount_id}/max_available_amount
 ```
 
 In case of successful response:
@@ -870,46 +871,53 @@ Content-Type: application/json
 }
 ```
 
-**Get information about loan details on a specific application.**
+## Endpoint /application/{application_id}/approved <a name="endpoints-applications-approved"></a> [(Back to content)](#content)
+
+**Approve desired by client amount of credit.**
+
+The loan application will be approved only in case if in the table MaxLoanAmount there is a corresponding value(ID) stating that the maximum available amount for this type of loan exceeds the amount desired by the client.
+
+\*protected request (available only for admin and worker with access_token)
+\*(only bank worker can do this, user_id is required for checking user's role)
 
 Request:
 
 ```
-GET /applications/1/details
+PUT /application/{application_id}/approved?loan_type=personal_loan
+Content-Type: application/json
 Authorization: Bearer {access_token}
+
+{
+  "user_id": 7
+}
 ```
 
 In case of successful response:
 
 ```
 HTTP/1.1 200 OK
+Content-Type: text/html; charset=utf-8
+
+'Status changed on approved'
+```
+
+In case of error response:
+
+```
+HTTP/1.1 400 Bad Request
+Content-Type: text/html; charset=utf-8
+
+'The provided loan type does not match the application data.'
+```
+
+or
+
+```
+HTTP/1.1 500 Internal Server Error
 Content-Type: application/json
 
 {
-  "application_id": 1,
-  "max_loan_amount": {
-    "max_loan_amount_id": 456,
-    "max_loan_amount": 20000,
-    "total_interest_amount": 3000
-  },
-  "repayment_schedule": {
-    "repayment_schedule_id": 789,
-    "monthly_payment": 1000,
-    "remaining_balance": 7000
-  },
-  "payment_notes": [
-    {
-      "note_id": 1,
-      "payment_date": "2023-10-01",
-      "payment_amount": 1000
-    },
-    {
-      "note_id": 2,
-      "payment_date": "2023-11-01",
-      "payment_amount": 1000
-    }
-    // ... more payment notes
-  ]
+  "error": err.message
 }
 ```
 
