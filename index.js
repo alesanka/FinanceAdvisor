@@ -12,7 +12,6 @@ import repaymentScheduleRouter from './routers/repaymentScheduleRouter.js';
 import repaymentNotesRouter from './routers/notesRouter.js';
 
 dotenv.config();
-initializeDatabase();
 
 const PORT = process.env.APP_PORT;
 const app = express();
@@ -33,6 +32,15 @@ app.use('/api/v1/documents', documentRouter);
 app.use('/api/v1/repayment_schedule', repaymentScheduleRouter);
 app.use('/api/v1/repayment_notes', repaymentNotesRouter);
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+const start = async () => {
+  try {
+    initializeDatabase();
+    app.listen(PORT);
+    console.log(`Server is running on port ${PORT}`);
+  } catch (err) {
+    console.log(err);
+    process.exit(1);
+  }
+};
+
+start();

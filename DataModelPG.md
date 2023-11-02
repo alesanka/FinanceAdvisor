@@ -173,6 +173,6 @@ The relationships between the tables are:
 - LoanTypes to LoanApplications: One LoanType can be associated with multiple LoanApplications and one LoanApplication can be associated with multiple LoanTypes (many-to-many) through LoanTypes_LoanApplications table.
 - LoanTypes_LoanApplications to MaximumLoanAmounts: One id can be associated with one MaximumLoanAmounts (one-to-one) through MaximumLoanAmounts (loan_app_loan_type).
 - LoanApplications to Documents: One LoanApplication can have multiple Documents (one-to-many) through Documents(application_id).
-- LoanApplications to RepaymentSchedules: One LoanApplication can have one RepaymentSchedule (one-to-one) through RepaymentSchedules(application_id).
+- LoanApplications to RepaymentSchedules: One LoanApplication can have many RepaymentSchedules (one-to-many) through RepaymentSchedules(application_id).
 - LoanApplications to MaximumLoanAmounts: One LoanApplication can have multiple MaximumLoanAmount (one-to-many) through MaximumLoanAmounts(application_id).
 - RepaymentSchedules to PaymentNotes: One RepaymentSchedule can have multiple PaymentNotes (one-to-many) through PaymentNotes(repayment_schedule_id).
