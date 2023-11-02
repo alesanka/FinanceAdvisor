@@ -1,35 +1,19 @@
 import { pool } from '../db/dbPool.js';
 
-class LoanApplicationModel {
-  async createLoanApplication(clientId, desiredLoanAmount) {
+class DocumentModel {
+  async createDocument(applicationId, documentName, documentType) {
     try {
       const result = await pool.query(
-        'INSERT INTO LoanApplications (client_id, desired_loan_amount, application_date) VALUES ($1, $2, CURRENT_DATE) RETURNING application_id',
-        [clientId, desiredLoanAmount]
+        'INSERT INTO Documents (application_id, document_name, document_type) VALUES ($1, $2, $3) RETURNING document_id',
+        [applicationId, documentName, documentType]
       );
 
-      return result.rows[0].application_id;
+      return result.rows[0].document_id;
     } catch (err) {
-      console.error(`Unable to create loan application: ${err}`);
-      throw new Error(`Unable to create loan application.`);
+      console.error(`Unable to create document: ${err}`);
+      throw new Error(`Unable to create document.`);
     }
   }
-  async findApplicationById(applicationId) {
-    try {
-      const result = await pool.query(
-        'SELECT application_id FROM loanapplications WHERE application_id = $1;',
-        [applicationId]
-      );
-      if (result.rows.length > 0) {
-        return result.rows[0];
-      }
-    } catch (err) {
-      console.error(`Unable to get application by id: ${err}`);
-      throw new Error(`Unable to get application by id.`);
-    }
-    return null;
-  }
-
   async findLoanByType(loan_type) {
     try {
       const result = await pool.query(
@@ -113,4 +97,4 @@ class LoanApplicationModel {
     }
   }
 }
-export const loanApplicationModel = new LoanApplicationModel();
+export const documentModel = new DocumentModel();

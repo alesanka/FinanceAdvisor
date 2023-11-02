@@ -13,6 +13,7 @@ The Personal Finance Advisor API is a web service that provides functionality fo
   - [Endpoint /login](#endpoints-login)
   - [Endpoint /user](#endpoints-users)
   - [Endpoint /loan_types](#endpoints-loan-types)
+  - [Endpoint /documents](#endpoints-documents)
   - [Endpoint /applications](#endpoints-applications)
   - [Endpoint /application/{application_id}/loan-information](#endpoints-applications-details)
 
@@ -599,6 +600,50 @@ HTTP/1.1 400 Bad Request
 Content-Type: text/html; charset=utf-8
 
 'Only admin can update loan type data, so admin_id is required.'
+```
+
+or
+
+```
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+
+{
+  "error": err.message
+}
+```
+
+## Endpoint /documents <a name="endpoints-documents"></a> [(Back to content)](#content)
+
+**Create a new document.**
+
+\*protected request (available only for admin and worker with access_token)
+\*(only bank worker can do this, user_id is required for checking user's role)
+
+Request:
+
+```
+POST /applications
+Content-Type: application/json
+Authorization: Bearer {access_token}
+
+{
+    "user_id": 2,
+    "application_id": 1,
+    "document_name": "Client passport",
+    "document_type": "passport"
+}
+```
+
+In case of successful response:
+
+In case of error response:
+
+```
+HTTP/1.1 403 Forbidden
+Content-Type: text/html; charset=utf-8
+
+'Only workers can add documents.'
 ```
 
 or
