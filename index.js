@@ -8,6 +8,7 @@ import authRouter from './routers/authRouter.js';
 import loanTypeRouter from './routers/loanTypeRouter.js';
 import loanApplicationRouter from './routers/loanApplicationRouter.js';
 import documentRouter from './routers/documentRouter.js';
+import repaymentScheduleRouter from './routers/repaymentScheduleRouter.js';
 
 dotenv.config();
 initializeDatabase();
@@ -28,6 +29,7 @@ app.use('/api/v1/users', userRouter);
 app.use('/api/v1/loan_types', loanTypeRouter);
 app.use('/api/v1/applications', loanApplicationRouter);
 app.use('/api/v1/documents', documentRouter);
+app.use('/api/v1/repayment_schedule', repaymentScheduleRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

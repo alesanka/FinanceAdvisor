@@ -921,4 +921,60 @@ Content-Type: application/json
 }
 ```
 
+## Endpoint /repayment_schedule <a name="endpoints-applications-approved"></a> [(Back to content)](#content)
+
+**Add a repayment schedule for a specific application.**
+
+\*protected request (available only for admin and worker with access_token)
+\*(only bank worker can do this, user_id is required for checking user's role)
+
+Request:
+
+```
+POST /repayment_schedule/{application_id}/approved?loan_type=personal_loan
+Content-Type: application/json
+Authorization: Bearer {access_token}
+
+{
+    "application_id": 1,
+    "user_id": 2
+}
+```
+
+In case of successful response:
+
+```
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+    "repaymentSchedule": {
+        "repayment_schedule_id": 1,
+        "application_id": 1,
+        "monthly_payment": "2824.06",
+        "remaining_balance": "549734.00"
+    }
+}
+```
+
+In case of error response:
+
+```
+HTTP/1.1 404 Not Found
+Content-Type: text/html; charset=utf-8
+
+'Loan application not found.'
+```
+
+or
+
+```
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+
+{
+  "error": err.message
+}
+```
+
 [⬆ Go Up ⬆](#content)

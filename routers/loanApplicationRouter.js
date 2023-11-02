@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { loanApplicationController } from '../controllers/loanApplicationController.js';
 import { maxLoanAmountController } from '../controllers/maxLoanAmountController.js';
 import { token } from '../controllers/tokenController.js';
+import { repaymentScheduleController } from '../controllers/repaymentScheduleController.js';
 
 const router = Router();
 
@@ -23,6 +24,11 @@ router.put(
   '/:application_id/approved',
   token.getAuthorization,
   loanApplicationController.changeApprovement
+); // protected
+router.post(
+  '/:application_id/repayment_schedule',
+  token.getAuthorization,
+  repaymentScheduleController.createRepaymentSchedule
 ); // protected
 
 export default router;
