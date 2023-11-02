@@ -671,6 +671,10 @@ Content-Type: application/json
 \*protected request (available only for admin and worker with access_token)
 \*(only bank worker can do this, user_id is required for checking user's role)
 
+| Parameter        | Type    | Description                            |
+| ---------------- | ------- | -------------------------------------- |
+| `application_id` | integer | The unique ID of the loan application. |
+
 Request:
 
 ```
@@ -782,6 +786,11 @@ Content-Type: application/json
 \*protected request (available only for admin and worker with access_token)
 \*(only bank worker can do this, user_id is required for checking user's role)
 
+| Parameter        | Type    | Description                                        |
+| ---------------- | ------- | -------------------------------------------------- |
+| `application_id` | integer | The unique ID of the loan application.             |
+| `loan_type_id`   | integer | The unique ID of the loan type associated with it. |
+
 Request:
 
 ```
@@ -830,6 +839,10 @@ Content-Type: application/json
 **User can get information about all max avaibale for him amounts of loans regarding his application (if before worker created his application and connected it with desired loan types).**
 
 \*public request
+
+| Parameter            | Type    | Description                                                         |
+| -------------------- | ------- | ------------------------------------------------------------------- |
+| `max_loan_amount_id` | integer | The unique ID of the max loan amount record associated with a user. |
 
 Request:
 
@@ -881,6 +894,13 @@ The loan application will be approved only in case if in the table MaxLoanAmount
 \*protected request (available only for admin and worker with access_token)
 \*(only bank worker can do this, user_id is required for checking user's role)
 
+Query Parameters:
+
+| Parameter        | Type    | Description                                                 |
+| ---------------- | ------- | ----------------------------------------------------------- |
+| `application_id` | integer | The unique ID of the loan application.                      |
+| `loan_type`      | enum    | Type of loan from enum ('personal_loan', 'mortgage', etc.). |
+
 Request:
 
 ```
@@ -928,6 +948,13 @@ Content-Type: application/json
 
 \*protected request (available only for admin and worker with access_token)
 \*(only bank worker can do this, user_id is required for checking user's role)
+
+Query Parameters:
+
+| Parameter        | Type    | Description                                                 |
+| ---------------- | ------- | ----------------------------------------------------------- |
+| `application_id` | integer | The unique ID of the loan application.                      |
+| `loan_type`      | enum    | Type of loan from enum ('personal_loan', 'mortgage', etc.). |
 
 Request:
 
@@ -979,5 +1006,109 @@ Content-Type: application/json
 ```
 
 ## Endpoint /repayment_notes <a name="endpoints-repayment-notes"></a> [(Back to content)](#content)
+
+**Add a list of payment notes for a specific repayment schedule.**
+
+After getting repayment_schedule_id a bank worker can create notes for client with month payment with dates of payment.
+
+\*protected request (available only for admin and worker with access_token)
+\*(only bank worker can do this, user_id is required for checking user's role)
+
+Request:
+
+```
+POST /repayment_notes
+Content-Type: application/json
+Authorization: Bearer {access_token}
+
+{
+    "repayment_schedule_id": 2,
+    "user_id": 2
+}
+```
+
+In case of successful response:
+
+```
+HTTP/1.1 200 OK
+Content-Type: text/html; charset=utf-8
+
+'Payment notes created successfully.'
+```
+
+In case of error response:
+
+```
+HTTP/1.1 404 Not Found
+Content-Type: text/html; charset=utf-8
+
+'User id is required for checking role.'
+```
+
+or
+
+```
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+
+{
+  "error": err.message
+}
+```
+
+---
+
+**Get a note with for specific date.**
+
+Client can get note with month payment for requested date.
+
+\*public request
+
+Query Parameters:
+
+| Parameter               | Type    | Required | Description                                               |
+| ----------------------- | ------- | -------- | --------------------------------------------------------- |
+| `repayment_schedule_id` | integer | Yes      | The unique ID of the repayment schedule.                  |
+| `year`                  | integer | Yes      | The year part of the date for which to find the payment.  |
+| `month`                 | integer | Yes      | The month part of the date for which to find the payment. |
+
+Request:
+
+```
+GET /repayment_notes/note?repayment_schedule_id=2&year=2024&month=5
+```
+
+In case of successful response:
+
+```
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+    "payment_amount": "2824.06"
+}
+```
+
+In case of error response:
+
+```
+HTTP/1.1 400 Bad Request
+Content-Type: text/html; charset=utf-8
+
+'Missing required parameters: repayment_schedule_id, year, and month'
+```
+
+or
+
+```
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+
+{
+  "error": err.message
+}
+```
+
+---
 
 [⬆ Go Up ⬆](#content)

@@ -77,7 +77,7 @@ class NotesController {
         );
       }
 
-      res.status(201).json({ message: 'Payment notes created successfully.' });
+      res.status(201).send('Payment notes created successfully.');
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: error.message });
@@ -89,10 +89,11 @@ class NotesController {
       const { repayment_schedule_id, year, month } = req.query;
 
       if (!repayment_schedule_id || !year || !month) {
-        return res.status(400).json({
-          error:
-            'Missing required parameters: repayment_schedule_id, year, and month',
-        });
+        return res
+          .status(400)
+          .send(
+            'Missing required parameters: repayment_schedule_id, year, and month'
+          );
       }
 
       const paymentAmounts =
