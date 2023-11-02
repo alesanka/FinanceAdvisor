@@ -693,6 +693,36 @@ Content-Type: application/json
 ]
 ```
 
+**Delete a user account.**
+
+\*protected request (available only for admin and worker with access_token)
+
+Request:
+
+```
+DELETE /documents/:documentId HTTP/1.1
+Authorization: Bearer {access_token}
+```
+
+In case of successful response:
+
+```
+HTTP/1.1 204 No Content
+
+```
+
+In case of error response:
+
+```
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+
+{
+  "error": err.message
+}
+
+```
+
 ## Endpoint /applications <a name="endpoints-applications"></a> [(Back to content)](#content)
 
 **Create a new loan application.**

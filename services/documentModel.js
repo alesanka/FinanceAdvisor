@@ -29,5 +29,26 @@ class DocumentModel {
     }
     return null;
   }
+  async deleteDocument(documentId) {
+    try {
+      const result = await pool.query(
+        'SELECT document_id FROM documents WHERE document_id = $1',
+        [documentId]
+      );
+
+      if (result.rows.length === 0) {
+        throw new Error(`No document found with documentId ${documentId}`);
+      }
+
+      await pool.query('DELETE FROM documents WHERE document_id = $1', [
+        documentId,
+      ]);
+
+      return;
+    } catch (err) {
+      console.error(`Unable to delete document ${documentId}: ${err}`);
+      throw new Error(`Unable to delete document ${documentId}.`);
+    }
+  }
 }
 export const documentModel = new DocumentModel();

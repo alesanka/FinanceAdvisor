@@ -10,5 +10,10 @@ router.get(
   token.getAuthorization,
   documentController.findDocumentsByApplicationId
 ); // protected
+router.delete(
+  '/:documentId',
+  token.getAuthorization,
+  documentController.deleteDocument
+); // protected
 
 export default router;
