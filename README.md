@@ -783,7 +783,7 @@ Content-Type: application/json
 Request:
 
 ```
-POST /applications?application_id=1&loan_type_id=1
+POST /applications/save?application_id=1&loan_type_id=1
 Content-Type: application/json
 Authorization: Bearer {access_token}
 
@@ -798,23 +798,29 @@ In case of successful response:
 HTTP/1.1 200 OK
 Content-Type: application/json
 
-[
-  {
-    "application_id": 1,
-    "client_id": 3,
-    "worker_id": 5,
-    "desired_loan_amount": 10000,
-    "loan_type_id": 2
-  },
-  {
-    "application_id": 2,
-    "client_id": 4,
-    "worker_id": 6,
-    "desired_loan_amount": 15000,
-    "loan_type_id": 1
-  }
-  // ... more credit loan applications
-]
+{
+    "maxAvailableAmount id": 1
+}
+```
+
+In case of error response:
+
+```
+HTTP/1.1 403 Forbidden
+Content-Type: text/html; charset=utf-8
+
+'Only workers can modificate loan applications.'
+```
+
+or
+
+```
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+
+{
+  "error": err.message
+}
 ```
 
 ---

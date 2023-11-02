@@ -70,10 +70,10 @@ CREATE TABLE IF NOT EXISTS RepaymentSchedules (
     remaining_balance DECIMAL(20,2) NOT NULL
 );
 
-
 CREATE TABLE IF NOT EXISTS MaximumLoanAmounts (
     max_loan_amount_id SERIAL PRIMARY KEY,
     application_id INT REFERENCES LoanApplications(application_id) ON DELETE CASCADE,
     max_loan_amount INT NOT NULL,
-    total_interest_amount DECIMAL(20,2) NOT NULL
+    total_interest_amount DECIMAL(20,2) NOT NULL,
+    loan_app_loan_type_id INT REFERENCES LoanTypes_LoanApplications(id) ON DELETE CASCADE
 );

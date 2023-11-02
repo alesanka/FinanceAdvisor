@@ -127,12 +127,13 @@ Notes related to payments.
 
 Maximum loan amounts for applications.
 
-| Key | Column Name           | Data Type | Description                                       |
-| --- | --------------------- | --------- | ------------------------------------------------- |
-| PK  | max_loan_amount_id    | int       | Primary key for the maximumloanamounts table      |
-| FK  | application_id        | int       | Foreign key from the applications table           |
-|     | max_loan_amount       | int       | Maximum loan amount available for the application |
-|     | total_interest_amount | float     | Total interest amount for the loan                |
+| Key | Column Name           | Data Type | Description                                           |
+| --- | --------------------- | --------- | ----------------------------------------------------- |
+| PK  | max_loan_amount_id    | int       | Primary key for the maximumloanamounts table          |
+| FK  | application_id        | int       | Foreign key from the applications table               |
+|     | max_loan_amount       | int       | Maximum loan amount available for the application     |
+|     | total_interest_amount | float     | Total interest amount for the loan                    |
+| FK  | laon_app_loan_type    | int       | Foreign key from the LoanTypes_LoanApplications table |
 
 ## Enumeration
 
@@ -169,7 +170,8 @@ The relationships between the tables are:
 - Users to Clients: One User can be associated with one Client (one-to-one) through Clients(user_id).
 - Clients to LoanApplications: One Client can have multiple Applications (one-to-many) through LoanApplications(client_id).
 - LoanTypes to LoanApplications: One LoanType can be associated with multiple LoanApplications and one LoanApplication can be associated with multiple LoanTypes (many-to-many) through LoanTypes_LoanApplications table.
+- LoanTypes_LoanApplications to MaximumLoanAmounts: One id can be associated with one MaximumLoanAmounts (one-to-one) through MaximumLoanAmounts (loan_app_loan_type).
 - LoanApplications to Documents: One LoanApplication can have multiple Documents (one-to-many) through Documents(application_id).
 - LoanApplications to RepaymentSchedules: One LoanApplication can have one RepaymentSchedule (one-to-one) through RepaymentSchedules(application_id).
-- LoanApplications to MaximumLoanAmounts: One LoanApplication can have one MaximumLoanAmount (one-to-one) through MaximumLoanAmounts(application_id).
+- LoanApplications to MaximumLoanAmounts: One LoanApplication can have multiple MaximumLoanAmount (one-to-many) through MaximumLoanAmounts(application_id).
 - RepaymentSchedules to PaymentNotes: One RepaymentSchedule can have multiple PaymentNotes (one-to-many) through PaymentNotes(repayment_schedule_id).

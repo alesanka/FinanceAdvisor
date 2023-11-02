@@ -39,7 +39,7 @@ class LoanApplicationModel {
                 c.salary, c.credit_story
          FROM LoanTypes AS lt 
          LEFT JOIN Documents AS d ON d.application_id = $2 
-         LEFT JOIN loanApplication AS la ON la.application_id = $2 
+         LEFT JOIN loanApplications AS la ON la.application_id = $2 
          LEFT JOIN clients AS c ON c.client_id = la.client_id 
          WHERE lt.loan_type_id = $1;`,
         [loantypeId, applicationId]
@@ -56,6 +56,7 @@ class LoanApplicationModel {
         document_type: docAvail,
         salary,
         credit_story,
+        desired_loan_amount,
       } = result.rows[0];
 
       if (docAvail !== docReq) {
@@ -75,13 +76,19 @@ class LoanApplicationModel {
         maxLoanAmount *= 0.95;
       }
 
+      maxLoanAmount = Math.round(maxLoanAmount);
+      // Check if desired loan amount is greater than max loan amount
+      if (desired_loan_amount > maxLoanAmount) {
+        throw new Error(
+          `Desired loan amount exceeds the maximum available loan amount.`
+        );
+      }
       const calculateTotalInterest = (
         principalAmount,
         interestRate,
         numberOfMonths
       ) => {
         const monthlyRate = interestRate / 12 / 100;
-
         const annuityCoefficient =
           (monthlyRate * Math.pow(1 + monthlyRate, numberOfMonths)) /
           (Math.pow(1 + monthlyRate, numberOfMonths) - 1);
@@ -92,83 +99,22 @@ class LoanApplicationModel {
       };
 
       const totalInterest = calculateTotalInterest(maxLoanAmount, rate, term);
+
       const resultConnect = await pool.query(
         'INSERT INTO LoanTypes_LoanApplications (loan_type_id, application_id) VALUES ($1, $2) RETURNING id',
         [loantypeId, applicationId]
       );
+      const id = resultConnect.rows[0].id;
 
-      return resultConnect.rows[0].id;
+      const resultMaximumLoanAmounts = await pool.query(
+        'INSERT INTO MaximumLoanAmounts (application_id, max_loan_amount, total_interest_amount, loan_app_loan_type_id) VALUES ($1, $2, $3, $4) RETURNING max_loan_amount_id',
+        [applicationId, maxLoanAmount, totalInterest, id]
+      );
+
+      return resultMaximumLoanAmounts.rows[0].max_loan_amount_id;
     } catch (err) {
       console.error(`Unable to save application with loan type: ${err}`);
       throw new Error(`Unable to save application with loan type.`);
-    }
-  }
-
-  async findLoanById(loan_id) {
-    try {
-      const result = await pool.query(
-        'SELECT * FROM loanTypes WHERE loan_type_id = $1;',
-        [loan_id]
-      );
-      if (result.rows.length > 0) {
-        return result.rows[0];
-      }
-    } catch (err) {
-      console.error(`Unable to get loan type by loan_id: ${err}`);
-      throw new Error(`Unable to get loan type by loan_id.`);
-    }
-    return null;
-  }
-  async getAllLoanTypes() {
-    try {
-      const result = await pool.query('SELECT * FROM loanTypes');
-
-      return result.rows;
-    } catch (err) {
-      console.error(`Unable to get all loan types: ${err}`);
-      throw new Error(`Unable to get all loan types.`);
-    }
-  }
-  async updateLoanTypeData(loanTypeId, data) {
-    try {
-      const loanResult = await pool.query(
-        'SELECT loan_type_id FROM loanTypes WHERE loan_type_id = $1',
-        [loanTypeId]
-      );
-
-      if (loanResult.rows.length === 0) {
-        throw new Error(
-          `No loan type was found with provided loan_type_id ${userId}`
-        );
-      }
-
-      let query = 'UPDATE loanTypes SET ';
-      let values = [];
-
-      if (data.interest_rate) {
-        query += `interest_rate = $${values.length + 1}, `;
-        values.push(data.interest_rate);
-      }
-
-      if (data.loan_term) {
-        query += `loan_term = $${values.length + 1}, `;
-        values.push(data.loan_term);
-      }
-
-      if (data.required_doc) {
-        query += `required_doc = $${values.length + 1}, `;
-        values.push(data.required_doc);
-      }
-
-      query = query.trim().endsWith(',') ? (query = query.slice(0, -2)) : query;
-
-      query += ` WHERE loan_type_id = $${values.length + 1}`;
-
-      values.push(loanTypeId);
-      await pool.query(query, values);
-    } catch (err) {
-      console.error(`Unable to update loan type: ${err}`);
-      throw new Error(`Unable to update loan type.`);
     }
   }
 }
