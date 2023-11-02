@@ -1,62 +1,34 @@
-import { loanTypeModel } from '../services/loanTypeModel.js';
+import { loanApplicationModel } from '../services/loanApplicationModel.js';
 import { userModel } from '../services/userModel.js';
 
-class LoanTypeController {
-  createLoanType = async (req, res) => {
+class LoanApplicationController {
+  createLoanApplication = async (req, res) => {
     try {
       const userId = req.body.user_id;
       if (!userId) {
         return res.status(400).send('User id is required for checking role.');
       }
 
-      const isAdmin = await userModel.checkRoleByUserId(userId);
+      const isWorker = await userModel.checkRoleByUserId(userId);
 
-      if (isAdmin !== 'admin') {
-        return res.status(403).send('Only admins can create loan types.');
-      }
-
-      const { loan_type, interest_rate, loan_term, required_doc } = req.body;
-
-      const validLoanTypes = [
-        'personal_loan',
-        'mortgage',
-        'student_loan',
-        'business_loan',
-      ];
-      if (!validLoanTypes.includes(loan_type)) {
+      if (isWorker !== 'worker') {
         return res
-          .status(400)
-          .send(
-            'Invalid loan type. Accepted values are: personal_loan, mortgage, student_loan, business_loan'
-          );
+          .status(403)
+          .send('Only workers can create loan applications.');
       }
 
-      const validDocs = [
-        'passport',
-        'student_verification',
-        'business_plan',
-        'purchase_agreement',
-      ];
-      if (!validDocs.includes(required_doc)) {
-        return res
-          .status(400)
-          .send(
-            'Invalid required document. Accepted values are: passport, student_verification, business_plan, purchase_agreement'
-          );
+      const { client_id, desired_loan_amount } = req.body;
+
+      const isRealClient = await userModel.findClientById(client_id);
+      if (!isRealClient) {
+        return res.status(400).send('Invalid client id.');
       }
 
-      const existingLoanType = await loanTypeModel.findLoanByType(loan_type);
-      if (existingLoanType) {
-        return res.status(409).send(`Loan type ${loan_type} already exists`);
-      }
-
-      await loanTypeModel.createLoanType(
-        loan_type,
-        interest_rate,
-        loan_term,
-        required_doc
+      await loanApplicationModel.createLoanApplication(
+        client_id,
+        desired_loan_amount
       );
-      res.status(201).send('Loan type was created successfully');
+      res.status(201).send('Loan application was created successfully');
     } catch (err) {
       console.error(err);
       res.status(500).json({ error: err.message });
@@ -99,7 +71,7 @@ class LoanTypeController {
 
       const isAdmin = await userModel.checkRoleByUserId(userId);
 
-      if (isAdmin !== 'admin') {
+      if (!isAdmin) {
         return res.status(403).send('Only admins can update loan types.');
       }
 
@@ -133,4 +105,4 @@ class LoanTypeController {
   };
 }
 
-export const loanTypeController = new LoanTypeController();
+export const loanApplicationController = new LoanApplicationController();

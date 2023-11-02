@@ -41,3 +41,23 @@ CREATE TABLE IF NOT EXISTS LoanTypes (
     loan_term INT NOT NULL CHECK (loan_term > 0),
     required_doc docs_enum NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS LoanApplications(
+    application_id SERIAL PRIMARY KEY,
+    client_id INT REFERENCES Clients(client_id) ON DELETE CASCADE,
+    desired_loan_amount INT NOT NULL,
+    application_date DATE NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS LoanTypes_LoanApplications(
+id SERIAL PRIMARY KEY,
+loan_type_id INT REFERENCES LoanTypes(loan_type_id) ON DELETE CASCADE,
+application_id INT REFERENCES LoanApplications(application_id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS Documents (
+    document_id SERIAL PRIMARY KEY,
+    application_id INT REFERENCES LoanApplications(application_id) ON DELETE CASCADE,
+    document_name VARCHAR(255) NOT NULL,
+    document_type docs_enum NOT NULL
+);

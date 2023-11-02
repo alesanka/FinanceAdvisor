@@ -615,7 +615,9 @@ Content-Type: application/json
 ## Endpoint /applications <a name="endpoints-applications"></a> [(Back to content)](#content)
 
 **Create a new loan application.**
-(only bank worker can do this)
+
+\*protected request (available only for admin and worker with access_token)
+\*(only bank worker can do this, user_id is required for checking user's role)
 
 Request:
 
@@ -625,10 +627,9 @@ Content-Type: application/json
 Authorization: Bearer {access_token}
 
 {
+  "user_id: 7,
   "client_id": 4,
-  "worker_id": 6,
-  "desired_loan_amount": 20000,
-  "loan_type_id": 3
+  "desired_loan_amount": 20000
 }
 ```
 
@@ -636,14 +637,28 @@ In case of successful response:
 
 ```
 HTTP/1.1 201 Created
+Content-Type: text/html; charset=utf-8
+
+'Loan application was created successfully'
+```
+
+In case of error response:
+
+```
+HTTP/1.1 403 Forbidden
+Content-Type: text/html; charset=utf-8
+
+'Only workers can create loan applications.'
+```
+
+or
+
+```
+HTTP/1.1 500 Internal Server Error
 Content-Type: application/json
 
 {
-  "application_id": 3,
-  "client_id": 4,
-  "worker_id": 6,
-  "desired_loan_amount": 20000,
-  "loan_type_id": 3
+  "error": err.message
 }
 ```
 

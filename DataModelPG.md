@@ -66,6 +66,7 @@ Loan application details.
 | PK  | application_id      | int       | Primary key for the applications table |
 | FK  | client_id           | int       | Foreign key from the clients table     |
 |     | desired_loan_amount | int       | Desired loan amount by the client      |
+|     | application_date    | date      | The application's creation date.       |
 
 ### 4. Documents
 

@@ -295,11 +295,26 @@ class UserModel {
         throw new Error('User not found.');
       }
 
-      return result.rows[0].role === 'admin';
+      return result.rows[0].role;
     } catch (err) {
       console.error(`Unable to get role by user id: ${err}`);
       throw new Error(`Unable to get role by user id.`);
     }
+  }
+  async findClientById(clientId) {
+    try {
+      const result = await pool.query(
+        'SELECT client_id FROM clients WHERE client_id = $1;',
+        [clientId]
+      );
+      if (result.rows.length > 0) {
+        return result.rows[0];
+      }
+    } catch (err) {
+      console.error(`Unable to get client by id: ${err}`);
+      throw new Error(`Unable to get client by id.`);
+    }
+    return null;
   }
 }
 
