@@ -823,22 +823,16 @@ Content-Type: application/json
 }
 ```
 
----
+## Endpoint /application/{application_id}/loan-information <a name="endpoints-applications-details"></a> [(Back to content)](#content)
 
-**Retrieve information about a specific loan application.**
-(only bank worker can do this)
+**User can get information about all max avaibale for him amounts of loans regarding his application (if before worker created his application and connected it with desired loan types).**
 
-Query Parameters:
-
-| Parameter        | Type   | Description                        |
-| ---------------- | ------ | ---------------------------------- |
-| `application_id` | number | Filter loan types by loan_type_id. |
+\*public request
 
 Request:
 
 ```
-GET /applications/:application_id
-Authorization: Bearer {access_token}
+GET /application/{max_loan_amount_id}/loan-information
 ```
 
 In case of successful response:
@@ -848,26 +842,33 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
-  "application_id": {application_id},
-  "client_id": 3,
-  "worker_id": 5,
-  "desired_loan_amount": 10000,
-  "loan_type_id": 2
+
+    "Max available amount of loan": 549734,
+    "Loan type": "personal_loan",
+    "Max interest amount": "20266.13"
+
 }
 ```
 
 In case of error response:
 
 ```
-HTTP/1.1 404 Not Found
+HTTP/1.1 403 Forbidden
+Content-Type: text/html; charset=utf-8
+
+'Data not found for the provided max loan amount ID.'
+```
+
+or
+
+```
+HTTP/1.1 500 Internal Server Error
 Content-Type: application/json
 
 {
-  "error": "Invalid application id"
+  "error": err.message
 }
 ```
-
-## Endpoint /application/{application_id}/loan-information <a name="endpoints-applications-details"></a> [(Back to content)](#content)
 
 **Get information about loan details on a specific application.**
 
