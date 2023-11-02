@@ -623,7 +623,7 @@ Content-Type: application/json
 Request:
 
 ```
-POST /applications
+POST /documents
 Content-Type: application/json
 Authorization: Bearer {access_token}
 
@@ -636,6 +636,13 @@ Authorization: Bearer {access_token}
 ```
 
 In case of successful response:
+
+```
+HTTP/1.1 201 Created
+Content-Type: text/html; charset=utf-8
+
+'Document was added successfully'
+```
 
 In case of error response:
 
@@ -656,6 +663,58 @@ Content-Type: application/json
   "error": err.message
 }
 ```
+
+**Get all documents by application id.**
+
+\*protected request (available only for admin and worker with access_token)
+\*(only bank worker can do this, user_id is required for checking user's role)
+
+Request:
+
+```
+Get /documents/:application_id
+Authorization: Bearer {access_token}
+
+```
+
+In case of successful response:
+
+```
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+
+'Document was added successfully'
+```
+
+In case of error response:
+
+```
+HTTP/1.1 403 Forbidden
+Content-Type: text/html; charset=utf-8
+
+'Only workers can add documents.'
+```
+
+or
+
+```
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+
+{
+  "error": err.message
+}
+```
+
+[
+{
+"document_id": 1,
+"application_id": 1,
+"document_name": "Client passport",
+"document_type": "passport"
+}
+]
 
 ## Endpoint /applications <a name="endpoints-applications"></a> [(Back to content)](#content)
 

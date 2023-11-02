@@ -50,10 +50,13 @@ class DocumentController {
       res.status(500).json({ error: err.message });
     }
   };
-  getAllLoanTypes = async (req, res) => {
+  findDocumentsByApplicationId = async (req, res) => {
     try {
-      const loanTypes = await loanTypeModel.getAllLoanTypes();
-      res.status(200).json(loanTypes);
+      const applicationId = req.params.application_id;
+      const documents = await documentModel.findDocumentsByApplicationId(
+        applicationId
+      );
+      res.status(200).json(documents);
     } catch (err) {
       console.error(err);
       res.status(500).json({ error: err.message });
