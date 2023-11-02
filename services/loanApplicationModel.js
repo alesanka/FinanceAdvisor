@@ -74,7 +74,23 @@ class LoanApplicationModel {
       if (!credit_story) {
         maxLoanAmount *= 0.95;
       }
+      const calculateTotalInterest = (
+        principalAmount,
+        interestRate,
+        numberOfMonths
+      ) => {
+        const monthlyRate = interestRate / 12 / 100;
 
+        const annuityCoefficient =
+          (monthlyRate * Math.pow(1 + monthlyRate, numberOfMonths)) /
+          (Math.pow(1 + monthlyRate, numberOfMonths) - 1);
+        const monthlyPayment = principalAmount * annuityCoefficient;
+        const totalPayments = monthlyPayment * numberOfMonths;
+        const totalInterest = totalPayments - principalAmount;
+        return totalInterest;
+      };
+
+      const totalInterest = calculateTotalInterest(maxLoanAmount, rate, term);
       const resultConnect = await pool.query(
         'INSERT INTO LoanTypes_LoanApplications (loan_type_id, application_id) VALUES ($1, $2) RETURNING id',
         [loantypeId, applicationId]
