@@ -683,38 +683,15 @@ In case of successful response:
 HTTP/1.1 200 OK
 Content-Type: application/json
 
-
-'Document was added successfully'
-```
-
-In case of error response:
-
-```
-HTTP/1.1 403 Forbidden
-Content-Type: text/html; charset=utf-8
-
-'Only workers can add documents.'
-```
-
-or
-
-```
-HTTP/1.1 500 Internal Server Error
-Content-Type: application/json
-
-{
-  "error": err.message
-}
-```
-
 [
-{
-"document_id": 1,
-"application_id": 1,
-"document_name": "Client passport",
-"document_type": "passport"
-}
+    {
+        "document_id": 1,
+        "application_id": {application_id},
+        "document_name": "Client passport",
+        "document_type": "passport"
+    }
 ]
+```
 
 ## Endpoint /applications <a name="endpoints-applications"></a> [(Back to content)](#content)
 
