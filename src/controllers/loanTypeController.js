@@ -1,5 +1,5 @@
-import { loanTypeModel } from '../repositories/loanTypeRepos.js';
-import { userModel } from '../repositories/userRepos.js';
+import { loanTypeRepos } from '../repositories/loanTypeRepos.js';
+import { userRepos } from '../repositories/userRepos.js';
 
 class LoanTypeController {
   createLoanType = async (req, res) => {
@@ -9,7 +9,7 @@ class LoanTypeController {
         return res.status(400).send('User id is required for checking role.');
       }
 
-      const isAdmin = await userModel.checkRoleByUserId(userId);
+      const isAdmin = await userRepos.checkRoleByUserId(userId);
 
       if (isAdmin !== 'admin') {
         return res.status(403).send('Only admins can create loan types.');
@@ -45,12 +45,12 @@ class LoanTypeController {
           );
       }
 
-      const existingLoanType = await loanTypeModel.findLoanByType(loan_type);
+      const existingLoanType = await loanTypeRepos.findLoanByType(loan_type);
       if (existingLoanType) {
         return res.status(409).send(`Loan type ${loan_type} already exists`);
       }
 
-      await loanTypeModel.createLoanType(
+      await loanTypeRepos.createLoanType(
         loan_type,
         interest_rate,
         loan_term,
@@ -64,7 +64,7 @@ class LoanTypeController {
   };
   getAllLoanTypes = async (req, res) => {
     try {
-      const loanTypes = await loanTypeModel.getAllLoanTypes();
+      const loanTypes = await loanTypeRepos.getAllLoanTypes();
       res.status(200).json(loanTypes);
     } catch (err) {
       console.error(err);
@@ -79,7 +79,7 @@ class LoanTypeController {
         return res.status(400).send(`No valid loan_type is provided`);
       }
 
-      const loanData = await loanTypeModel.findLoanByType(loanType);
+      const loanData = await loanTypeRepos.findLoanByType(loanType);
       res.status(200).json(loanData);
     } catch (err) {
       console.error(err);
@@ -97,7 +97,7 @@ class LoanTypeController {
         return res.status(400).send('User id is required for checking role.');
       }
 
-      const isAdmin = await userModel.checkRoleByUserId(userId);
+      const isAdmin = await userRepos.checkRoleByUserId(userId);
 
       if (isAdmin !== 'admin') {
         return res.status(403).send('Only admins can update loan types.');
@@ -119,7 +119,7 @@ class LoanTypeController {
         }
       }
 
-      await loanTypeModel.updateLoanTypeData(loanTypeId, req.body);
+      await loanTypeRepos.updateLoanTypeData(loanTypeId, req.body);
 
       res
         .status(200)

@@ -1,15 +1,15 @@
 import * as dotenv from 'dotenv';
 import { db } from '../db/client.js';
-import { createModel } from '../repositories/tokenRepos.js';
+import { createRepos } from '../repositories/tokenRepos.js';
 import pkg from '@node-oauth/oauth2-server';
 import OAuthServer from '@node-oauth/oauth2-server';
 const { Request, Response } = pkg;
 dotenv.config();
 
-const model = createModel(db);
+const Repos = createRepos(db);
 
 const oauth = new OAuthServer({
-  model: model,
+  model: Repos,
 });
 
 let options = {

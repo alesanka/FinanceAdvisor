@@ -1,6 +1,6 @@
 import { pool } from '../db/dbPool.js';
 
-class MaxLoanAmountModel {
+class MaxLoanAmountRepos {
   async getMaxLoanAmount(maxLoanamountId) {
     try {
       const result = await pool.query(
@@ -61,4 +61,4 @@ class MaxLoanAmountModel {
   }
 }
 
-export const maxLoanAmountModel = new MaxLoanAmountModel();
+export const maxLoanAmountRepos = new MaxLoanAmountRepos();

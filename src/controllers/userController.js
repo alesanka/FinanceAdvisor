@@ -1,4 +1,4 @@
-import { userModel } from '../repositories/userRepos.js';
+import { userRepos } from '../repositories/userRepos.js';
 
 import bcrypt from 'bcrypt';
 
@@ -17,7 +17,7 @@ class AuthenticationController {
         credit_story,
       } = req.body;
 
-      const existingUser = await userModel.findUserByUsername(username);
+      const existingUser = await userRepos.findUserByUsername(username);
       if (existingUser) {
         return res.status(409).send(`User with this username already exists`);
       }
@@ -68,7 +68,7 @@ class AuthenticationController {
           .send('Invalid role. Accepted values are: client, worker, admin');
       }
 
-      await userModel.registerUser(
+      await userRepos.registerUser(
         username,
         password,
         first_name,
@@ -119,7 +119,7 @@ class AuthenticationController {
         }
       }
 
-      const existingUser = await userModel.findUserByUsername(username);
+      const existingUser = await userRepos.findUserByUsername(username);
       if (!existingUser) {
         return res.status(400).send('Username is incorrect');
       }
@@ -149,13 +149,13 @@ class UserController {
   filterByParameter = async (req, res) => {
     try {
       if (Object.keys(req.query).length === 0) {
-        const users = await userModel.getAllUsers();
+        const users = await userRepos.getAllUsers();
         return res.status(200).json(users);
       }
 
       const params = req.query;
 
-      const users = await userModel.filterByParameter(params);
+      const users = await userRepos.filterByParameter(params);
 
       if (!users.length) {
         return res.status(404).send('No users found matching the criteria.');
@@ -170,7 +170,7 @@ class UserController {
   getUserById = async (req, res) => {
     try {
       const userId = req.params.userId;
-      const user = await userModel.getUserById(userId);
+      const user = await userRepos.getUserById(userId);
       res.status(200).json(user);
     } catch (err) {
       console.error(err);
@@ -185,7 +185,7 @@ class UserController {
     }
 
     try {
-      await userModel.changeData(userId, req.body);
+      await userRepos.changeData(userId, req.body);
 
       res
         .status(200)
@@ -199,7 +199,7 @@ class UserController {
     const userId = req.params.userId;
 
     try {
-      await userModel.deleteUser(userId);
+      await userRepos.deleteUser(userId);
       res.status(204).end();
     } catch (err) {
       console.error(err);

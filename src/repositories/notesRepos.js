@@ -1,6 +1,6 @@
 import { pool } from '../db/dbPool.js';
 
-class NotesModel {
+class NotesRepos {
   async createNotes(repaymentScheduleId, paymentDate, paymentAmount) {
     try {
       const insertResult = await pool.query(
@@ -49,4 +49,4 @@ class NotesModel {
   }
 }
 
-export const notesModel = new NotesModel();
+export const notesRepos = new NotesRepos();

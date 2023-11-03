@@ -1,7 +1,7 @@
-import { loanApplicationModel } from '../repositories/loanApplicationRepos.js';
-import { userModel } from '../repositories/userRepos.js';
-import { loanTypeModel } from '../repositories/loanTypeRepos.js';
-import { maxLoanAmountModel } from '../repositories/maxLoanAmountRepos.js';
+import { loanApplicationRepos } from '../repositories/loanApplicationRepos.js';
+import { userRepos } from '../repositories/userRepos.js';
+import { loanTypeRepos } from '../repositories/loanTypeRepos.js';
+import { maxLoanAmountRepos } from '../repositories/maxLoanAmountRepos.js';
 
 class LoanApplicationController {
   createLoanApplication = async (req, res) => {
@@ -11,7 +11,7 @@ class LoanApplicationController {
         return res.status(400).send('User id is required for checking role.');
       }
 
-      const isWorker = await userModel.checkRoleByUserId(userId);
+      const isWorker = await userRepos.checkRoleByUserId(userId);
 
       if (isWorker !== 'worker') {
         return res
@@ -21,12 +21,12 @@ class LoanApplicationController {
 
       const { client_id, desired_loan_amount } = req.body;
 
-      const isRealClient = await userModel.findClientById(client_id);
+      const isRealClient = await userRepos.findClientById(client_id);
       if (!isRealClient) {
         return res.status(400).send('Invalid client id.');
       }
 
-      await loanApplicationModel.createLoanApplication(
+      await loanApplicationRepos.createLoanApplication(
         client_id,
         desired_loan_amount
       );
@@ -45,7 +45,7 @@ class LoanApplicationController {
         return res.status(400).send('User id is required for checking role.');
       }
 
-      const isWorker = await userModel.checkRoleByUserId(userId);
+      const isWorker = await userRepos.checkRoleByUserId(userId);
 
       if (isWorker !== 'worker') {
         return res
@@ -53,12 +53,12 @@ class LoanApplicationController {
           .send('Only workers can modificate loan applications.');
       }
 
-      const isLoanTypeExists = await loanTypeModel.findLoanById(loan_type_id);
+      const isLoanTypeExists = await loanTypeRepos.findLoanById(loan_type_id);
       if (!isLoanTypeExists) {
         throw new Error('Loan type does not exist.');
       }
       const maxAvailableAmount =
-        await loanApplicationModel.saveApplicationWithLoanType(
+        await loanApplicationRepos.saveApplicationWithLoanType(
           loan_type_id,
           application_id
         );
@@ -79,7 +79,7 @@ class LoanApplicationController {
         return res.status(400).send('User id is required for checking role.');
       }
 
-      const isWorker = await userModel.checkRoleByUserId(userId);
+      const isWorker = await userRepos.checkRoleByUserId(userId);
 
       if (isWorker !== 'worker') {
         return res
@@ -88,7 +88,7 @@ class LoanApplicationController {
       }
 
       const maxLoanAmountData =
-        await maxLoanAmountModel.getMaxLoanAmountByApplicationId(
+        await maxLoanAmountRepos.getMaxLoanAmountByApplicationId(
           application_id
         );
 
@@ -98,7 +98,7 @@ class LoanApplicationController {
           .send('The provided loan type does not match the application data.');
       }
 
-      const isApproved = await loanApplicationModel.changeApprovement(
+      const isApproved = await loanApplicationRepos.changeApprovement(
         application_id
       );
       if (!isApproved) {

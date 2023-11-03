@@ -1,6 +1,6 @@
 import { pool } from '../db/dbPool.js';
 
-class DocumentModel {
+class DocumentRepos {
   async createDocument(applicationId, documentName, documentType) {
     try {
       const result = await pool.query(
@@ -51,4 +51,4 @@ class DocumentModel {
     }
   }
 }
-export const documentModel = new DocumentModel();
+export const documentRepos = new DocumentRepos();

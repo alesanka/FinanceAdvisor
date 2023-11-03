@@ -1,7 +1,7 @@
-import { loanApplicationModel } from '../repositories/loanApplicationRepos.js';
-import { userModel } from '../repositories/userRepos.js';
-import { maxLoanAmountModel } from '../repositories/maxLoanAmountRepos.js';
-import { repaymentScheduleModel } from '../repositories/repaymentScheduleRepos.js';
+import { loanApplicationRepos } from '../repositories/loanApplicationRepos.js';
+import { userRepos } from '../repositories/userRepos.js';
+import { maxLoanAmountRepos } from '../repositories/maxLoanAmountRepos.js';
+import { repaymentScheduleRepos } from '../repositories/repaymentScheduleRepos.js';
 
 class RepaymentScheduleController {
   createRepaymentSchedule = async (req, res) => {
@@ -12,7 +12,7 @@ class RepaymentScheduleController {
         return res.status(400).send('User id is required for checking role.');
       }
 
-      const isWorker = await userModel.checkRoleByUserId(user_id);
+      const isWorker = await userRepos.checkRoleByUserId(user_id);
 
       if (isWorker !== 'worker') {
         return res
@@ -21,11 +21,11 @@ class RepaymentScheduleController {
       }
 
       const maxLoanAmountData =
-        await maxLoanAmountModel.getMaxLoanAmountByApplicationId(
+        await maxLoanAmountRepos.getMaxLoanAmountByApplicationId(
           application_id
         );
 
-      const isApproved = await loanApplicationModel.checkApprovement(
+      const isApproved = await loanApplicationRepos.checkApprovement(
         application_id
       );
 
@@ -34,7 +34,7 @@ class RepaymentScheduleController {
       }
 
       const repaymentSchedule =
-        await repaymentScheduleModel.createRepaymentSchedule(
+        await repaymentScheduleRepos.createRepaymentSchedule(
           application_id,
           maxLoanAmountData.loan_term,
           maxLoanAmountData.interest_rate,

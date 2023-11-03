@@ -1,6 +1,6 @@
 import { pool } from '../db/dbPool.js';
 
-class LoanTypeModel {
+class LoanTypeRepos {
   async createLoanType(loanType, interestRate, loanTerm, requiredDoc) {
     try {
       const result = await pool.query(
@@ -97,4 +97,4 @@ class LoanTypeModel {
     }
   }
 }
-export const loanTypeModel = new LoanTypeModel();
+export const loanTypeRepos = new LoanTypeRepos();

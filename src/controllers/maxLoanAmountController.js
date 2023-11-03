@@ -1,4 +1,4 @@
-import { maxLoanAmountModel } from '../repositories/maxLoanAmountRepos.js';
+import { maxLoanAmountRepos } from '../repositories/maxLoanAmountRepos.js';
 
 class MaxLoanAmountController {
   getMaxLoanAmount = async (req, res) => {
@@ -11,7 +11,7 @@ class MaxLoanAmountController {
           .json({ error: 'max_loan_amount_id is required' });
       }
 
-      const maxAvailableAmount = await maxLoanAmountModel.getMaxLoanAmount(
+      const maxAvailableAmount = await maxLoanAmountRepos.getMaxLoanAmount(
         max_loan_amount_id
       );
 

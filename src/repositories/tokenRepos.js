@@ -2,7 +2,7 @@ import { pool } from '../db/dbPool.js';
 
 const enabledScopes = ['admin', 'worker'];
 
-export const createModel = (db) => {
+export const createRepos = (db) => {
   async function getClient(clientId, clientSecret) {
     try {
       return await db.findClient(clientId, clientSecret);

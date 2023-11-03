@@ -1,8 +1,8 @@
-import { notesModel } from '../repositories/notesRepos.js';
-import { userModel } from '../repositories/userRepos.js';
-import { maxLoanAmountModel } from '../repositories/maxLoanAmountRepos.js';
-import { repaymentScheduleModel } from '../repositories/repaymentScheduleRepos.js';
-import { loanApplicationModel } from '../repositories/loanApplicationRepos.js';
+import { notesRepos } from '../repositories/notesRepos.js';
+import { userRepos } from '../repositories/userRepos.js';
+import { maxLoanAmountRepos } from '../repositories/maxLoanAmountRepos.js';
+import { repaymentScheduleRepos } from '../repositories/repaymentScheduleRepos.js';
+import { loanApplicationRepos } from '../repositories/loanApplicationRepos.js';
 
 class NotesController {
   createNotes = async (req, res) => {
@@ -13,7 +13,7 @@ class NotesController {
         return res.status(400).send('User id is required for checking role.');
       }
 
-      const isWorker = await userModel.checkRoleByUserId(user_id);
+      const isWorker = await userRepos.checkRoleByUserId(user_id);
 
       if (isWorker !== 'worker') {
         return res
@@ -22,17 +22,17 @@ class NotesController {
       }
 
       const repaymentSchedule =
-        await repaymentScheduleModel.getRepaymentScheduleById(
+        await repaymentScheduleRepos.getRepaymentScheduleById(
           repayment_schedule_id
         );
       const applicationId = repaymentSchedule.application_id;
       const monthlyPayment = repaymentSchedule.monthly_payment;
 
       const maxLoanAmountData =
-        await maxLoanAmountModel.getMaxLoanAmountByApplicationId(applicationId);
+        await maxLoanAmountRepos.getMaxLoanAmountByApplicationId(applicationId);
       const loanTerm = maxLoanAmountData.loan_term;
 
-      const applicationData = await loanApplicationModel.findApplicationById(
+      const applicationData = await loanApplicationRepos.findApplicationById(
         applicationId
       );
 
@@ -70,7 +70,7 @@ class NotesController {
       }
 
       for (const note of paymentNotes) {
-        await notesModel.createNotes(
+        await notesRepos.createNotes(
           note.repayment_schedule_id,
           note.payment_date,
           note.payment_amount
@@ -97,7 +97,7 @@ class NotesController {
       }
 
       const paymentAmounts =
-        await notesModel.getPaymentAmountByScheduleIdAndMonthYear(
+        await notesRepos.getPaymentAmountByScheduleIdAndMonthYear(
           repayment_schedule_id,
           year,
           month
