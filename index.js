@@ -1,15 +1,15 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import { initializeDatabase } from './db/initializeDb.js';
+import { initializeDatabase } from './src/db/initializeDb.js';
 import * as dotenv from 'dotenv';
-import userRouter from './routers/userRouter.js';
-import registerRouter from './routers/registrationRouter.js';
-import authRouter from './routers/authRouter.js';
-import loanTypeRouter from './routers/loanTypeRouter.js';
-import loanApplicationRouter from './routers/loanApplicationRouter.js';
-import documentRouter from './routers/documentRouter.js';
-import repaymentScheduleRouter from './routers/repaymentScheduleRouter.js';
-import repaymentNotesRouter from './routers/notesRouter.js';
+import userRouter from './src/routers/userRouter.js';
+import registerRouter from './src/routers/registrationRouter.js';
+import authRouter from './src/routers/authRouter.js';
+import loanTypeRouter from './src/routers/loanTypeRouter.js';
+import loanApplicationRouter from './src/routers/loanApplicationRouter.js';
+import documentRouter from './src/routers/documentRouter.js';
+import repaymentScheduleRouter from './src/routers/repaymentScheduleRouter.js';
+import repaymentNotesRouter from './src/routers/notesRouter.js';
 
 dotenv.config();
 
