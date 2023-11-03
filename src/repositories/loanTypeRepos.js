@@ -1,4 +1,4 @@
-import { pool } from '../db/dbPool.js';
+import { pool } from '../../db/dbPool.js';
 
 class LoanTypeRepos {
   async createLoanType(loanType, interestRate, loanTerm, requiredDoc) {

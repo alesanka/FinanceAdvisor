@@ -1,4 +1,4 @@
-import { pool } from '../db/dbPool.js';
+import { pool } from '../../db/dbPool.js';
 
 class MaxLoanAmountRepos {
   async getMaxLoanAmount(maxLoanamountId) {

@@ -1,4 +1,4 @@
-import { pool } from '../db/dbPool.js';
+import { pool } from '../../db/dbPool.js';
 import bcrypt from 'bcrypt';
 import * as dotenv from 'dotenv';
 

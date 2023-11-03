@@ -1,4 +1,4 @@
-import { pool } from '../db/dbPool.js';
+import { pool } from '../../db/dbPool.js';
 
 class RepaymentScheduleRepos {
   async createRepaymentSchedule(applicationId, loanTerm, annualRate, amount) {
