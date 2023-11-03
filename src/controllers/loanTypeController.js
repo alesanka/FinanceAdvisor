@@ -1,5 +1,5 @@
-import { loanTypeModel } from '../services/loanTypeModel.js';
-import { userModel } from '../services/userModel.js';
+import { loanTypeModel } from '../repositories/loanTypeRepos.js';
+import { userModel } from '../repositories/userRepos.js';
 
 class LoanTypeController {
   createLoanType = async (req, res) => {

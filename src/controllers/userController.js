@@ -1,4 +1,4 @@
-import { userModel } from '../services/userModel.js';
+import { userModel } from '../repositories/userRepos.js';
 
 import bcrypt from 'bcrypt';
 

@@ -1,7 +1,7 @@
-import { loanApplicationModel } from '../services/loanApplicationModel.js';
-import { userModel } from '../services/userModel.js';
-import { maxLoanAmountModel } from '../services/maxLoanAmountModel.js';
-import { repaymentScheduleModel } from '../services/repaymentScheduleModel.js';
+import { loanApplicationModel } from '../repositories/loanApplicationRepos.js';
+import { userModel } from '../repositories/userRepos.js';
+import { maxLoanAmountModel } from '../repositories/maxLoanAmountRepos.js';
+import { repaymentScheduleModel } from '../repositories/repaymentScheduleRepos.js';
 
 class RepaymentScheduleController {
   createRepaymentSchedule = async (req, res) => {

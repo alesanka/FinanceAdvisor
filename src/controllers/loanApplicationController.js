@@ -1,7 +1,7 @@
-import { loanApplicationModel } from '../services/loanApplicationModel.js';
-import { userModel } from '../services/userModel.js';
-import { loanTypeModel } from '../services/loanTypeModel.js';
-import { maxLoanAmountModel } from '../services/maxLoanAmountModel.js';
+import { loanApplicationModel } from '../repositories/loanApplicationRepos.js';
+import { userModel } from '../repositories/userRepos.js';
+import { loanTypeModel } from '../repositories/loanTypeRepos.js';
+import { maxLoanAmountModel } from '../repositories/maxLoanAmountRepos.js';
 
 class LoanApplicationController {
   createLoanApplication = async (req, res) => {

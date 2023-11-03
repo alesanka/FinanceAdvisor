@@ -2,14 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import { initializeDatabase } from './src/db/initializeDb.js';
 import * as dotenv from 'dotenv';
-import userRouter from './src/routers/userRouter.js';
-import registerRouter from './src/routers/registrationRouter.js';
-import authRouter from './src/routers/authRouter.js';
-import loanTypeRouter from './src/routers/loanTypeRouter.js';
-import loanApplicationRouter from './src/routers/loanApplicationRouter.js';
-import documentRouter from './src/routers/documentRouter.js';
-import repaymentScheduleRouter from './src/routers/repaymentScheduleRouter.js';
-import repaymentNotesRouter from './src/routers/notesRouter.js';
+import apiRoutes from './src/routers.js';
 
 dotenv.config();
 
@@ -23,14 +16,7 @@ app.get('/api/v1/', (req, res) => {
   res.send("“It's alive! It's alive!” - Frankenstein, 1931");
 });
 
-app.use('/api/v1/register', registerRouter);
-app.use('/api/v1/login', authRouter);
-app.use('/api/v1/users', userRouter);
-app.use('/api/v1/loan_types', loanTypeRouter);
-app.use('/api/v1/applications', loanApplicationRouter);
-app.use('/api/v1/documents', documentRouter);
-app.use('/api/v1/repayment_schedule', repaymentScheduleRouter);
-app.use('/api/v1/repayment_notes', repaymentNotesRouter);
+app.use('/api/v1', apiRoutes);
 
 const start = async () => {
   try {

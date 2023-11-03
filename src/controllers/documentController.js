@@ -1,6 +1,6 @@
-import { documentModel } from '../services/documentModel.js';
-import { userModel } from '../services/userModel.js';
-import { loanApplicationModel } from '../services/loanApplicationModel.js';
+import { documentModel } from '../repositories/documentRepos.js';
+import { userModel } from '../repositories/userRepos.js';
+import { loanApplicationModel } from '../repositories/loanApplicationRepos.js';
 
 class DocumentController {
   createDocument = async (req, res) => {

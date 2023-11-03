@@ -1,4 +1,4 @@
-import { maxLoanAmountModel } from '../services/maxLoanAmountModel.js';
+import { maxLoanAmountModel } from '../repositories/maxLoanAmountRepos.js';
 
 class MaxLoanAmountController {
   getMaxLoanAmount = async (req, res) => {
