@@ -1,6 +1,6 @@
 import * as dotenv from 'dotenv';
 import { db } from '../../utils/client.js';
-import { createRepos } from '../repositories/tokenRepos.js';
+import { createRepos } from '../../utils/tokenRepos.js';
 import pkg from '@node-oauth/oauth2-server';
 import OAuthServer from '@node-oauth/oauth2-server';
 const { Request, Response } = pkg;
