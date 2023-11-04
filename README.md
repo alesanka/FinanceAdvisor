@@ -359,8 +359,9 @@ HTTP/1.1 500 Internal Server Error
 Content-Type: application/json
 
 {
-  "error": err.message
-}
+    message: `Something went wrong during getting users by parameters.`,
+    error: err.message,
+  }
 ```
 
 ---
