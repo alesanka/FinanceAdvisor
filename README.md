@@ -441,7 +441,8 @@ HTTP/1.1 500 Internal Server Error
 Content-Type: application/json
 
 {
-  "error": err.message
+  message: `Something went wrong while deleting user.`,
+  error: err.message,
 }
 
 ```
