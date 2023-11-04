@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import { initializeDatabase } from '../db/initializeDb.js';
+import { initializeDatabase } from '../db/postgress/initializeDb.js';
 import * as dotenv from 'dotenv';
 import apiRoutes from './routers.js';
 

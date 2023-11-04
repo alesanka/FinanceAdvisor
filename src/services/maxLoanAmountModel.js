@@ -1,6 +1,6 @@
 import { pool } from '../../db/postgress/dbPool.js';
 
-class MaxLoanAmountRepos {
+class MaxLoanAmountModel {
   async getMaxLoanAmount(maxLoanamountId) {
     try {
       const result = await pool.query(
@@ -61,4 +61,4 @@ class MaxLoanAmountRepos {
   }
 }
 
-export const maxLoanAmountRepos = new MaxLoanAmountRepos();
+export const maxLoanAmountModel = new MaxLoanAmountModel();

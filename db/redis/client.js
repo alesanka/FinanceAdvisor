@@ -1,4 +1,4 @@
-import db from './redisConfig.js';
+import db from '../db/redis/redisConfig.js';
 import * as dotenv from 'dotenv';
 
 dotenv.config();

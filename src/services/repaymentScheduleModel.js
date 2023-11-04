@@ -1,6 +1,6 @@
 import { pool } from '../../db/postgress/dbPool.js';
 
-class RepaymentScheduleRepos {
+class RepaymentScheduleModel {
   async createRepaymentSchedule(applicationId, loanTerm, annualRate, amount) {
     const monthlyRate = annualRate / 12 / 100;
     const loanTermMonths = loanTerm * 12;
@@ -47,4 +47,4 @@ class RepaymentScheduleRepos {
   }
 }
 
-export const repaymentScheduleRepos = new RepaymentScheduleRepos();
+export const repaymentScheduleModel = new RepaymentScheduleModel();

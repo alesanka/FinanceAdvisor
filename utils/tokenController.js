@@ -3,6 +3,7 @@ import * as model from './tokenService.js';
 import pkg from '@node-oauth/oauth2-server';
 import OAuthServer from '@node-oauth/oauth2-server';
 const { Request, Response } = pkg;
+import { TokenDTO } from './tokenDTO.js';
 dotenv.config();
 
 const oauth = new OAuthServer({
@@ -27,7 +28,8 @@ class TokenController {
     oauth
       .token(request, response, options)
       .then((token) => {
-        res.json(token);
+        const tokenDTO = new TokenDTO(token);
+        res.json(tokenDTO);
         console.log('Authorization token successfully retrieved!');
       })
       .catch((err) => {

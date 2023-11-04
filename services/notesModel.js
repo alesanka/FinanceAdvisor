@@ -1,6 +1,6 @@
-import { pool } from '../../db/postgress/dbPool.js';
+import { pool } from '../db/postgress/dbPool.js';
 
-class NotesRepos {
+class NotesModel {
   async createNotes(repaymentScheduleId, paymentDate, paymentAmount) {
     try {
       const insertResult = await pool.query(
@@ -49,4 +49,4 @@ class NotesRepos {
   }
 }
 
-export const notesRepos = new NotesRepos();
+export const notesModel = new NotesModel();

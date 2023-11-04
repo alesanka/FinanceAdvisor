@@ -1,6 +1,6 @@
-import { pool } from '../../db/postgress/dbPool.js';
+import { pool } from '../db/postgress/dbPool.js';
 
-class LoanTypeRepos {
+class LoanTypeModel {
   async createLoanType(loanType, interestRate, loanTerm, requiredDoc) {
     try {
       const result = await pool.query(
@@ -97,4 +97,4 @@ class LoanTypeRepos {
     }
   }
 }
-export const loanTypeRepos = new LoanTypeRepos();
+export const loanTypeModel = new LoanTypeModel();

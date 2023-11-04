@@ -6,7 +6,7 @@ dotenv.config();
 
 const SALTY = parseInt(process.env.SALT);
 
-class UserRepos {
+class UserModel {
   async registerUser(
     username,
     passwordRaw,
@@ -318,4 +318,4 @@ class UserRepos {
   }
 }
 
-export const userRepos = new UserRepos();
+export const userModel = new UserModel();

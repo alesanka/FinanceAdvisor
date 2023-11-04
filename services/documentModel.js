@@ -1,6 +1,6 @@
-import { pool } from '../../db/postgress/dbPool.js';
+import { pool } from '../db/postgress/dbPool.js';
 
-class DocumentRepos {
+class DocumentModel {
   async createDocument(applicationId, documentName, documentType) {
     try {
       const result = await pool.query(
@@ -51,4 +51,4 @@ class DocumentRepos {
     }
   }
 }
-export const documentRepos = new DocumentRepos();
+export const documentModel = new DocumentModel();

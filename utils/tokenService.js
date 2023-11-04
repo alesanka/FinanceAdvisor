@@ -1,4 +1,4 @@
-import { pool } from '../db/dbPool.js';
+import { pool } from '../db/postgress/dbPool.js';
 import { redisRepository } from './redisRepository.js';
 
 const enabledScopes = ['admin', 'worker'];
