@@ -151,17 +151,9 @@ class UserRepos {
       throw new Error(`Unable to get users by parameters: ${err}.`);
     }
   }
-  async changeData(userId, data) {
+  async updateData(userId, data) {
     try {
-      const userResult = await pool.query(
-        'SELECT role FROM users WHERE user_id = $1',
-        [userId]
-      );
-
-      if (userResult.rows.length === 0) {
-        throw new Error(`No user found with userId ${userId}`);
-      }
-
+      console.log(data);
       if (
         data.first_name ||
         data.last_name ||
@@ -200,14 +192,11 @@ class UserRepos {
         userValues.push(userId);
         await pool.query(userQuery, userValues);
       }
-      if (data.credit_story || data.salary) {
-        let query;
-        let values;
+      if ('credit_story' in data || data.salary) {
+        let query = 'UPDATE clients SET ';
+        let values = [];
 
-        query = 'UPDATE clients SET ';
-        values = [];
-
-        if (data.credit_story) {
+        if ('credit_story' in data) {
           query += `credit_story = $${values.length + 1}, `;
           values.push(data.credit_story);
         }
@@ -227,8 +216,7 @@ class UserRepos {
       }
       return;
     } catch (err) {
-      console.error(`Unable to update data for userId ${userId}: ${err}`);
-      throw new Error(`Unable to update data for userId ${userId}.`);
+      throw new Error(`Unable to update data for userId ${userId}: ${err}.`);
     }
   }
   async deleteUser(userId) {

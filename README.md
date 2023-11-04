@@ -396,11 +396,21 @@ Content-Type: text/html; charset=utf-8
 In case of error response:
 
 ```
+HTTP/1.1 400 Bad Request
+Content-Type: text/html; charset=utf-8
+
+'No data provided in request body.'
+```
+
+or
+
+```
 HTTP/1.1 500 Internal Server Error
 Content-Type: application/json
 
 {
-  "error": err.message
+    message: `Something went wrong during updating user's data.`,
+    error: err.message,
 }
 ```
 

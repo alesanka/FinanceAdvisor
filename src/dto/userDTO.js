@@ -27,7 +27,7 @@ export class UserDTO {
     try {
       return emailSchema.parse(email);
     } catch (e) {
-      throw new Error(`${e}`);
+      throw new Error('Invalid email format');
     }
   }
 

@@ -16,6 +16,6 @@ router.get(
 ); // protected
 router.get('/', userController.getAllUsers); // public
 router.delete('/:userId', token.getAuthorization, userController.deleteUser); // protected
-router.put('/:userId', token.getAuthorization, userController.changeData); // protected
+router.put('/:userId', token.getAuthorization, userController.updateData); // protected
 
 export default router;

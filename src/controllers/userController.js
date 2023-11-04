@@ -96,21 +96,22 @@ class UserController {
     }
   };
 
-  changeData = async (req, res) => {
+  updateData = async (req, res) => {
     const userId = req.params.userId;
     if (!req.body) {
       return res.status(400).send('No data provided in request body.');
     }
-
     try {
-      await userRepos.changeData(userId, req.body);
-
+      await userModel.updateData(userId, req.body);
       res
         .status(200)
         .send(`User's data with id - ${userId} was updated successfully.`);
     } catch (err) {
       console.error(err);
-      res.status(500).json({ error: err.message });
+      res.status(500).json({
+        message: `Something went wrong during updating user's data.`,
+        error: err.message,
+      });
     }
   };
   deleteUser = async (req, res) => {

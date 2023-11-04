@@ -204,84 +204,35 @@ class UserModel {
     }
   }
 
-  async changeData(userId, data) {
+  async updateData(userId, data) {
     try {
-      const userResult = await pool.query(
-        'SELECT role FROM users WHERE user_id = $1',
-        [userId]
-      );
+      const isUserExists = await userRepos.findUserById(userId);
 
-      if (userResult.rows.length === 0) {
+      if (!isUserExists) {
         throw new Error(`No user found with userId ${userId}`);
       }
 
-      if (
-        data.first_name ||
-        data.last_name ||
-        data.phone_number ||
-        data.email
-      ) {
-        let userQuery = 'UPDATE users SET ';
-        let userValues = [];
-
-        if (data.first_name) {
-          userQuery += `first_name = $${userValues.length + 1}, `;
-          userValues.push(data.first_name);
+      if (data.email) {
+        const emailSchema = z.string().email();
+        try {
+          emailSchema.parse(data.email);
+        } catch (e) {
+          throw new Error(`Invalid email format`);
         }
-
-        if (data.last_name) {
-          userQuery += `last_name = $${userValues.length + 1}, `;
-          userValues.push(data.last_name);
-        }
-
-        if (data.email) {
-          userQuery += `email = $${userValues.length + 1}, `;
-          userValues.push(data.email);
-        }
-
-        if (data.phone_number) {
-          userQuery += `phone_number = $${userValues.length + 1}, `;
-          userValues.push(data.phone_number);
-        }
-
-        userQuery = userQuery.trim().endsWith(',')
-          ? (userQuery = userQuery.slice(0, -2))
-          : userQuery;
-
-        userQuery += ` WHERE user_id = $${userValues.length + 1}`;
-
-        userValues.push(userId);
-        await pool.query(userQuery, userValues);
       }
-      if (data.credit_story || data.salary) {
-        let query;
-        let values;
 
-        query = 'UPDATE clients SET ';
-        values = [];
-
-        if (data.credit_story) {
-          query += `credit_story = $${values.length + 1}, `;
-          values.push(data.credit_story);
+      if (data.phone_number) {
+        const phoneSchema = z.string().length(10);
+        try {
+          phoneSchema.parse(data.phone_number);
+        } catch (e) {
+          throw new Error('Phone number must contain 10 digits');
         }
-
-        if (data.salary) {
-          query += `salary = $${values.length + 1}, `;
-          values.push(data.salary);
-        }
-
-        query = query.trim().endsWith(',')
-          ? (query = query.slice(0, -2))
-          : query;
-        query += ` WHERE user_id = $${values.length + 1}`;
-        values.push(userId);
-
-        await pool.query(query, values);
       }
+      await userRepos.updateData(userId, data);
       return;
     } catch (err) {
-      console.error(`Unable to update data for userId ${userId}: ${err}`);
-      throw new Error(`Unable to update data for userId ${userId}.`);
+      throw new Error(`Unable to update data for userId ${userId}: ${err}.`);
     }
   }
   async deleteUser(userId) {
