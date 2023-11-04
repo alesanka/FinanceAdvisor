@@ -10,7 +10,7 @@ class LoanTypeRepos {
 
       return result.rows[0].loan_type_id;
     } catch (err) {
-      throw new Error(`Unable to create loan type: ${err}.`);
+      throw new Error(`${err}`);
     }
   }
   async findLoanByType(loan_type) {
@@ -25,7 +25,16 @@ class LoanTypeRepos {
         return null;
       }
     } catch (err) {
-      throw new Error(`Unable to get loan type by loan_type: ${err}.`);
+      throw new Error(`${err}.`);
+    }
+  }
+  async getAllLoanTypes() {
+    try {
+      const result = await pool.query('SELECT * FROM loanTypes');
+
+      return result.rows;
+    } catch (err) {
+      throw new Error(`${err}`);
     }
   }
 
@@ -44,16 +53,7 @@ class LoanTypeRepos {
     }
     return null;
   }
-  async getAllLoanTypes() {
-    try {
-      const result = await pool.query('SELECT * FROM loanTypes');
 
-      return result.rows;
-    } catch (err) {
-      console.error(`Unable to get all loan types: ${err}`);
-      throw new Error(`Unable to get all loan types.`);
-    }
-  }
   async updateLoanTypeData(loanTypeId, data) {
     try {
       const loanResult = await pool.query(

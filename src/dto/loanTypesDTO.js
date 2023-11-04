@@ -24,7 +24,7 @@ export class LoanTypeDTO {
   ) {
     this._loan_type_id = loan_type_id;
     this._loan_type = this.validateLoanType(loan_type);
-    this._interest_rate = this.validateRate(interest_rate);
+    this._interest_rate = interest_rate;
     this._loan_term = this.validateTerm(loan_term);
     this._required_doc = this.validateDoc(required_doc);
   }
@@ -36,14 +36,6 @@ export class LoanTypeDTO {
       return termSchema.parse(loan_term);
     } catch (e) {
       throw new Error('Provide correct info about loan term.');
-    }
-  }
-  validateRate(interest_rate) {
-    const rateSchema = z.number().positive();
-    try {
-      return rateSchema.parse(interest_rate);
-    } catch (e) {
-      throw new Error('Provide correct info about loan interest rate.');
     }
   }
 
@@ -92,7 +84,7 @@ export class LoanTypeDTO {
   }
 
   set interest_rate(value) {
-    this._interest_rate = this.validateRate(value);
+    this._interest_rate = value;
   }
 
   set loan_term(value) {

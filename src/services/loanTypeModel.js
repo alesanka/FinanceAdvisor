@@ -32,6 +32,33 @@ class LoanTypeModel {
     }
   }
 
+  async getAllLoanTypes() {
+    try {
+      const loans = await loanTypeRepos.getAllLoanTypes();
+      console.log(loans);
+      const loanDTOs = loans.map((loan) => {
+        const dto = new LoanTypeDTO(
+          loan.loan_type_id,
+          loan.loan_type,
+          loan.interest_rate,
+          loan.loan_term,
+          loan.required_doc
+        );
+        return {
+          loan_type_id: dto.loan_type_id,
+          loan_type: dto.loan_type,
+          interest_rate: dto.interest_rate,
+          loan_term: dto.loan_term,
+          required_doc: dto.required_doc,
+        };
+      });
+
+      return loanDTOs;
+    } catch (err) {
+      throw new Error(`Unable to get all loan types: ${err}`);
+    }
+  }
+
   async findLoanById(loan_id) {
     try {
       const result = await pool.query(
@@ -47,16 +74,7 @@ class LoanTypeModel {
     }
     return null;
   }
-  async getAllLoanTypes() {
-    try {
-      const result = await pool.query('SELECT * FROM loanTypes');
 
-      return result.rows;
-    } catch (err) {
-      console.error(`Unable to get all loan types: ${err}`);
-      throw new Error(`Unable to get all loan types.`);
-    }
-  }
   async updateLoanTypeData(loanTypeId, data) {
     try {
       const loanResult = await pool.query(

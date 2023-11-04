@@ -35,11 +35,14 @@ class LoanTypeController {
   };
   getAllLoanTypes = async (req, res) => {
     try {
-      const loanTypes = await loanTypeRepos.getAllLoanTypes();
+      const loanTypes = await loanTypeModel.getAllLoanTypes();
       res.status(200).json(loanTypes);
     } catch (err) {
       console.error(err);
-      res.status(500).json({ error: err.message });
+      res.status(500).json({
+        message: `Something went wrong while getting loan types.`,
+        error: err.message,
+      });
     }
   };
   getSpecificLoanType = async (req, res) => {

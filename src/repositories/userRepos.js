@@ -18,7 +18,7 @@ class UserRepos {
 
       return result.rows[0].user_id;
     } catch (err) {
-      throw new Error(`Unable to register new user: ${err}`);
+      throw new Error(`${err}`);
     }
   }
   async createClient(userId, salary, isCreditStory) {
@@ -30,7 +30,7 @@ class UserRepos {
 
       return resultClient.rows[0].client_id;
     } catch (err) {
-      throw new Error(`Unable to register new user: ${err}`);
+      throw new Error(`${err}`);
     }
   }
   async findUserByUsername(username) {
@@ -45,7 +45,7 @@ class UserRepos {
         return null;
       }
     } catch (err) {
-      throw new Error(`Unable to get user by username: ${err}`);
+      throw new Error(`${err}`);
     }
   }
 
@@ -61,7 +61,7 @@ class UserRepos {
         return null;
       }
     } catch (err) {
-      throw new Error(`Unable to get user by id: ${err}`);
+      throw new Error(`${err}}`);
     }
   }
   async getAllUsers() {
@@ -69,7 +69,7 @@ class UserRepos {
       const result = await pool.query('SELECT * FROM users');
       return result.rows;
     } catch (err) {
-      throw new Error(`Unable to get all users from db: ${err}.`);
+      throw new Error(`${err}`);
     }
   }
   async findClientByUserId(userId) {
@@ -85,7 +85,7 @@ class UserRepos {
         return null;
       }
     } catch (err) {
-      throw new Error(`Unable to get user by id: ${err}`);
+      throw new Error(`${err}`);
     }
   }
 
@@ -148,7 +148,7 @@ class UserRepos {
       const result = await pool.query(baseQuery, values);
       return result.rows;
     } catch (err) {
-      throw new Error(`Unable to get users by parameters: ${err}.`);
+      throw new Error(`${err}`);
     }
   }
   async updateData(userId, data) {
@@ -216,7 +216,7 @@ class UserRepos {
       }
       return;
     } catch (err) {
-      throw new Error(`Unable to update data for userId ${userId}: ${err}.`);
+      throw new Error(`${err}`);
     }
   }
   async deleteUser(userId) {
@@ -224,7 +224,7 @@ class UserRepos {
       await pool.query('DELETE FROM users WHERE user_id = $1', [userId]);
       return;
     } catch (err) {
-      throw new Error(`Unable to delete userId ${userId}: ${err}.`);
+      throw new Error(`${err}`);
     }
   }
   async checkRoleByUserId(userId) {
@@ -239,7 +239,7 @@ class UserRepos {
         return null;
       }
     } catch (err) {
-      throw new Error(`Unable to get role by user id: ${err}`);
+      throw new Error(`${err}`);
     }
   }
   async findClientById(clientId) {
@@ -254,7 +254,7 @@ class UserRepos {
         return null;
       }
     } catch (err) {
-      throw new Error(`Unable to get client by id: ${err}`);
+      throw new Error(`${err}`);
     }
   }
 }
