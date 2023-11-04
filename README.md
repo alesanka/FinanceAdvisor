@@ -546,7 +546,7 @@ Query Parameters:
 Request:
 
 ```
-GET /loan_types/:loan_type_id
+GET /loan_types/:loan_type/
 ```
 
 In case of successful response:
@@ -580,7 +580,8 @@ HTTP/1.1 500 Internal Server Error
 Content-Type: application/json
 
 {
-  "error": err.message
+  message: `Something went wrong while getting loan type.`,
+  error: err.message,
 }
 ```
 

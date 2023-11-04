@@ -35,7 +35,7 @@ class LoanTypeModel {
   async getAllLoanTypes() {
     try {
       const loans = await loanTypeRepos.getAllLoanTypes();
-      console.log(loans);
+
       const loanDTOs = loans.map((loan) => {
         const dto = new LoanTypeDTO(
           loan.loan_type_id,
@@ -56,6 +56,34 @@ class LoanTypeModel {
       return loanDTOs;
     } catch (err) {
       throw new Error(`Unable to get all loan types: ${err}`);
+    }
+  }
+
+  async findLoanByType(loan_type) {
+    try {
+      const loan = await loanTypeRepos.findLoanByType(loan_type);
+      if (!loan) {
+        throw new Error('Invalid loan type');
+      }
+
+      const loanDTO = new LoanTypeDTO(
+        loan.loan_type_id,
+        loan.loan_type,
+        loan.interest_rate,
+        loan.loan_term,
+        loan.required_doc
+      );
+
+      let result = {
+        loan_type_id: loanDTO.loan_type_id,
+        loan_type: loanDTO.loan_type,
+        interest_rate: loanDTO.interest_rate,
+        loan_term: loanDTO.loan_term,
+        required_doc: loanDTO.required_doc,
+      };
+      return result;
+    } catch (err) {
+      throw new Error(`Unable to get loan type: ${err}`);
     }
   }
 

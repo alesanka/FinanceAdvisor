@@ -48,16 +48,20 @@ class LoanTypeController {
   getSpecificLoanType = async (req, res) => {
     try {
       const loanType = req.params.loan_type;
+      console.log(loanType);
 
       if (!loanType) {
         return res.status(400).send(`No valid loan_type is provided`);
       }
 
-      const loanData = await loanTypeRepos.findLoanByType(loanType);
+      const loanData = await loanTypeModel.findLoanByType(loanType);
       res.status(200).json(loanData);
     } catch (err) {
       console.error(err);
-      res.status(500).json({ error: err.message });
+      res.status(500).json({
+        message: `Something went wrong while getting loan type.`,
+        error: err.message,
+      });
     }
   };
   updateLoanTypeData = async (req, res) => {
