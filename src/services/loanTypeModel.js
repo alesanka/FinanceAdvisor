@@ -1,34 +1,37 @@
-import { pool } from '../../db/postgress/dbPool.js';
+import { LoanTypeDTO } from '../dto/loanTypesDTO.js';
+import { loanTypeRepos } from '../repositories/loanTypeRepos.js';
 
 class LoanTypeModel {
   async createLoanType(loanType, interestRate, loanTerm, requiredDoc) {
     try {
-      const result = await pool.query(
-        'INSERT INTO loanTypes (loan_type, interest_rate, loan_term, required_doc) VALUES ($1, $2, $3, $4) RETURNING loan_type_id',
-        [loanType, interestRate, loanTerm, requiredDoc]
+      const loanTypeDTO = new LoanTypeDTO(
+        null,
+        loanType,
+        interestRate,
+        loanTerm,
+        requiredDoc
       );
 
-      return result.rows[0].loan_type_id;
-    } catch (err) {
-      console.error(`Unable to create loan type: ${err}`);
-      throw new Error(`Unable to create loan type.`);
-    }
-  }
-  async findLoanByType(loan_type) {
-    try {
-      const result = await pool.query(
-        'SELECT * FROM loanTypes WHERE loan_type = $1;',
-        [loan_type]
+      const isLoanTypeExists = await loanTypeRepos.findLoanByType(
+        loanTypeDTO.loan_type
       );
-      if (result.rows.length > 0) {
-        return result.rows[0];
+      if (isLoanTypeExists) {
+        throw new Error(`Loan type ${loanTypeDTO.loan_type} already exists`);
       }
+
+      const loanTypeId = await loanTypeRepos.createLoanType(
+        loanTypeDTO.loan_type,
+        loanTypeDTO.interest_rate,
+        loanTypeDTO.loan_term,
+        loanTypeDTO.required_doc
+      );
+
+      return loanTypeId;
     } catch (err) {
-      console.error(`Unable to get loan type by loan_type: ${err}`);
-      throw new Error(`Unable to get loan type by loan_type.`);
+      throw new Error(`Unable to create loan type: ${err}`);
     }
-    return null;
   }
+
   async findLoanById(loan_id) {
     try {
       const result = await pool.query(

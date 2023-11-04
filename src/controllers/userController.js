@@ -120,6 +120,7 @@ class UserController {
       await userModel.deleteUser(userId);
       res.status(204).end();
     } catch (err) {
+      console.error(err);
       res.status(500).json({
         message: `Something went wrong while deleting user.`,
         error: err.message,

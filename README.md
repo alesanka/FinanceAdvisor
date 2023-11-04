@@ -476,7 +476,7 @@ In case of successful response:
 HTTP/1.1 201 Created
 Content-Type: text/html; charset=utf-8
 
-'Loan type was created successfully'
+`Loan type was created successfully. Loan type id - ${loanId}`
 
 ```
 
@@ -486,7 +486,7 @@ In case of error response:
 HTTP/1.1 409 Conflict
 Content-Type: text/html; charset=utf-8
 
-`Loan type ${loan_type} already exists`
+'Only admins can create loan types.'
 ```
 
 or
@@ -496,7 +496,8 @@ HTTP/1.1 500 Internal Server Error
 Content-Type: application/json
 
 {
-  "error": err.message
+  message: `Something went wrong while creating new type loan.`,
+   error: err.message,
 }
 ```
 

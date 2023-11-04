@@ -168,6 +168,17 @@ class UserModel {
       throw new Error(`Unable to get user by id: ${err}.`);
     }
   }
+  async checkUserRoleById(userId) {
+    try {
+      const user = await userRepos.findUserById(userId);
+      if (!user) {
+        throw new Error('Invalid user id');
+      }
+      return await userRepos.checkRoleByUserId(userId);
+    } catch (err) {
+      throw new Error(`Unable to check user role by id: ${err}.`);
+    }
+  }
   async filterByParameter(params) {
     try {
       const users = await userRepos.filterByParameter(params);

@@ -60,13 +60,13 @@ Information about clients who are also users.
 
 Different types of loans available.
 
-| Key | Column Name   | Data Type | Description                           |
-| --- | ------------- | --------- | ------------------------------------- |
-| PK  | loan_type_id  | int       | Primary key for the loantypes table   |
-|     | loan_type     | varchar   | Type of loan                          |
-|     | interest_rate | float     | Interest rate for the loan type       |
-|     | loan_term     | int       | Term/duration of the loan (in months) |
-|     | required_doc  | doc_enum  | Type of document required for loan    |
+| Key | Column Name   | Data Type  | Description                           |
+| --- | ------------- | ---------- | ------------------------------------- |
+| PK  | loan_type_id  | int        | Primary key for the loantypes table   |
+|     | loan_type     | loans_enum | Type of loan                          |
+|     | interest_rate | float      | Interest rate for the loan type       |
+|     | loan_term     | int        | Term/duration of the loan (in months) |
+|     | required_doc  | docs_enum  | Type of document required for loan    |
 
 ### 4. LoanApplications
 

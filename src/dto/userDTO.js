@@ -89,7 +89,7 @@ export class UserDTO {
   }
 
   set phone_number(value) {
-    this._phone_number = value;
+    this._phone_number = this.validatePhone(value);
   }
 
   set email(value) {

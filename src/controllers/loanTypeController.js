@@ -1,65 +1,36 @@
-import { loanTypeRepos } from '../repositories/loanTypeRepos.js';
-import { userRepos } from '../repositories/userRepos.js';
+import { loanTypeModel } from '../services/loanTypeModel.js';
+import { userModel } from '../services/userModel.js';
 
 class LoanTypeController {
   createLoanType = async (req, res) => {
     try {
-      const userId = req.body.user_id;
-      if (!userId) {
+      const { user_id, loan_type, interest_rate, loan_term, required_doc } =
+        req.body;
+
+      if (!user_id) {
         return res.status(400).send('User id is required for checking role.');
       }
 
-      const isAdmin = await userRepos.checkRoleByUserId(userId);
-
+      const isAdmin = await userModel.checkUserRoleById(user_id);
       if (isAdmin !== 'admin') {
         return res.status(403).send('Only admins can create loan types.');
       }
 
-      const { loan_type, interest_rate, loan_term, required_doc } = req.body;
-
-      const validLoanTypes = [
-        'personal_loan',
-        'mortgage',
-        'student_loan',
-        'business_loan',
-      ];
-      if (!validLoanTypes.includes(loan_type)) {
-        return res
-          .status(400)
-          .send(
-            'Invalid loan type. Accepted values are: personal_loan, mortgage, student_loan, business_loan'
-          );
-      }
-
-      const validDocs = [
-        'passport',
-        'student_verification',
-        'business_plan',
-        'purchase_agreement',
-      ];
-      if (!validDocs.includes(required_doc)) {
-        return res
-          .status(400)
-          .send(
-            'Invalid required document. Accepted values are: passport, student_verification, business_plan, purchase_agreement'
-          );
-      }
-
-      const existingLoanType = await loanTypeRepos.findLoanByType(loan_type);
-      if (existingLoanType) {
-        return res.status(409).send(`Loan type ${loan_type} already exists`);
-      }
-
-      await loanTypeRepos.createLoanType(
+      const loanId = await loanTypeModel.createLoanType(
         loan_type,
         interest_rate,
         loan_term,
         required_doc
       );
-      res.status(201).send('Loan type was created successfully');
+      res
+        .status(201)
+        .send(`Loan type was created successfully. Loan type id - ${loanId}`);
     } catch (err) {
       console.error(err);
-      res.status(500).json({ error: err.message });
+      res.status(500).json({
+        message: `Something went wrong while creating new type loan.`,
+        error: err.message,
+      });
     }
   };
   getAllLoanTypes = async (req, res) => {
