@@ -42,18 +42,25 @@ CREATE TABLE IF NOT EXISTS LoanTypes (
     required_doc docs_enum NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS MaximumLoanAmounts (
+    max_loan_amount_id SERIAL PRIMARY KEY,
+    client_id INT REFERENCES Clients(client_id) ON DELETE CASCADE,
+    max_loan_amount INT NOT NULL,
+    total_interest_amount DECIMAL(20,2) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS LoanTypes_MaximumLoanAmounts(
+id SERIAL PRIMARY KEY,
+loan_type_id INT REFERENCES LoanTypes(loan_type_id) ON DELETE CASCADE,
+max_loan_amount_id INT REFERENCES MaximumLoanAmounts(max_loan_amount_id) ON DELETE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS LoanApplications(
     application_id SERIAL PRIMARY KEY,
-    client_id INT REFERENCES Clients(client_id) ON DELETE CASCADE,
+    id INT REFERENCES LoanTypes_MaximumLoanAmounts(id) ON DELETE CASCADE,
     desired_loan_amount INT NOT NULL,
     application_date DATE NOT NULL,
     is_approved BOOLEAN DEFAULT false
-);
-
-CREATE TABLE IF NOT EXISTS LoanTypes_LoanApplications(
-id SERIAL PRIMARY KEY,
-loan_type_id INT REFERENCES LoanTypes(loan_type_id) ON DELETE CASCADE,
-application_id INT REFERENCES LoanApplications(application_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Documents (
@@ -63,7 +70,6 @@ CREATE TABLE IF NOT EXISTS Documents (
     document_type docs_enum NOT NULL
 );
 
-
 CREATE TABLE IF NOT EXISTS RepaymentSchedules (
     repayment_schedule_id SERIAL PRIMARY KEY,
     application_id INT REFERENCES LoanApplications(application_id) ON DELETE CASCADE,
@@ -71,17 +77,11 @@ CREATE TABLE IF NOT EXISTS RepaymentSchedules (
     remaining_balance DECIMAL(20,2) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS MaximumLoanAmounts (
-    max_loan_amount_id SERIAL PRIMARY KEY,
-    application_id INT REFERENCES LoanApplications(application_id) ON DELETE CASCADE,
-    max_loan_amount INT NOT NULL,
-    total_interest_amount DECIMAL(20,2) NOT NULL,
-    loan_app_loan_type_id INT REFERENCES LoanTypes_LoanApplications(id) ON DELETE CASCADE
-);
-
 CREATE TABLE IF NOT EXISTS PaymentNotes (
     note_id SERIAL PRIMARY KEY,
     repayment_schedule_id INT REFERENCES RepaymentSchedules(repayment_schedule_id) ON DELETE CASCADE,
     payment_date DATE NOT NULL,
-    payment_amount DECIMAL(20,2) NOT NULL
+    payment_amount DECIMAL(20,2) NOT NULL,
+    payment_received BOOLEAN DEFAULT false
 );
+

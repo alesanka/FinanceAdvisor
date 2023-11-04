@@ -1,8 +1,6 @@
 import { userRepos } from '../repositories/userRepos.js';
 
-import bcrypt from 'bcrypt';
-
-class AuthenticationController {
+class UserController {
   registerUser = async (req, res) => {
     try {
       const {
@@ -16,11 +14,6 @@ class AuthenticationController {
         salary,
         credit_story,
       } = req.body;
-
-      const existingUser = await userRepos.findUserByUsername(username);
-      if (existingUser) {
-        return res.status(409).send(`User with this username already exists`);
-      }
 
       const requiredFields = [
         'username',
@@ -37,38 +30,7 @@ class AuthenticationController {
         }
       }
 
-      if (role == 'client' && !req.body.salary) {
-        return res
-          .status(400)
-          .send(`Missing required for client field "salary"`);
-      }
-
-      if (password.length < 8) {
-        return res
-          .status(400)
-          .send('Password should be at least 8 characters long');
-      }
-
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email)) {
-        return res.status(400).send('Invalid email format');
-      }
-
-      const cleanedPhoneNumber = phone_number.replace(/\D/g, '');
-      if (cleanedPhoneNumber.length !== 10) {
-        return res
-          .status(400)
-          .send('Phone number should contain exactly 10 digits');
-      }
-
-      const validRoles = ['client', 'worker', 'admin'];
-      if (!validRoles.includes(role)) {
-        return res
-          .status(400)
-          .send('Invalid role. Accepted values are: client, worker, admin');
-      }
-
-      await userRepos.registerUser(
+      const id = await userRepos.registerUser(
         username,
         password,
         first_name,
@@ -79,72 +41,16 @@ class AuthenticationController {
         salary,
         credit_story
       );
-      res.status(201).send('User was registered successfully');
+      res.status(201).send(`User was registered successfully. Id - ${id}`);
     } catch (err) {
       console.error(err);
-      res.status(500).json({ error: err.message });
+      res.status(500).json({
+        message: 'Something went wrong during user registration',
+        error: err.message,
+      });
     }
   };
-  authenticateUser = async (req, res, next) => {
-    try {
-      const {
-        grant_type,
-        scope,
-        client_id,
-        client_secret,
-        username,
-        password,
-      } = req.body;
 
-      if (scope !== 'admin' && scope !== 'worker') {
-        const requiredFields = [
-          'grant_type',
-          'scope',
-          'client_id',
-          'client_secret',
-          'username',
-          'password',
-        ];
-
-        for (const field of requiredFields) {
-          if (!req.body[field]) {
-            return res
-              .status(400)
-              .send(`Missing field: "${field}" in requst body`);
-          }
-        }
-
-        if (grant_type !== 'password') {
-          return res.status(400).send('Invalid value for grant_type');
-        }
-      }
-
-      const existingUser = await userRepos.findUserByUsername(username);
-      if (!existingUser) {
-        return res.status(400).send('Username is incorrect');
-      }
-
-      const validPassword = await bcrypt.compare(
-        password,
-        existingUser.password
-      );
-
-      if (!validPassword) {
-        return res.status(400).send('Password is incorrect');
-      }
-      if (scope === 'admin' || scope === 'worker') {
-        next();
-      } else {
-        return res.status(200).send('Client logged in successfully');
-      }
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: err.message });
-    }
-  };
-}
-
-class UserController {
   // to get all users in this method as well
   filterByParameter = async (req, res) => {
     try {
@@ -208,5 +114,4 @@ class UserController {
   };
 }
 
-export const authenticationController = new AuthenticationController();
 export const userController = new UserController();

@@ -1,66 +1,54 @@
 import { pool } from '../../db/postgress/dbPool.js';
-import bcrypt from 'bcrypt';
-import * as dotenv from 'dotenv';
-
-dotenv.config();
-
-const SALTY = parseInt(process.env.SALT);
 
 class UserRepos {
-  async registerUser(
+  async createUser(
     username,
-    passwordRaw,
+    password,
     firstName,
     lastName,
     email,
     phoneNumber,
-    role,
-    salary,
-    isCreditStory
+    role
   ) {
-    const password = await bcrypt.hash(passwordRaw, SALTY);
-
     try {
       const result = await pool.query(
         'INSERT INTO users (username, password, first_name, last_name, email, phone_number, role) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING user_id',
         [username, password, firstName, lastName, email, phoneNumber, role]
       );
-      let userId = result.rows[0].user_id;
-      if (role === 'client') {
-        let resultClient;
-        if (typeof isCreditStory !== 'undefined') {
-          resultClient = await pool.query(
-            'INSERT INTO clients (user_id, salary, credit_story) VALUES ($1, $2, $3) RETURNING client_id',
-            [userId, salary, isCreditStory]
-          );
-        } else {
-          resultClient = await pool.query(
-            'INSERT INTO clients (user_id, salary) VALUES ($1, $2) RETURNING client_id',
-            [userId, salary]
-          );
-        }
-        return resultClient.rows[0].client_id;
-      }
+
+      return result.rows[0].user_id;
     } catch (err) {
-      console.error(`Unable to register new user: ${err}`);
-      throw new Error('Unable to register new user. Please try again.');
+      throw new Error(`Unable to register new user: ${err}`);
+    }
+  }
+  async createClient(userId, salary, isCreditStory) {
+    try {
+      resultClient = await pool.query(
+        'INSERT INTO clients (user_id, salary, credit_story) VALUES ($1, $2, $3) RETURNING client_id',
+        [userId, salary, isCreditStory]
+      );
+
+      return resultClient.rows[0].client_id;
+    } catch (err) {
+      throw new Error(`Unable to register new user: ${err}`);
     }
   }
   async findUserByUsername(username) {
     try {
       const result = await pool.query(
-        'SELECT user_id, username, password FROM users WHERE username = $1;',
+        'SELECT user_id, username FROM users WHERE username = $1;',
         [username]
       );
-      if (result.rows.length > 0) {
+      if (result.rows[0].length > 0) {
         return result.rows[0];
+      } else {
+        return null;
       }
     } catch (err) {
-      console.error(`Unable to get user by username: ${err}`);
-      throw new Error(`Unable to get user by username.`);
+      throw new Error(`Unable to get user by username: ${err}`);
     }
-    return null;
   }
+
   async findUserById(userId) {
     try {
       const result = await pool.query(

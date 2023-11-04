@@ -1,4 +1,4 @@
-import { pool } from '../db/postgress/dbPool.js';
+import { userRepos } from '../src/repositories/userRepos.js';
 import { redisRepository } from './redisRepository.js';
 
 const enabledScopes = ['admin', 'worker'];
@@ -116,17 +116,14 @@ export async function saveToken(token, client, user) {
 
 export async function getUser(username) {
   try {
-    const result = await pool.query(
-      'SELECT user_id, username FROM users WHERE username = $1;',
-      [username]
-    );
-    if (!result.rows.length) {
-      return null;
+    const user = userRepos.findUserByUsername(username);
+    if (!user) {
+      throw new Error('Can not find user');
     }
 
     return {
-      id: result.rows[0].user_id,
-      username: result.rows[0].username,
+      id: user.user_id,
+      username: user.username,
     };
   } catch (error) {
     console.error('Error fetching user:', error);

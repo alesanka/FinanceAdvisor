@@ -1,6 +1,9 @@
 import { pool } from '../../db/postgress/dbPool.js';
 import bcrypt from 'bcrypt';
 import * as dotenv from 'dotenv';
+import { UserDTO } from '../dto/userDTO.js';
+import { userRepos } from '../repositories/userRepos.js';
+import { z } from 'zod';
 
 dotenv.config();
 
@@ -18,49 +21,56 @@ class UserModel {
     salary,
     isCreditStory
   ) {
-    const password = await bcrypt.hash(passwordRaw, SALTY);
+    const userDto = new UserDTO(
+      null,
+      username,
+      firstName,
+      lastName,
+      phoneNumber,
+      email,
+      role
+    );
 
+    const passwordSchema = z.string().length(8);
     try {
-      const result = await pool.query(
-        'INSERT INTO users (username, password, first_name, last_name, email, phone_number, role) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING user_id',
-        [username, password, firstName, lastName, email, phoneNumber, role]
+      passwordSchema.parse(passwordRaw);
+    } catch (e) {
+      throw new Error('Password should contain 8 or more symbols.');
+    }
+
+    const password = await bcrypt.hash(passwordRaw, SALTY);
+    const isUsernameTaken = await userRepos.findUserByUsername(
+      userDto.username
+    );
+    if (!isUsernameTaken) {
+      throw new Error(`The username is already taken!`);
+    }
+    try {
+      const userId = await userRepos.createUser(
+        userDto.username,
+        password,
+        userDto.first_name,
+        userDto.last_name,
+        userDto.email,
+        userDto.phone_number,
+        userDto.role
       );
-      let userId = result.rows[0].user_id;
-      if (role === 'client') {
-        let resultClient;
-        if (typeof isCreditStory !== 'undefined') {
-          resultClient = await pool.query(
-            'INSERT INTO clients (user_id, salary, credit_story) VALUES ($1, $2, $3) RETURNING client_id',
-            [userId, salary, isCreditStory]
-          );
-        } else {
-          resultClient = await pool.query(
-            'INSERT INTO clients (user_id, salary) VALUES ($1, $2) RETURNING client_id',
-            [userId, salary]
-          );
-        }
-        return resultClient.rows[0].client_id;
+
+      if (userDto.role === 'client') {
+        const clientId = await userRepos.createClient(
+          userId,
+          salary,
+          isCreditStory
+        );
+
+        return { userId, clientId };
       }
+      return userId;
     } catch (err) {
-      console.error(`Unable to register new user: ${err}`);
-      throw new Error('Unable to register new user. Please try again.');
+      throw new Error(`Unable to register new user: ${err}`);
     }
   }
-  async findUserByUsername(username) {
-    try {
-      const result = await pool.query(
-        'SELECT user_id, username, password FROM users WHERE username = $1;',
-        [username]
-      );
-      if (result.rows.length > 0) {
-        return result.rows[0];
-      }
-    } catch (err) {
-      console.error(`Unable to get user by username: ${err}`);
-      throw new Error(`Unable to get user by username.`);
-    }
-    return null;
-  }
+
   async findUserById(userId) {
     try {
       const result = await pool.query(
