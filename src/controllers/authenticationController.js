@@ -1,4 +1,4 @@
-import { userRepos } from '../repositories/userRepos.js';
+import { userModel } from '../services/userModel.js';
 
 class AuthenticationController {
   authenticateUser = async (req, res, next) => {
@@ -12,42 +12,25 @@ class AuthenticationController {
         password,
       } = req.body;
 
-      if (scope !== 'admin' && scope !== 'worker') {
-        const requiredFields = [
-          'grant_type',
-          'scope',
-          'client_id',
-          'client_secret',
-          'username',
-          'password',
-        ];
+      const requiredFields = [
+        'grant_type',
+        'scope',
+        'client_id',
+        'client_secret',
+        'username',
+        'password',
+      ];
 
-        for (const field of requiredFields) {
-          if (!req.body[field]) {
-            return res
-              .status(400)
-              .send(`Missing field: "${field}" in requst body`);
-          }
-        }
-
-        if (grant_type !== 'password') {
-          return res.status(400).send('Invalid value for grant_type');
+      for (const field of requiredFields) {
+        if (!req.body[field]) {
+          return res
+            .status(400)
+            .send(`Missing parameter: "${field}" in requst body`);
         }
       }
 
-      const existingUser = await userRepos.findUserByUsername(username);
-      if (!existingUser) {
-        return res.status(400).send('Username is incorrect');
-      }
+      await userModel.loginUser(username, password);
 
-      const validPassword = await bcrypt.compare(
-        password,
-        existingUser.password
-      );
-
-      if (!validPassword) {
-        return res.status(400).send('Password is incorrect');
-      }
       if (scope === 'admin' || scope === 'worker') {
         next();
       } else {
@@ -55,7 +38,10 @@ class AuthenticationController {
       }
     } catch (err) {
       console.error(err);
-      res.status(500).json({ error: err.message });
+      res.status(500).json({
+        message: 'Something went wrong during attempt to log in user.',
+        error: err.message,
+      });
     }
   };
 }

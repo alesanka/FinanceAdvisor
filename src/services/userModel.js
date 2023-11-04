@@ -65,6 +65,35 @@ class UserModel {
     }
   }
 
+  async loginUser(username, passwordRaw) {
+    try {
+      const passwordSchema = z.string().min(8);
+      try {
+        passwordSchema.parse(passwordRaw);
+      } catch (e) {
+        throw new Error('Password should contain 8 or more symbols.');
+      }
+
+      const user = await userRepos.findUserByUsername(username);
+
+      if (!user) {
+        throw new Error('Username is incorrect.');
+      }
+
+      const validPassword = await bcrypt.compare(passwordRaw, user.password);
+
+      if (!validPassword) {
+        throw new Error('Password is incorrect.');
+      }
+
+      const role = await userRepos.checkRoleByUserId(user.user_id);
+
+      return role;
+    } catch (err) {
+      throw new Error(`Unable to login user: ${err}`);
+    }
+  }
+
   async findUserById(userId) {
     try {
       const result = await pool.query(

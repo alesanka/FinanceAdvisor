@@ -116,7 +116,7 @@ export async function saveToken(token, client, user) {
 
 export async function getUser(username) {
   try {
-    const user = userRepos.findUserByUsername(username);
+    const user = await userRepos.findUserByUsername(username);
     if (!user) {
       throw new Error('Can not find user');
     }

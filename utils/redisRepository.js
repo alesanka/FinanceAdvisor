@@ -4,7 +4,7 @@ class RedisRepository {
   async getClient(clientId) {
     try {
       const client = await db.hGetAll('clients:client', clientId);
-      console.log(client);
+
       return client;
     } catch (error) {
       console.error(`Error fetching client: ${error.message}`);
