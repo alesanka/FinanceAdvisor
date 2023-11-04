@@ -101,38 +101,39 @@ Schedule of repayments for loans.
 | FK  | application_id        | int       | Foreign key from the applications table      |
 |     | monthly_payment       | float     | Amount to be paid monthly                    |
 |     | remaining_balance     | float     | Remaining balance to be paid                 |
-|     | due_date              | date      | Due date for the payment                     |
 
 ### 7. PaymentNotes
 
 Notes related to payments made or missed.
 
-| Key | Column Name     | Data Type | Description                             |
-| --- | --------------- | --------- | --------------------------------------- |
-| PK  | payment_note_id | int       | Primary key for the paymentnotes table  |
-| FK  | client_id       | int       | Foreign key from the clients table      |
-| FK  | application_id  | int       | Foreign key from the applications table |
-|     | note            | text      | Note regarding the payment              |
+| Key | Column Name      | Data Type | Description                            |
+| --- | ---------------- | --------- | -------------------------------------- |
+| PK  | payment_note_id  | int       | Primary key for the paymentnotes table |
+| FK  | client_id        | int       | Foreign key from the clients table     |
+|     | payment_date     | data      | Data of required payment               |
+|     | payment_amount   | float     | Required payment amount                |
+|     | payment_received | boolean   | Info about recievement of payment      |
 
 ### 8. MaximumLoanAmounts
 
-Maximum loan amounts per client based on their salary and credit history.
+Maximum loan amounts per client based on their salary, credit history and desired loan type.
 
-| Key | Column Name        | Data Type | Description                                              |
-| --- | ------------------ | --------- | -------------------------------------------------------- |
-| PK  | max_loan_amount_id | int       | Primary key for the maximumloanamounts table             |
-| FK  | client_id          | int       | Foreign key from the clients table                       |
-|     | max_amount         | int       | Calculated maximum amount that can be lent to the client |
+| Key | Column Name           | Data Type | Description                                               |
+| --- | --------------------- | --------- | --------------------------------------------------------- |
+| PK  | max_loan_amount_id    | int       | Primary key for the maximumloanamounts table              |
+| FK  | client_id             | int       | Foreign key from the clients table                        |
+|     | max_amount            | float     | Calculated maximum amount that can be lent to the client  |
+|     | total_interest_amount | float     | Calculated total interest that will be paid by the client |
 
 ### 9. LoanTypes_MaximumLoanAmounts
 
 Relation between loan types and maximum loan amounts.
 
-| Key | Column Name           | Data Type | Description                                            |
-| --- | --------------------- | --------- | ------------------------------------------------------ |
-| PK  | lt_max_loan_amount_id | int       | Primary key for the loantypes_maximumloanamounts table |
-| FK  | loan_type_id          | int       | Foreign key from the loantypes table                   |
-| FK  | max_loan_amount_id    | int       | Foreign key from the maximumloanamounts table          |
+| Key | Column Name        | Data Type | Description                                            |
+| --- | ------------------ | --------- | ------------------------------------------------------ |
+| PK  | id                 | int       | Primary key for the loantypes_maximumloanamounts table |
+| FK  | loan_type_id       | int       | Foreign key from the loantypes table                   |
+| FK  | max_loan_amount_id | int       | Foreign key from the maximumloanamounts table          |
 
 ## Enumeration
 
