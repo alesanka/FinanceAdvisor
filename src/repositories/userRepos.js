@@ -91,12 +91,13 @@ class UserRepos {
 
   async filterByParameter(params) {
     try {
-      let baseQuery =
-        'SELECT users.user_id, first_name, last_name, email, phone_number, role';
-      let roleQuery = '';
-
       const values = [];
       const conditions = [];
+
+      let baseQuery =
+        'SELECT users.user_id, first_name, last_name, email, phone_number, role';
+
+      let roleQuery = '';
 
       if (params.role === 'client') {
         roleQuery =
@@ -147,8 +148,7 @@ class UserRepos {
       const result = await pool.query(baseQuery, values);
       return result.rows;
     } catch (err) {
-      console.error(`Unable to get users by parameters: ${err}`);
-      throw new Error(`Unable to get users by parameters.`);
+      throw new Error(`Unable to get users by parameters: ${err}.`);
     }
   }
   async changeData(userId, data) {

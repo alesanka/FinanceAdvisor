@@ -168,69 +168,42 @@ class UserModel {
       throw new Error(`Unable to get user by id: ${err}.`);
     }
   }
-
   async filterByParameter(params) {
     try {
-      let baseQuery =
-        'SELECT users.user_id, first_name, last_name, email, phone_number, role';
-      let roleQuery = '';
+      const users = await userRepos.filterByParameter(params);
 
-      const values = [];
-      const conditions = [];
+      const combinedDTOs = users.map((user) => {
+        const userDto = new UserDTO(
+          user.user_id,
+          user.username,
+          user.first_name,
+          user.last_name,
+          user.email,
+          user.phone_number,
+          user.role
+        );
 
-      if (params.role === 'client') {
-        roleQuery =
-          ', salary, client_id, credit_story FROM users LEFT JOIN clients ON users.user_id = clients.user_id';
-      } else {
-        roleQuery = ' FROM users';
-      }
+        let clientDto;
+        if (
+          user.client_id &&
+          (params.salary || params.credit_story || params.role === 'client')
+        ) {
+          clientDto = new ClientDTO(
+            user.client_id,
+            user.user_id,
+            user.salary,
+            user.credit_story
+          );
+        }
+        return { ...userDto, client: clientDto };
+      });
 
-      baseQuery += roleQuery;
-
-      if (params.role) {
-        conditions.push(`users.role = $${values.length + 1}`);
-        values.push(params.role);
-      }
-      if (params.first_name) {
-        conditions.push(`first_name ILIKE $${values.length + 1}`);
-        values.push(`%${params.first_name}%`);
-      }
-      if (params.last_name) {
-        conditions.push(`last_name ILIKE $${values.length + 1}`);
-        values.push(`%${params.last_name}%`);
-      }
-      if (params.email) {
-        conditions.push(`users.email = $${values.length + 1}`);
-        values.push(params.email);
-      }
-      if (params.phone) {
-        conditions.push(`users.phone_number = $${values.length + 1}`);
-        values.push(params.phone);
-      }
-      if (params.salary) {
-        conditions.push(`clients.salary = $${values.length + 1}`);
-        values.push(params.salary);
-      }
-      if (params.credit_story) {
-        conditions.push(`clients.credit_story = $${values.length + 1}`);
-        values.push(params.credit_story);
-      }
-
-      if (conditions.length) {
-        baseQuery += ' WHERE ' + conditions.join(' AND ');
-      }
-
-      if (params.sort) {
-        baseQuery += ' ORDER BY clients.salary';
-      }
-
-      const result = await pool.query(baseQuery, values);
-      return result.rows;
+      return combinedDTOs;
     } catch (err) {
-      console.error(`Unable to get users by parameters: ${err}`);
-      throw new Error(`Unable to get users by parameters.`);
+      throw new Error(`Unable to get users by parameters: ${err}.`);
     }
   }
+
   async changeData(userId, data) {
     try {
       const userResult = await pool.query(

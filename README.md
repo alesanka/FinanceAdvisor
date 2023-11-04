@@ -317,7 +317,7 @@ Query Parameters:
 Request:
 
 ```
-GET /users/filter?role=admin&name=anna HTTP/1.1
+GET /users/filter?role=client&sort=salary HTTP/1.1
 Authorization: Bearer {access_token}
 ```
 
@@ -327,14 +327,20 @@ In case of successful response:
 HTTP/1.1 200 OK
 Content-Type: application/json
 
-{
-  "user_id": 1,
-  "first_name": "Anna",
-  "last_name": "Smith",
-  "email": "thebestanna@email.com",
-  "phone_number": "1234567890",
-  "role": "admin",
-}
+ {
+        "_id_user": 5,
+        "_first_name": "Kassia",
+        "_last_name": "K.",
+        "_email": "kasia@email.com",
+        "_phone_number": "1234567890",
+        "_role": "client",
+        "client": {
+            "_client_id": 3,
+            "_user_id": 5,
+            "_salary": 70000,
+            "_credit_story": true
+        }
+    }
 ```
 
 In case of error response:

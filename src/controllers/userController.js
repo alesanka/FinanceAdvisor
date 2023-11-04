@@ -79,27 +79,20 @@ class UserController {
       });
     }
   };
-
-  // to get all users in this method as well
   filterByParameter = async (req, res) => {
     try {
-      if (Object.keys(req.query).length === 0) {
-        const users = await userRepos.getAllUsers();
-        return res.status(200).json(users);
-      }
-
       const params = req.query;
-
-      const users = await userRepos.filterByParameter(params);
-
+      const users = await userModel.filterByParameter(params);
       if (!users.length) {
         return res.status(404).send('No users found matching the criteria.');
       }
-
       res.status(200).json(users);
     } catch (err) {
       console.error(err);
-      res.status(500).json({ error: err.message });
+      res.status(404).json({
+        message: `Something went wrong during getting users by parameters.`,
+        error: err.message,
+      });
     }
   };
 
