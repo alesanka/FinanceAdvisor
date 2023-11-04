@@ -237,53 +237,16 @@ class UserModel {
   }
   async deleteUser(userId) {
     try {
-      const userResult = await pool.query(
-        'SELECT role FROM users WHERE user_id = $1',
-        [userId]
-      );
+      const isUserExists = await userRepos.findUserById(userId);
 
-      if (userResult.rows.length === 0) {
+      if (!isUserExists) {
         throw new Error(`No user found with userId ${userId}`);
       }
-
-      await pool.query('DELETE FROM users WHERE user_id = $1', [userId]);
-
+      await userRepos.deleteUser(userId);
       return;
     } catch (err) {
-      console.error(`Unable to delete userId ${userId}: ${err}`);
-      throw new Error(`Unable to delete userId ${userId}.`);
+      throw new Error(`Unable to delete userId ${userId}: ${err}.`);
     }
-  }
-  async checkRoleByUserId(userId) {
-    try {
-      const result = await pool.query(
-        `SELECT role FROM users WHERE user_id = $1;`,
-        [userId]
-      );
-      if (!result.rows.length) {
-        throw new Error('User not found.');
-      }
-
-      return result.rows[0].role;
-    } catch (err) {
-      console.error(`Unable to get role by user id: ${err}`);
-      throw new Error(`Unable to get role by user id.`);
-    }
-  }
-  async findClientById(clientId) {
-    try {
-      const result = await pool.query(
-        'SELECT client_id FROM clients WHERE client_id = $1;',
-        [clientId]
-      );
-      if (result.rows.length > 0) {
-        return result.rows[0];
-      }
-    } catch (err) {
-      console.error(`Unable to get client by id: ${err}`);
-      throw new Error(`Unable to get client by id.`);
-    }
-    return null;
   }
 }
 

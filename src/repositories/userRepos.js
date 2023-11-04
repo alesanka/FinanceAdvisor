@@ -221,21 +221,10 @@ class UserRepos {
   }
   async deleteUser(userId) {
     try {
-      const userResult = await pool.query(
-        'SELECT role FROM users WHERE user_id = $1',
-        [userId]
-      );
-
-      if (userResult.rows.length === 0) {
-        throw new Error(`No user found with userId ${userId}`);
-      }
-
       await pool.query('DELETE FROM users WHERE user_id = $1', [userId]);
-
       return;
     } catch (err) {
-      console.error(`Unable to delete userId ${userId}: ${err}`);
-      throw new Error(`Unable to delete userId ${userId}.`);
+      throw new Error(`Unable to delete userId ${userId}: ${err}.`);
     }
   }
   async checkRoleByUserId(userId) {

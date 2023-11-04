@@ -1,4 +1,3 @@
-import { userRepos } from '../repositories/userRepos.js';
 import { userModel } from '../services/userModel.js';
 
 class UserController {
@@ -118,11 +117,13 @@ class UserController {
     const userId = req.params.userId;
 
     try {
-      await userRepos.deleteUser(userId);
+      await userModel.deleteUser(userId);
       res.status(204).end();
     } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: err.message });
+      res.status(500).json({
+        message: `Something went wrong while deleting user.`,
+        error: err.message,
+      });
     }
   };
 }

@@ -15,7 +15,7 @@ router.get(
   userController.filterByParameter
 ); // protected
 router.get('/', userController.getAllUsers); // public
-router.delete('/:userId', token.getAuthorization, userController.deleteUser); // protected
 router.put('/:userId', token.getAuthorization, userController.updateData); // protected
+router.delete('/:userId', token.getAuthorization, userController.deleteUser); // protected
 
 export default router;
