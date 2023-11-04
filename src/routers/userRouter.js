@@ -10,7 +10,7 @@ router.get(
   userController.getUserById
 ); // protected
 router.get('/filter', token.getAuthorization, userController.filterByParameter); // protected
-router.get('/', userController.filterByParameter); // public
+router.get('/', userController.getAllUsers); // public
 router.delete('/:userId', token.getAuthorization, userController.deleteUser); // protected
 router.put('/:userId', token.getAuthorization, userController.changeData); // protected
 

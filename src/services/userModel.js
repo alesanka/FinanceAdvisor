@@ -93,7 +93,33 @@ class UserModel {
       throw new Error(`Unable to login user: ${err}`);
     }
   }
+  async getAllUsers() {
+    try {
+      const users = await userRepos.getAllUsers();
 
+      const userDTOs = users.map((user) => {
+        const dto = new UserDTO(
+          user.user_id,
+          user.username,
+          user.first_name,
+          user.last_name,
+          user.email,
+          user.phone_number,
+          user.role
+        );
+        return {
+          id_user: dto.id_user,
+          first_name: dto.first_name,
+          last_name: dto.last_name,
+          role: dto.role,
+        };
+      });
+
+      return userDTOs;
+    } catch (err) {
+      throw new Error(`Unable to get all users: ${err}`);
+    }
+  }
   async findUserById(userId) {
     try {
       const result = await pool.query(
@@ -109,17 +135,7 @@ class UserModel {
     }
     return null;
   }
-  async getAllUsers() {
-    try {
-      const result = await pool.query(
-        'SELECT user_id, first_name, last_name, role FROM users'
-      );
-      return result.rows;
-    } catch (err) {
-      console.error(`Unable to get all users: ${err}`);
-      throw new Error(`Unable to get all users.`);
-    }
-  }
+
   async getUserById(userId) {
     try {
       const resultRole = await pool.query(

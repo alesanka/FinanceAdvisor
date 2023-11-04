@@ -52,6 +52,20 @@ class UserController {
     }
   };
 
+  getAllUsers = async (req, res) => {
+    try {
+      const users = await userModel.getAllUsers();
+
+      res.status(200).json(users);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({
+        message: 'Something went wrong during getting all users.',
+        error: err.message,
+      });
+    }
+  };
+
   // to get all users in this method as well
   filterByParameter = async (req, res) => {
     try {

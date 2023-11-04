@@ -19,19 +19,15 @@ export class UserDTO {
     this._email = this.validateEmail(email);
     this._phone_number = this.validatePhone(phone_number);
     this._role = this.validateRole(role);
-
-    Object.defineProperty(this, '_id_user', {
-      writable: false,
-      value: id_user,
-    });
   }
 
   validateEmail(email) {
     const emailSchema = z.string().email();
+
     try {
       return emailSchema.parse(email);
     } catch (e) {
-      throw new Error('Invalid email format');
+      throw new Error(`${e}`);
     }
   }
 
@@ -80,9 +76,9 @@ export class UserDTO {
     return this._role;
   }
 
-  //   set user_id(value) {
-  //     this._user_id = value;
-  //   }
+  set id_user(value) {
+    this._user_id = value;
+  }
 
   set first_name(value) {
     this._first_name = value;
@@ -98,5 +94,9 @@ export class UserDTO {
 
   set email(value) {
     this._email = this.validateEmail(value);
+  }
+
+  set role(value) {
+    this._role = value;
   }
 }

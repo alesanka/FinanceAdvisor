@@ -187,31 +187,18 @@ In case of successful response:
 HTTP/1.1 200 OK
 Content-Type: application/json
 {
-    "accessToken": "6361f33a3ad018fe3daba62c08e3522e246462669c838bd98d480a61fba6f109",
-    "accessTokenExpiresAt": "2023-10-28T19:59:30.882Z",
-    "refreshToken": "3696d5287a75b80601c763b2e738a68b4dab794e6dd187518a431f1b27cd58c5",
-    "refreshTokenExpiresAt": "2023-11-11T18:59:30.882Z",
-    "client": {
-        "id": "this-client-id-is-for-demo-only",
-        "secret": "this-secret-id-is-for-demo-only",
-        "grants": [
-            "password",
-            "refresh_token"
-        ]
-    },
-    "user": 2
+    "accessToken": "9e84379ff46ee5d01f1212c19491473864baff98fc92515d94f289ce6e91414c",
+    "refreshToken": "6a326acdc64827fe7445dc2980ad4c22b6cb5c9d801c37ee6d324f170e557a5b"
 }
 ```
 
 In case of error response:
 
 ```
-HTTP/1.1 400 Bad Request
+HTTP/1.1 500 Internal Server Error
 Content-Type: application/json
 
-{
-   "error": err.message
-}
+{ error: err.message }
 ```
 
 ## Endpoint /users <a name="endpoints-users"></a> [(Back to content)](#content)
@@ -244,6 +231,18 @@ Response:
   }
   // ... more users
 ]
+```
+
+In case of error response:
+
+```
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+
+{
+    message: 'Something went wrong during getting all users.',
+    error: err.message,
+}
 ```
 
 ---
