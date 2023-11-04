@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { loanTypeController } from '../controllers/loanTypeController.js';
-import { token } from '../controllers/tokenController.js';
+import { token } from '../../utils/tokenController.js';
 
 const router = Router();
 

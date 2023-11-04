@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { userController } from '../controllers/userController.js';
-import { token } from '../controllers/tokenController.js';
+import { token } from '../../utils/tokenController.js';
 
 const router = Router();
 

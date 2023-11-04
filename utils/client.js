@@ -1,11 +1,12 @@
-import { DBForTokens } from './dbForTokens.js';
+import db from './redisConfig.js';
+import * as dotenv from 'dotenv';
 
-const db = new DBForTokens();
+dotenv.config();
 
-db.saveClient({
-  id: process.env.CLIENT_ID,
-  secret: process.env.CLIENT_SECRET,
-  grants: ['password', 'refresh_token'],
+await db.hSet('clients:client', {
+  clientId: process.env.CLIENT_ID,
+  clientSecret: process.env.CLIENT_SECRET,
+  grants: JSON.stringify(['password', 'refresh_token']),
 });
 
 export { db };

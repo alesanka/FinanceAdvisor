@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { loanApplicationController } from '../controllers/loanApplicationController.js';
 import { maxLoanAmountController } from '../controllers/maxLoanAmountController.js';
-import { token } from '../controllers/tokenController.js';
+import { token } from '../../utils/tokenController.js';
 import { repaymentScheduleController } from '../controllers/repaymentScheduleController.js';
 
 const router = Router();
