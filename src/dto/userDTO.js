@@ -77,7 +77,7 @@ export class UserDTO {
   }
 
   set id_user(value) {
-    this._user_id = value;
+    this._id_user = value;
   }
 
   set first_name(value) {

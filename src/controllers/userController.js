@@ -66,6 +66,20 @@ class UserController {
     }
   };
 
+  getUserById = async (req, res) => {
+    try {
+      const userId = req.params.userId;
+      const user = await userModel.getUserById(userId);
+      res.status(200).json(user);
+    } catch (err) {
+      console.error(err);
+      res.status(404).json({
+        message: `Something went wrong during getting user ${req.params.userId}.`,
+        error: err.message,
+      });
+    }
+  };
+
   // to get all users in this method as well
   filterByParameter = async (req, res) => {
     try {
@@ -86,16 +100,6 @@ class UserController {
     } catch (err) {
       console.error(err);
       res.status(500).json({ error: err.message });
-    }
-  };
-  getUserById = async (req, res) => {
-    try {
-      const userId = req.params.userId;
-      const user = await userRepos.getUserById(userId);
-      res.status(200).json(user);
-    } catch (err) {
-      console.error(err);
-      res.status(404).json({ error: err.message });
     }
   };
 

@@ -1,9 +1,10 @@
 import { pool } from '../../db/postgress/dbPool.js';
-import bcrypt from 'bcrypt';
-import * as dotenv from 'dotenv';
 import { UserDTO } from '../dto/userDTO.js';
+import { ClientDTO } from '../dto/clientDTO.js';
 import { userRepos } from '../repositories/userRepos.js';
+import bcrypt from 'bcrypt';
 import { z } from 'zod';
+import * as dotenv from 'dotenv';
 
 dotenv.config();
 
@@ -120,59 +121,54 @@ class UserModel {
       throw new Error(`Unable to get all users: ${err}`);
     }
   }
-  async findUserById(userId) {
-    try {
-      const result = await pool.query(
-        'SELECT user_id, username, password FROM users WHERE user_id = $1;',
-        [userId]
-      );
-      if (result.rows.length > 0) {
-        return result.rows[0];
-      }
-    } catch (err) {
-      console.error(`Unable to get user by id: ${err}`);
-      throw new Error(`Unable to get user by id.`);
-    }
-    return null;
-  }
-
   async getUserById(userId) {
     try {
-      const resultRole = await pool.query(
-        'SELECT role FROM users WHERE user_id = $1;',
-        [userId]
-      );
-
-      if (resultRole.rows.length === 0) {
+      const user = await userRepos.findUserById(userId);
+      if (!user) {
         throw new Error('Invalid user id');
       }
-
-      const role = resultRole.rows[0].role;
-      let clientDetails = {};
-
-      if (role === 'client') {
-        const resultClient = await pool.query(
-          `SELECT client_id, salary, credit_story FROM clients WHERE user_id = $1;`,
-          [userId]
-        );
-        clientDetails = resultClient.rows[0];
-      }
-
-      const userDetails = await pool.query(
-        'SELECT first_name, last_name, email, phone_number FROM users WHERE user_id = $1;',
-        [userId]
+      const userDTO = new UserDTO(
+        user.user_id,
+        user.username,
+        user.first_name,
+        user.last_name,
+        user.email,
+        user.phone_number,
+        user.role
       );
 
-      return {
-        ...userDetails.rows[0],
-        ...clientDetails,
-        role,
+      let result = {
+        first_name: userDTO.first_name,
+        last_name: userDTO.last_name,
+        email: userDTO.email,
+        phone_number: userDTO.phone_number,
+        role: userDTO.role,
+        client_info: 'User is not a client',
       };
+
+      if (userDTO.role === 'client') {
+        const client = await userRepos.findClientByUserId(userId);
+        if (client) {
+          const clientDTO = new ClientDTO(
+            client.client_id,
+            client.user_id,
+            client.salary,
+            client.credit_story
+          );
+
+          result.client_info = {
+            salary: clientDTO.salary,
+            credit_story: clientDTO.credit_story,
+          };
+        }
+      }
+
+      return result;
     } catch (err) {
-      console.error(`Unable to get user by id: ${err}`);
-      throw new Error(`Unable to get user by id.`);
+      throw new Error(`Unable to get user by id: ${err}.`);
     }
   }
+
   async filterByParameter(params) {
     try {
       let baseQuery =

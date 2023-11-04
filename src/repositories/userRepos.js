@@ -72,7 +72,7 @@ class UserRepos {
       throw new Error(`Unable to get all users from db: ${err}.`);
     }
   }
-  async getClientByUserId(userId) {
+  async findClientByUserId(userId) {
     try {
       const resultClient = await pool.query(
         `SELECT * FROM clients WHERE user_id = $1;`,

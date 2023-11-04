@@ -271,15 +271,16 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
-    "first_name": "Anna",
-    "last_name": "Smith",
-    "email": "user@example.com",
+    "first_name": "Polya",
+    "last_name": "B.",
+    "email": "polina@email.com",
     "phone_number": "1234567890",
-    "client_id": 1,
-    "salary": 30000,
-    "credit_story": false,
-    "role": "client"
-  }
+    "role": "client",
+    "client_info": {
+        "salary": 50000,
+        "credit_story": false
+    }
+}
 ```
 
 In case of error response:
@@ -289,7 +290,8 @@ HTTP/1.1 404 Not Found
 Content-Type: application/json
 
 {
-  "error": err.message
+    message: `Something went wrong during getting user ${userId}.`,
+    error: err.message,
 }
 ```
 
