@@ -127,22 +127,18 @@ In case of successful response:
 HTTP/1.1 200 OK
 Content-Type: application/json
 {
-    "accessToken": "9db102b9fe208ddc4bb16c67e487c3068446c085505bddd6e4e65227ee260290",
-    "accessTokenExpiresAt": "2023-10-28T18:21:48.414Z",
-    "refreshToken": "b54442e512075cd68721e9c0796f75ab9db3554be4153ee8ab1a698f23ca45b2",
-    "refreshTokenExpiresAt": "2023-11-11T17:21:48.414Z",
-    "scope": true,
-    "client": {
-        "id": "this-client-id-is-for-demo-only",
-        "secret": "this-secret-id-is-for-demo-only",
-        "grants": [
-            "password"
-        ]
-    },
-    "user": {
-        "id": 2,
-        "username": "maria"
-    }
+    "accessToken": "9e84379ff46ee5d01f1212c19491473864baff98fc92515d94f289ce6e91414c",
+    "refreshToken": "6a326acdc64827fe7445dc2980ad4c22b6cb5c9d801c37ee6d324f170e557a5b"
+}
+```
+
+or
+
+```
+HTTP/1.1 200 OK
+Content-Type: text/html; charset=utf-8
+{
+    'User logged in successfully'
 }
 ```
 
@@ -152,7 +148,7 @@ In case of error response:
 HTTP/1.1 400 Bad Request
 Content-Type: text/html; charset=utf-8
 
-'Password is incorrect'
+`Missing parameter: "${field}" in requst body`
 
 ```
 
@@ -163,8 +159,9 @@ HTTP/1.1 500 Internal Server Error
 Content-Type: application/json
 
 {
-  "error": err.message
- }
+    message: 'Something went wrong during attempt to log in user.',
+    error: err.message,
+}
 ```
 
 ---

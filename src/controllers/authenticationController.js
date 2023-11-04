@@ -3,14 +3,7 @@ import { userModel } from '../services/userModel.js';
 class AuthenticationController {
   authenticateUser = async (req, res, next) => {
     try {
-      const {
-        grant_type,
-        scope,
-        client_id,
-        client_secret,
-        username,
-        password,
-      } = req.body;
+      const { username, password } = req.body;
 
       const requiredFields = [
         'grant_type',
@@ -28,13 +21,11 @@ class AuthenticationController {
             .send(`Missing parameter: "${field}" in requst body`);
         }
       }
-
-      await userModel.loginUser(username, password);
-
-      if (scope === 'admin' || scope === 'worker') {
+      const role = await userModel.loginUser(username, password);
+      if (role === 'admin' || role === 'worker') {
         next();
       } else {
-        return res.status(200).send('Client logged in successfully');
+        return res.status(200).send('User logged in successfully');
       }
     } catch (err) {
       console.error(err);
