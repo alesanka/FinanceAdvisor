@@ -26,12 +26,12 @@ class UserModel {
       username,
       firstName,
       lastName,
-      phoneNumber,
       email,
+      phoneNumber,
       role
     );
 
-    const passwordSchema = z.string().length(8);
+    const passwordSchema = z.string().min(8);
     try {
       passwordSchema.parse(passwordRaw);
     } catch (e) {
@@ -42,7 +42,7 @@ class UserModel {
     const isUsernameTaken = await userRepos.findUserByUsername(
       userDto.username
     );
-    if (!isUsernameTaken) {
+    if (isUsernameTaken) {
       throw new Error(`The username is already taken!`);
     }
     try {
@@ -57,13 +57,7 @@ class UserModel {
       );
 
       if (userDto.role === 'client') {
-        const clientId = await userRepos.createClient(
-          userId,
-          salary,
-          isCreditStory
-        );
-
-        return { userId, clientId };
+        await userRepos.createClient(userId, salary, isCreditStory);
       }
       return userId;
     } catch (err) {

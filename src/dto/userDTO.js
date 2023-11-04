@@ -8,16 +8,16 @@ export class UserDTO {
     username,
     first_name,
     last_name,
-    phone_number,
     email,
+    phone_number,
     role
   ) {
     this._id_user = id_user;
     this._username = username;
     this._first_name = first_name;
     this._last_name = last_name;
-    this._phone_number = this.validatePhone(phone_number);
     this._email = this.validateEmail(email);
+    this._phone_number = this.validatePhone(phone_number);
     this._role = this.validateRole(role);
 
     Object.defineProperty(this, '_id_user', {

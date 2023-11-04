@@ -1,4 +1,5 @@
 import { userRepos } from '../repositories/userRepos.js';
+import { userModel } from '../services/userModel.js';
 
 class UserController {
   registerUser = async (req, res) => {
@@ -26,11 +27,11 @@ class UserController {
       ];
       for (const field of requiredFields) {
         if (!req.body[field]) {
-          return res.status(400).send(`Missing required field: ${field}`);
+          return res.status(400).send(`Missing required parameter: ${field}`);
         }
       }
 
-      const id = await userRepos.registerUser(
+      const id = await userModel.registerUser(
         username,
         password,
         first_name,

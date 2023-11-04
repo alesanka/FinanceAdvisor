@@ -23,7 +23,7 @@ class UserRepos {
   }
   async createClient(userId, salary, isCreditStory) {
     try {
-      resultClient = await pool.query(
+      const resultClient = await pool.query(
         'INSERT INTO clients (user_id, salary, credit_story) VALUES ($1, $2, $3) RETURNING client_id',
         [userId, salary, isCreditStory]
       );
@@ -39,7 +39,7 @@ class UserRepos {
         'SELECT user_id, username FROM users WHERE username = $1;',
         [username]
       );
-      if (result.rows[0].length > 0) {
+      if (result.rows.length > 0) {
         return result.rows[0];
       } else {
         return null;
