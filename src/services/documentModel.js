@@ -23,20 +23,33 @@ class DocumentModel {
       throw new Error(`Unable to create document: ${err}.`);
     }
   }
-  async findDocumentsByApplicationId(applicationId) {
+  async findAllDocumentsByApplicationId(applicationId) {
     try {
-      const result = await pool.query(
-        'SELECT * FROM documents WHERE application_id = $1;',
-        [applicationId]
+      const docs = await documentRepos.findAllDocumentsByApplicationId(
+        applicationId
       );
-      if (result.rows.length > 0) {
-        return result.rows;
+      if (!docs) {
+        throw new Error('Invalid application id.');
       }
+
+      const docDTOs = docs.map((doc) => {
+        const dto = new DocDTO(
+          doc.document_id,
+          doc.application_id,
+          doc.document_name,
+          doc.document_type
+        );
+        return {
+          document_id: dto.document_id,
+          document_name: dto.document_name,
+          document_type: dto.document_type,
+        };
+      });
+
+      return docDTOs;
     } catch (err) {
-      console.error(`Unable to get documents by application_id: ${err}`);
-      throw new Error(`Unable to get documents by application_id.`);
+      throw new Error(`Unable to get documents by application_id: ${err}`);
     }
-    return null;
   }
   async deleteDocument(documentId) {
     try {

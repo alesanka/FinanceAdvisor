@@ -865,11 +865,22 @@ Content-Type: application/json
 [
     {
         "document_id": 1,
-        "application_id": {application_id},
         "document_name": "Client passport",
         "document_type": "passport"
     }
 ]
+```
+
+In case of error response:
+
+```
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+
+{
+  message: `Something went wrong while finding documents by application id.`,
+  error: err.message,
+}
 ```
 
 **Delete a user account.**

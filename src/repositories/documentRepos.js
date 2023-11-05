@@ -13,7 +13,7 @@ class DocumentRepos {
       throw new Error(`${err}`);
     }
   }
-  async findDocumentsByApplicationId(applicationId) {
+  async findAllDocumentsByApplicationId(applicationId) {
     try {
       const result = await pool.query(
         'SELECT * FROM documents WHERE application_id = $1;',
@@ -21,12 +21,12 @@ class DocumentRepos {
       );
       if (result.rows.length > 0) {
         return result.rows;
+      } else {
+        return null;
       }
     } catch (err) {
-      console.error(`Unable to get documents by application_id: ${err}`);
-      throw new Error(`Unable to get documents by application_id.`);
+      throw new Error(`${err}.`);
     }
-    return null;
   }
   async deleteDocument(documentId) {
     try {

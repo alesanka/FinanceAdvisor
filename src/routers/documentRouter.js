@@ -8,7 +8,7 @@ router.post('/', token.getAuthorization, documentController.createDocument); // 
 router.get(
   '/:application_id',
   token.getAuthorization,
-  documentController.findDocumentsByApplicationId
+  documentController.findAllDocumentsByApplicationId
 ); // protected
 router.delete(
   '/:documentId',

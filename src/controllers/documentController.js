@@ -35,16 +35,19 @@ class DocumentController {
       });
     }
   };
-  findDocumentsByApplicationId = async (req, res) => {
+  findAllDocumentsByApplicationId = async (req, res) => {
     try {
       const applicationId = req.params.application_id;
-      const documents = await documentRepos.findDocumentsByApplicationId(
+      const documents = await documentModel.findAllDocumentsByApplicationId(
         applicationId
       );
       res.status(200).json(documents);
     } catch (err) {
       console.error(err);
-      res.status(500).json({ error: err.message });
+      res.status(500).json({
+        message: `Something went wrong while finding documents by application id.`,
+        error: err.message,
+      });
     }
   };
   deleteDocument = async (req, res) => {
