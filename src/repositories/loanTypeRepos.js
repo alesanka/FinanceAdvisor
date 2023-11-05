@@ -44,29 +44,19 @@ class LoanTypeRepos {
         'SELECT * FROM loanTypes WHERE loan_type_id = $1;',
         [loan_id]
       );
+      console.log(result.rows[0]);
       if (result.rows.length > 0) {
         return result.rows[0];
+      } else {
+        return null;
       }
     } catch (err) {
-      console.error(`Unable to get loan type by loan_id: ${err}`);
-      throw new Error(`Unable to get loan type by loan_id.`);
+      throw new Error(`${err}`);
     }
-    return null;
   }
 
   async updateLoanTypeData(loanTypeId, data) {
     try {
-      const loanResult = await pool.query(
-        'SELECT loan_type_id FROM loanTypes WHERE loan_type_id = $1',
-        [loanTypeId]
-      );
-
-      if (loanResult.rows.length === 0) {
-        throw new Error(
-          `No loan type was found with provided loan_type_id ${userId}`
-        );
-      }
-
       let query = 'UPDATE loanTypes SET ';
       let values = [];
 
@@ -92,8 +82,7 @@ class LoanTypeRepos {
       values.push(loanTypeId);
       await pool.query(query, values);
     } catch (err) {
-      console.error(`Unable to update loan type: ${err}`);
-      throw new Error(`Unable to update loan type.`);
+      throw new Error(`${err}`);
     }
   }
 }

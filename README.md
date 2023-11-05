@@ -595,7 +595,7 @@ Content-Type: application/json
 Request:
 
 ```
-PUT /api/loan_types/:loanTypeId
+PUT /api/loan_types/:loan_type_id
 Content-Type: application/json
 Authorization: Bearer {access_token}
 
@@ -617,10 +617,10 @@ Content-Type: text/html; charset=utf-8
 In case of error response:
 
 ```
-HTTP/1.1 400 Bad Request
+HTTP/1.1 403 Forbidden
 Content-Type: text/html; charset=utf-8
 
-'Only admin can update loan type data, so admin_id is required.'
+'Only admins can update loan types.
 ```
 
 or

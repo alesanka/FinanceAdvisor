@@ -89,60 +89,55 @@ class LoanTypeModel {
 
   async findLoanById(loan_id) {
     try {
-      const result = await pool.query(
-        'SELECT * FROM loanTypes WHERE loan_type_id = $1;',
-        [loan_id]
-      );
-      if (result.rows.length > 0) {
-        return result.rows[0];
+      const loan = await loanTypeRepos.findLoanById(loan_id);
+      if (!loan) {
+        throw new Error('Invalid loan id');
       }
+
+      const loanDTO = new LoanTypeDTO(
+        loan.loan_type_id,
+        loan.loan_type,
+        loan.interest_rate,
+        loan.loan_term,
+        loan.required_doc
+      );
+
+      let result = {
+        loan_type_id: loanDTO.loan_type_id,
+        loan_type: loanDTO.loan_type,
+        interest_rate: loanDTO.interest_rate,
+        loan_term: loanDTO.loan_term,
+        required_doc: loanDTO.required_doc,
+      };
+      return result;
     } catch (err) {
-      console.error(`Unable to get loan type by loan_id: ${err}`);
-      throw new Error(`Unable to get loan type by loan_id.`);
+      throw new Error(`Unable to get loan type by loan_id: ${err}`);
     }
-    return null;
   }
 
   async updateLoanTypeData(loanTypeId, data) {
     try {
-      const loanResult = await pool.query(
-        'SELECT loan_type_id FROM loanTypes WHERE loan_type_id = $1',
-        [loanTypeId]
-      );
-
-      if (loanResult.rows.length === 0) {
-        throw new Error(
-          `No loan type was found with provided loan_type_id ${userId}`
-        );
+      const loan = await loanTypeRepos.findLoanById(loanTypeId);
+      if (!loan) {
+        throw new Error('Invalid loan id');
       }
-
-      let query = 'UPDATE loanTypes SET ';
-      let values = [];
-
-      if (data.interest_rate) {
-        query += `interest_rate = $${values.length + 1}, `;
-        values.push(data.interest_rate);
-      }
-
-      if (data.loan_term) {
-        query += `loan_term = $${values.length + 1}, `;
-        values.push(data.loan_term);
-      }
-
       if (data.required_doc) {
-        query += `required_doc = $${values.length + 1}, `;
-        values.push(data.required_doc);
+        const DocSchema = z.enum([
+          'passport',
+          'student_verification',
+          'business_plan',
+          'purchase_agreement',
+        ]);
+        try {
+          DocSchema.parse(doc);
+        } catch (e) {
+          throw new Error('Invalid document type');
+        }
       }
 
-      query = query.trim().endsWith(',') ? (query = query.slice(0, -2)) : query;
-
-      query += ` WHERE loan_type_id = $${values.length + 1}`;
-
-      values.push(loanTypeId);
-      await pool.query(query, values);
+      await loanTypeRepos.updateLoanTypeData(loanTypeId, data);
     } catch (err) {
-      console.error(`Unable to update loan type: ${err}`);
-      throw new Error(`Unable to update loan type.`);
+      throw new Error(`Unable to update loan type: ${err}.`);
     }
   }
 }

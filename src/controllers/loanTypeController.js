@@ -67,37 +67,15 @@ class LoanTypeController {
   updateLoanTypeData = async (req, res) => {
     try {
       const loanTypeId = req.params.loan_type_id;
-      if (!req.body) {
-        return res.status(400).send('No data provided in request body.');
-      }
+      console.log(loanTypeId);
       const userId = req.body.user_id;
-      if (!userId) {
-        return res.status(400).send('User id is required for checking role.');
-      }
 
-      const isAdmin = await userRepos.checkRoleByUserId(userId);
-
+      const isAdmin = await userModel.checkUserRoleById(userId);
       if (isAdmin !== 'admin') {
         return res.status(403).send('Only admins can update loan types.');
       }
 
-      if (req.body.required_doc) {
-        const validDocs = [
-          'passport',
-          'student_verification',
-          'business_plan',
-          'purchase_agreement',
-        ];
-        if (!validDocs.includes(req.body.required_doc)) {
-          return res
-            .status(400)
-            .send(
-              'Invalid required document. Accepted values are: passport, student_verification, business_plan, purchase_agreement'
-            );
-        }
-      }
-
-      await loanTypeRepos.updateLoanTypeData(loanTypeId, req.body);
+      await loanTypeModel.updateLoanTypeData(loanTypeId, req.body);
 
       res
         .status(200)
@@ -106,7 +84,10 @@ class LoanTypeController {
         );
     } catch (err) {
       console.error(err);
-      res.status(500).json({ error: err.message });
+      res.status(500).json({
+        message: `Something went wrong while updating loan type.`,
+        error: err.message,
+      });
     }
   };
 }
