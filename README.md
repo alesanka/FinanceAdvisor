@@ -842,7 +842,6 @@ Content-Type: application/json
 **Get all documents by application id.**
 
 \*protected request (available only for admin and worker with access_token)
-\*(only bank worker can do this, user_id is required for checking user's role)
 
 | Parameter        | Type    | Description                            |
 | ---------------- | ------- | -------------------------------------- |
@@ -883,7 +882,7 @@ Content-Type: application/json
 }
 ```
 
-**Delete a user account.**
+**Delete a document by document id.**
 
 \*protected request (available only for admin and worker with access_token)
 

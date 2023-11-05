@@ -53,23 +53,16 @@ class DocumentModel {
   }
   async deleteDocument(documentId) {
     try {
-      const result = await pool.query(
-        'SELECT document_id FROM documents WHERE document_id = $1',
-        [documentId]
-      );
+      const isDocExists = await documentRepos.checkDocumentById(documentId);
 
-      if (result.rows.length === 0) {
-        throw new Error(`No document found with documentId ${documentId}`);
+      if (!isDocExists) {
+        throw new Error(`No document found with document id ${documentId}`);
       }
 
-      await pool.query('DELETE FROM documents WHERE document_id = $1', [
-        documentId,
-      ]);
-
+      await documentRepos.deleteDocument(documentId);
       return;
     } catch (err) {
-      console.error(`Unable to delete document ${documentId}: ${err}`);
-      throw new Error(`Unable to delete document ${documentId}.`);
+      throw new Error(`Unable to delete document ${documentId}: ${err}.`);
     }
   }
 }

@@ -1,6 +1,5 @@
 import { documentModel } from '../services/documentModel.js';
 import { userModel } from '../services/userModel.js';
-import { loanApplicationRepos } from '../repositories/loanApplicationRepos.js';
 
 class DocumentController {
   createDocument = async (req, res) => {
@@ -53,11 +52,14 @@ class DocumentController {
   deleteDocument = async (req, res) => {
     const documentId = req.params.documentId;
     try {
-      await documentRepos.deleteDocument(documentId);
+      await documentModel.deleteDocument(documentId);
       res.status(204).end();
     } catch (err) {
       console.error(err);
-      res.status(500).json({ error: err.message });
+      res.status(500).json({
+        message: `Something went wrong while deleting document by id.`,
+        error: err.message,
+      });
     }
   };
 }

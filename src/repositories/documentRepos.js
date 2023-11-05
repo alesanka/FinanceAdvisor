@@ -28,25 +28,31 @@ class DocumentRepos {
       throw new Error(`${err}.`);
     }
   }
-  async deleteDocument(documentId) {
+  async checkDocumentById(docId) {
     try {
       const result = await pool.query(
         'SELECT document_id FROM documents WHERE document_id = $1',
-        [documentId]
+        [docId]
       );
-
-      if (result.rows.length === 0) {
-        throw new Error(`No document found with documentId ${documentId}`);
+      if (result.rows.length > 0) {
+        return true;
+      } else {
+        return false;
       }
+    } catch (err) {
+      throw new Error(`${err}.`);
+    }
+  }
 
+  async deleteDocument(documentId) {
+    try {
       await pool.query('DELETE FROM documents WHERE document_id = $1', [
         documentId,
       ]);
 
       return;
     } catch (err) {
-      console.error(`Unable to delete document ${documentId}: ${err}`);
-      throw new Error(`Unable to delete document ${documentId}.`);
+      throw new Error(`${err}`);
     }
   }
 }
