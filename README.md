@@ -907,31 +907,29 @@ HTTP/1.1 500 Internal Server Error
 Content-Type: application/json
 
 {
-  "error": err.message
+    message: `Something went wrong while deleting document by id.`,
+    error: err.message,
 }
 
 ```
 
 ## Endpoint /application/{application_id}/approved <a name="endpoints-applications-approved"></a> [(Back to content)](#content)
 
-**Approve desired by client amount of credit.**
-
-The loan application will be approved only in case if in the table MaxLoanAmount there is a corresponding value(ID) stating that the maximum available amount for this type of loan exceeds the amount desired by the client.
+**Approve the application with the loan amount desired by the client if the required documents are attached to the application.**
 
 \*protected request (available only for admin and worker with access_token)
 \*(only bank worker can do this, user_id is required for checking user's role)
 
 Query Parameters:
 
-| Parameter        | Type    | Description                                                 |
-| ---------------- | ------- | ----------------------------------------------------------- |
-| `application_id` | integer | The unique ID of the loan application.                      |
-| `loan_type`      | enum    | Type of loan from enum ('personal_loan', 'mortgage', etc.). |
+| Parameter        | Type    | Description                            |
+| ---------------- | ------- | -------------------------------------- |
+| `application_id` | integer | The unique ID of the loan application. |
 
 Request:
 
 ```
-PUT /application/{application_id}/approved?loan_type=personal_loan
+PUT /application/{application_id}/approved/
 Content-Type: application/json
 Authorization: Bearer {access_token}
 
@@ -946,16 +944,16 @@ In case of successful response:
 HTTP/1.1 200 OK
 Content-Type: text/html; charset=utf-8
 
-'Status changed on approved'
+'Loan application status changed on approved'
 ```
 
 In case of error response:
 
 ```
-HTTP/1.1 400 Bad Request
+HTTP/1.1 403 Forbidden
 Content-Type: text/html; charset=utf-8
 
-'The provided loan type does not match the application data.'
+'Only workers can create loan applications.'
 ```
 
 or
@@ -965,7 +963,8 @@ HTTP/1.1 500 Internal Server Error
 Content-Type: application/json
 
 {
-  "error": err.message
+  message: `Something went wrong while updating status on application.`,
+  error: err.message,
 }
 ```
 
