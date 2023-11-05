@@ -44,7 +44,7 @@ class LoanTypeRepos {
         'SELECT * FROM loanTypes WHERE loan_type_id = $1;',
         [loan_id]
       );
-      console.log(result.rows[0]);
+
       if (result.rows.length > 0) {
         return result.rows[0];
       } else {

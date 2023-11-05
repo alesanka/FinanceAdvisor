@@ -688,6 +688,51 @@ Content-Type: application/json
 }
 ```
 
+---
+
+**Client can retrieve an information about max available loan amount by id**
+
+\*public request
+
+Query Parameters:
+
+| Parameter            | Type   | Description                          |
+| -------------------- | ------ | ------------------------------------ |
+| `max_loan_amount_id` | number | Get max available loan amount by id. |
+
+Request:
+
+```
+GET /max_available_amount/:max_loan_amount_id/
+```
+
+In case of successful response:
+
+```
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+    "max_loan_amount": 4712878,
+    "total_interest_amount": "3387122.15",
+    "loan_type": "mortgage",
+    "interest_rate": "4.00",
+    "loan_term": 360
+}
+```
+
+In case of error response:
+
+```
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+
+{
+  message: `Something went wrong while getting max available loan amount.`,
+  error: err.message,
+}
+```
+
 ## Endpoint /documents <a name="endpoints-documents"></a> [(Back to content)](#content)
 
 **Create a new document.**

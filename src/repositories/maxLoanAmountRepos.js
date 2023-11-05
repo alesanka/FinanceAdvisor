@@ -12,32 +12,24 @@ class MaxLoanAmountRepos {
       throw new Error(`${err}`);
     }
   }
-  async getMaxLoanAmount(maxLoanamountId) {
+  async getMaxLoanAmountLoanType(maxLoanAmountId) {
     try {
       const result = await pool.query(
-        `SELECT 
-                m.max_loan_amount_id,
-                m.application_id,  
-                m.max_loan_amount, 
-                m.total_interest_amount, 
-                lta.loan_type_id,
-                lt.loan_type
+        `SELECT *
              FROM MaximumLoanAmounts AS m
-             JOIN LoanTypes_LoanApplications AS lta ON m.loan_app_loan_type_id = lta.id
-             JOIN LoanTypes AS lt ON lta.loan_type_id = lt.loan_type_id
-             JOIN LoanApplications AS la ON lta.application_id = la.application_id
+             JOIN LoanTypes_MaximumLoanAmounts AS lm ON m.max_loan_amount_id = lm.max_loan_amount_id
+             JOIN LoanTypes AS lt ON lm.loan_type_id = lt.loan_type_id
              WHERE m.max_loan_amount_id = $1;`,
-        [maxLoanamountId]
+        [maxLoanAmountId]
       );
 
-      if (result.rows.length === 0) {
-        throw new Error('Data not found for the provided max loan amount ID.');
+      if (result.rows.length > 0) {
+        return result.rows[0];
+      } else {
+        return null;
       }
-
-      return result.rows[0];
     } catch (err) {
-      console.error(`Unable to get max loan amount by id: ${err}`);
-      throw new Error(`Unable to get max loan amount by id.`);
+      throw new Error(`${err}`);
     }
   }
 
