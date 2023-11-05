@@ -1,17 +1,17 @@
-import { loanApplicationRepos } from '../repositories/loanApplicationRepos.js';
-import { userRepos } from '../repositories/userRepos.js';
+import { loanApplicationModel } from '../services/loanApplicationModel.js';
+import { userModel } from '../services/userModel.js';
 import { loanTypeRepos } from '../repositories/loanTypeRepos.js';
 import { maxLoanAmountRepos } from '../repositories/maxLoanAmountRepos.js';
 
 class LoanApplicationController {
   createLoanApplication = async (req, res) => {
     try {
-      const userId = req.body.user_id;
-      if (!userId) {
+      const { user_id, id, desired_loan_amount, is_approved } = req.body;
+      if (!user_id) {
         return res.status(400).send('User id is required for checking role.');
       }
 
-      const isWorker = await userRepos.checkRoleByUserId(userId);
+      const isWorker = await userModel.checkUserRoleById(user_id);
 
       if (isWorker !== 'worker') {
         return res
@@ -19,21 +19,22 @@ class LoanApplicationController {
           .send('Only workers can create loan applications.');
       }
 
-      const { client_id, desired_loan_amount } = req.body;
-
-      const isRealClient = await userRepos.findClientById(client_id);
-      if (!isRealClient) {
-        return res.status(400).send('Invalid client id.');
-      }
-
-      await loanApplicationRepos.createLoanApplication(
-        client_id,
-        desired_loan_amount
+      const loanId = await loanApplicationModel.createLoanApplication(
+        id,
+        desired_loan_amount,
+        is_approved
       );
-      res.status(201).send('Loan application was created successfully');
+      res
+        .status(201)
+        .send(
+          `Loan application was created successfully. Loan application id - ${loanId}`
+        );
     } catch (err) {
       console.error(err);
-      res.status(500).json({ error: err.message });
+      res.status(500).json({
+        message: `Something went wrong while creating new loan application.`,
+        error: err.message,
+      });
     }
   };
   saveApplicationWithLoanType = async (req, res) => {

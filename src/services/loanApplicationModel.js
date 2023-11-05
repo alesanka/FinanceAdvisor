@@ -1,19 +1,28 @@
 import { pool } from '../../db/postgress/dbPool.js';
+import { loanApplicationRepos } from '../repositories/loanApplicationRepos.js';
+import { ApplicationDTO } from '../dto/applicationDTO.js';
 
 class LoanApplicationModel {
-  async createLoanApplication(clientId, desiredLoanAmount) {
+  async createLoanApplication(id, desiredLoanAmount, isApproved) {
     try {
-      const result = await pool.query(
-        'INSERT INTO LoanApplications (client_id, desired_loan_amount, application_date) VALUES ($1, $2, CURRENT_DATE) RETURNING application_id',
-        [clientId, desiredLoanAmount]
+      const applicationDTO = new ApplicationDTO(
+        null,
+        desiredLoanAmount,
+        null,
+        isApproved
       );
 
-      return result.rows[0].application_id;
+      const loanId = await loanApplicationRepos.createLoanApplication(
+        id,
+        applicationDTO.desired_loan_amount,
+        applicationDTO.is_approved
+      );
+      return loanId;
     } catch (err) {
-      console.error(`Unable to create loan application: ${err}`);
-      throw new Error(`Unable to create loan application.`);
+      throw new Error(`Unable to create loan application: ${err}.`);
     }
   }
+
   async findApplicationById(applicationId) {
     try {
       const result = await pool.query(

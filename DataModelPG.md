@@ -72,13 +72,13 @@ Different types of loans available.
 
 Loan application details.
 
-| Key | Column Name         | Data Type | Description                            |
-| --- | ------------------- | --------- | -------------------------------------- |
-| PK  | application_id      | int       | Primary key for the applications table |
-| FK  | client_id           | int       | Foreign key from the clients table     |
-|     | desired_loan_amount | int       | Desired loan amount by the client      |
-|     | application_date    | date      | The application's creation date.       |
-|     | isApproved          | boolean   | Status of loan application approval    |
+| Key | Column Name         | Data Type | Description                                    |
+| --- | ------------------- | --------- | ---------------------------------------------- |
+| PK  | application_id      | int       | Primary key for the applications table         |
+| FK  | id                  | int       | Foreign key from LoanType_MaxLoanAmounts table |
+|     | desired_loan_amount | int       | Desired loan amount by the client              |
+|     | application_date    | date      | The application's creation date.               |
+|     | is_approved         | boolean   | Status of loan application approval            |
 
 ### 5. Documents
 

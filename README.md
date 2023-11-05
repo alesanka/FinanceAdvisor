@@ -733,6 +733,113 @@ Content-Type: application/json
 }
 ```
 
+## Endpoint /applications <a name="endpoints-applications"></a> [(Back to content)](#content)
+
+**Create a new loan application.**
+
+\*protected request (available only for admin and worker with access_token)
+\*(only bank worker can do this, user_id is required for checking user's role)
+
+Request:
+
+```
+POST /applications
+Content-Type: application/json
+Authorization: Bearer {access_token}
+
+{
+    "user_id": 4,
+    "id": 1,
+    "desired_loan_amount": 50000,
+    "is_approved": false
+}
+```
+
+In case of successful response:
+
+```
+HTTP/1.1 201 Created
+Content-Type: text/html; charset=utf-8
+
+`Loan application was created successfully. Loan application id - ${loanId}`
+```
+
+In case of error response:
+
+```
+HTTP/1.1 403 Forbidden
+Content-Type: text/html; charset=utf-8
+
+'Only workers can create loan applications.'
+```
+
+or
+
+```
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+
+{
+    message: `Something went wrong while creating new loan application.`,
+    error: err.message,
+}
+```
+
+---
+
+**Save information about a specific loan application with a specific loan type.**
+
+\*protected request (available only for admin and worker with access_token)
+\*(only bank worker can do this, user_id is required for checking user's role)
+
+| Parameter        | Type    | Description                                        |
+| ---------------- | ------- | -------------------------------------------------- |
+| `application_id` | integer | The unique ID of the loan application.             |
+| `loan_type_id`   | integer | The unique ID of the loan type associated with it. |
+
+Request:
+
+```
+POST /applications/save?application_id=1&loan_type_id=1
+Content-Type: application/json
+Authorization: Bearer {access_token}
+
+{
+  "user_id": 7
+}
+```
+
+In case of successful response:
+
+```
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+    "maxAvailableAmount id": 1
+}
+```
+
+In case of error response:
+
+```
+HTTP/1.1 403 Forbidden
+Content-Type: text/html; charset=utf-8
+
+'Only workers can modificate loan applications.'
+```
+
+or
+
+```
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+
+{
+  "error": err.message
+}
+```
+
 ## Endpoint /documents <a name="endpoints-documents"></a> [(Back to content)](#content)
 
 **Create a new document.**
@@ -845,111 +952,6 @@ Content-Type: application/json
   "error": err.message
 }
 
-```
-
-## Endpoint /applications <a name="endpoints-applications"></a> [(Back to content)](#content)
-
-**Create a new loan application.**
-
-\*protected request (available only for admin and worker with access_token)
-\*(only bank worker can do this, user_id is required for checking user's role)
-
-Request:
-
-```
-POST /applications
-Content-Type: application/json
-Authorization: Bearer {access_token}
-
-{
-  "user_id: 7,
-  "client_id": 4,
-  "desired_loan_amount": 20000
-}
-```
-
-In case of successful response:
-
-```
-HTTP/1.1 201 Created
-Content-Type: text/html; charset=utf-8
-
-'Loan application was created successfully'
-```
-
-In case of error response:
-
-```
-HTTP/1.1 403 Forbidden
-Content-Type: text/html; charset=utf-8
-
-'Only workers can create loan applications.'
-```
-
-or
-
-```
-HTTP/1.1 500 Internal Server Error
-Content-Type: application/json
-
-{
-  "error": err.message
-}
-```
-
----
-
-**Save information about a specific loan application with a specific loan type.**
-
-\*protected request (available only for admin and worker with access_token)
-\*(only bank worker can do this, user_id is required for checking user's role)
-
-| Parameter        | Type    | Description                                        |
-| ---------------- | ------- | -------------------------------------------------- |
-| `application_id` | integer | The unique ID of the loan application.             |
-| `loan_type_id`   | integer | The unique ID of the loan type associated with it. |
-
-Request:
-
-```
-POST /applications/save?application_id=1&loan_type_id=1
-Content-Type: application/json
-Authorization: Bearer {access_token}
-
-{
-  "user_id": 7
-}
-```
-
-In case of successful response:
-
-```
-HTTP/1.1 200 OK
-Content-Type: application/json
-
-{
-    "maxAvailableAmount id": 1
-}
-```
-
-In case of error response:
-
-```
-HTTP/1.1 403 Forbidden
-Content-Type: text/html; charset=utf-8
-
-'Only workers can modificate loan applications.'
-```
-
-or
-
-```
-HTTP/1.1 500 Internal Server Error
-Content-Type: application/json
-
-{
-  "error": err.message
-}
 ```
 
 ## Endpoint /application/{application_id}/approved <a name="endpoints-applications-approved"></a> [(Back to content)](#content)

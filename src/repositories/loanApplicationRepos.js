@@ -1,17 +1,16 @@
 import { pool } from '../../db/postgress/dbPool.js';
 
 class LoanApplicationRepos {
-  async createLoanApplication(clientId, desiredLoanAmount) {
+  async createLoanApplication(id, desiredLoanAmount, isApproved) {
     try {
       const result = await pool.query(
-        'INSERT INTO LoanApplications (client_id, desired_loan_amount, application_date) VALUES ($1, $2, CURRENT_DATE) RETURNING application_id',
-        [clientId, desiredLoanAmount]
+        'INSERT INTO LoanApplications (id, desired_loan_amount, application_date, is_approved) VALUES ($1, $2, CURRENT_DATE, $3) RETURNING application_id',
+        [id, desiredLoanAmount, isApproved]
       );
 
       return result.rows[0].application_id;
     } catch (err) {
-      console.error(`Unable to create loan application: ${err}`);
-      throw new Error(`Unable to create loan application.`);
+      throw new Error(`${err}`);
     }
   }
   async findApplicationById(applicationId) {
