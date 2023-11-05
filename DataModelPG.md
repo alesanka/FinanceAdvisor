@@ -122,7 +122,7 @@ Maximum loan amounts per client based on their salary, credit history and desire
 | --- | --------------------- | --------- | --------------------------------------------------------- |
 | PK  | max_loan_amount_id    | int       | Primary key for the maximumloanamounts table              |
 | FK  | client_id             | int       | Foreign key from the clients table                        |
-|     | max_amount            | float     | Calculated maximum amount that can be lent to the client  |
+|     | max_loan_amount       | float     | Calculated maximum amount that can be lent to the client  |
 |     | total_interest_amount | float     | Calculated total interest that will be paid by the client |
 
 ### 9. LoanTypes_MaximumLoanAmounts

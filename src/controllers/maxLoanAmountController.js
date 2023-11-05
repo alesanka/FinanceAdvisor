@@ -1,6 +1,34 @@
-import { maxLoanAmountRepos } from '../repositories/maxLoanAmountRepos.js';
+import { maxLoanAmountModel } from '../services/maxLoanAmountModel.js';
+import { userModel } from '../services/userModel.js';
 
 class MaxLoanAmountController {
+  saveMaxLoan = async (req, res) => {
+    try {
+      const { user_id, client_id, loan_type_id } = req.body;
+
+      const isWorker = await userModel.checkUserRoleById(user_id);
+      if (isWorker !== 'worker') {
+        return res
+          .status(403)
+          .send('Only workers can save max available loan amounts.');
+      }
+
+      const id = await maxLoanAmountModel.saveMaxLoan(client_id, loan_type_id);
+
+      res
+        .status(200)
+        .send(
+          `Max avaiable loan amount with id - ${id} was saved successfully.`
+        );
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({
+        message: `Something went wrong while saving max available loan amount.`,
+        error: err.message,
+      });
+    }
+  };
+
   getMaxLoanAmount = async (req, res) => {
     try {
       const { max_loan_amount_id } = req.params;

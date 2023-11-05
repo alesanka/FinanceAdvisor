@@ -67,7 +67,7 @@ class LoanTypeController {
   updateLoanTypeData = async (req, res) => {
     try {
       const loanTypeId = req.params.loan_type_id;
-      console.log(loanTypeId);
+
       const userId = req.body.user_id;
 
       const isAdmin = await userModel.checkUserRoleById(userId);

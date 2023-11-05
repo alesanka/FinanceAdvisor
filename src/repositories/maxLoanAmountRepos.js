@@ -1,6 +1,17 @@
 import { pool } from '../../db/postgress/dbPool.js';
 
 class MaxLoanAmountRepos {
+  async saveMaxLoan(client_id, max_amount, total_interest_amount) {
+    try {
+      const result = await pool.query(
+        'INSERT INTO MaximumLoanAmounts (client_id,  max_loan_amount,  total_interest_amount) VALUES ($1, $2, $3) RETURNING max_loan_amount_id',
+        [client_id, max_amount, total_interest_amount]
+      );
+      return result.rows[0].max_loan_amount_id;
+    } catch (err) {
+      throw new Error(`${err}`);
+    }
+  }
   async getMaxLoanAmount(maxLoanamountId) {
     try {
       const result = await pool.query(

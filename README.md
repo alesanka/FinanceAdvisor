@@ -9,13 +9,15 @@ The Personal Finance Advisor API is a web service that provides functionality fo
 - [Implementation details](#imp-details)
 - [Technical requirements](#tech-details)
 - [Endpoints](#endpoints)
+
   - [Endpoint /register](#endpoints-register)
   - [Endpoint /login](#endpoints-login)
   - [Endpoint /user](#endpoints-users)
   - [Endpoint /loan_types](#endpoints-loan-types)
+  - [Endpoint /max_available_amount](#endpoints-max-available-amount)
   - [Endpoint /documents](#endpoints-documents)
   - [Endpoint /applications](#endpoints-applications)
-  - [Endpoint /application/{application_id}/max_available_amount](#endpoints-applications-details)
+
   - [Endpoint /application/{application_id}/approved](#endpoints-applications-approved)
   - [Endpoint /repayment_notes](#endpoints-repayment-notes)
 
@@ -635,6 +637,57 @@ Content-Type: application/json
 }
 ```
 
+## Endpoint /max_available_amount <a name="endpoints-max-available-amount"></a> [(Back to content)](#content)
+
+**Worker save information about max available loan amount for a client with requested loan type.**
+
+\*protected request (available only for admin and worker with access_token)
+\*(only workers can do this, user_id is required for checking user's role)
+
+Request:
+
+```
+POST /max_available_amount
+Content-Type: application/json
+Authorization: Bearer {access_token}
+
+{
+    "user_id": 4,
+    "client_id": 2,
+    "loan_type_id": 3
+}
+```
+
+In case of successful response:
+
+```
+HTTP/1.1 200 OK
+Content-Type: text/html; charset=utf-8
+
+Max avaiable loan amount with id - ${id} was saved successfully.
+```
+
+In case of error response:
+
+```
+HTTP/1.1 403 Forbidden
+Content-Type: text/html; charset=utf-8
+
+'Only workers can save max available loan amounts.'
+```
+
+or
+
+```
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+
+{
+  message: `Something went wrong while saving max available loan amount.`,
+  error: err.message,
+}
+```
+
 ## Endpoint /documents <a name="endpoints-documents"></a> [(Back to content)](#content)
 
 **Create a new document.**
@@ -841,57 +894,6 @@ HTTP/1.1 403 Forbidden
 Content-Type: text/html; charset=utf-8
 
 'Only workers can modificate loan applications.'
-```
-
-or
-
-```
-HTTP/1.1 500 Internal Server Error
-Content-Type: application/json
-
-{
-  "error": err.message
-}
-```
-
-## Endpoint /application/{application_id}/max_available_amount <a name="endpoints-applications-details"></a> [(Back to content)](#content)
-
-**User can get information about all max avaibale for him amounts of loans regarding his application (if before worker created his application and connected it with desired loan types).**
-
-\*public request
-
-| Parameter            | Type    | Description                                                         |
-| -------------------- | ------- | ------------------------------------------------------------------- |
-| `max_loan_amount_id` | integer | The unique ID of the max loan amount record associated with a user. |
-
-Request:
-
-```
-GET /application/{max_loan_amount_id}/max_available_amount
-```
-
-In case of successful response:
-
-```
-HTTP/1.1 200 OK
-Content-Type: application/json
-
-{
-
-    "Max available amount of loan": 549734,
-    "Loan type": "personal_loan",
-    "Max interest amount": "20266.13"
-
-}
-```
-
-In case of error response:
-
-```
-HTTP/1.1 403 Forbidden
-Content-Type: text/html; charset=utf-8
-
-'Data not found for the provided max loan amount ID.'
 ```
 
 or
