@@ -787,6 +787,38 @@ Content-Type: application/json
 
 ---
 
+**Delete a loan application.**
+
+\*protected request (available only for admin and worker with access_token)
+\*(only bank worker can do this, user_id is required for checking user's role)
+
+Request:
+
+```
+DELETE /applications/:loan_application_id
+Authorization: Bearer {access_token}
+```
+
+In case of successful response:
+
+```
+HTTP/1.1 204 No Content
+
+```
+
+In case of error response:
+
+```
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+
+{
+    message: `Something went wrong while deleting loan application.`,
+    error: err.message,
+}
+
+```
+
 ## Endpoint /documents <a name="endpoints-documents"></a> [(Back to content)](#content)
 
 **Create a new document.**

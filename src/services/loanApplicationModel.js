@@ -1,4 +1,3 @@
-import { pool } from '../../db/postgress/dbPool.js';
 import { loanApplicationRepos } from '../repositories/loanApplicationRepos.js';
 import { documentRepos } from '../repositories/documentRepos.js';
 import { maxLoanAmountRepos } from '../repositories/maxLoanAmountRepos.js';
@@ -99,37 +98,19 @@ class LoanApplicationModel {
     }
   }
 
-  async findApplicationById(applicationId) {
+  async deleteLoanApplication(applicationId) {
     try {
-      const result = await pool.query(
-        'SELECT * FROM loanapplications WHERE application_id = $1;',
-        [applicationId]
+      const application = await loanApplicationRepos.findApplicationById(
+        applicationId
       );
-      if (result.rows.length > 0) {
-        return result.rows[0];
+      if (!application) {
+        throw new Error(`Application with id ${applicationId} does not exist.`);
       }
-    } catch (err) {
-      console.error(`Unable to get application by id: ${err}`);
-      throw new Error(`Unable to get application by id.`);
-    }
-    return null;
-  }
 
-  async checkApprovement(applicationId) {
-    try {
-      const result = await pool.query(
-        'SELECT is_approved FROM loanapplications WHERE application_id = $1;',
-        [applicationId]
-      );
-
-      if (result.rows.length > 0) {
-        return result.rows[0].is_approved;
-      } else {
-        throw new Error(`Application with ID ${applicationId} does not exist.`);
-      }
+      await loanApplicationRepos.deleteLoanApplication(applicationId);
+      return;
     } catch (err) {
-      console.error(`Unable to check approvement status: ${err}`);
-      throw new Error(`Unable to check approvement status.`);
+      throw new Error(`Unable to delete loan application: ${err}`);
     }
   }
 }

@@ -15,6 +15,11 @@ router.put(
   token.getAuthorization,
   loanApplicationController.changeApprovement
 ); // protected
+router.delete(
+  '/:application_id',
+  token.getAuthorization,
+  loanApplicationController.deleteLoanApplication
+); // protected
 router.post(
   '/:application_id/repayment_schedule',
   token.getAuthorization,

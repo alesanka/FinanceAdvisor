@@ -1,6 +1,5 @@
 import { loanApplicationModel } from '../services/loanApplicationModel.js';
 import { userModel } from '../services/userModel.js';
-import { maxLoanAmountRepos } from '../repositories/maxLoanAmountRepos.js';
 
 class LoanApplicationController {
   createLoanApplication = async (req, res) => {
@@ -61,6 +60,34 @@ class LoanApplicationController {
       console.error(err);
       res.status(500).json({
         message: `Something went wrong while updating status on application.`,
+        error: err.message,
+      });
+    }
+  };
+  deleteLoanApplication = async (req, res) => {
+    try {
+      const application_id = req.params.application_id;
+
+      const userId = req.body.user_id;
+      if (!userId) {
+        return res.status(400).send('User id is required for checking role.');
+      }
+
+      const isWorker = await userModel.checkUserRoleById(userId);
+
+      if (isWorker !== 'worker') {
+        return res
+          .status(403)
+          .send('Only workers can create loan applications.');
+      }
+
+      await loanApplicationModel.deleteLoanApplication(application_id);
+
+      res.status(204).end();
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({
+        message: `Something went wrong while deleting loan application.`,
         error: err.message,
       });
     }

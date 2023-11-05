@@ -54,11 +54,21 @@ class LoanApplicationRepos {
       if (result.rows.length > 0) {
         return result.rows[0].is_approved;
       } else {
-        throw new Error(`Application with ID ${applicationId} does not exist.`);
+        return null;
       }
     } catch (err) {
-      console.error(`Unable to check approvement status: ${err}`);
-      throw new Error(`Unable to check approvement status.`);
+      throw new Error(`${err}`);
+    }
+  }
+  async deleteLoanApplication(applicationId) {
+    try {
+      await pool.query(
+        'DELETE FROM loanapplications WHERE application_id = $1',
+        [applicationId]
+      );
+      return;
+    } catch (err) {
+      throw new Error(`${err}`);
     }
   }
 }
