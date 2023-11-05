@@ -1,5 +1,7 @@
 import { pool } from '../../db/postgress/dbPool.js';
 import { loanApplicationRepos } from '../repositories/loanApplicationRepos.js';
+import { maxLoanAmountRepos } from '../repositories/maxLoanAmountRepos.js';
+import { loanTypeRepos } from '../repositories/loanTypeRepos.js';
 import { ApplicationDTO } from '../dto/applicationDTO.js';
 
 class LoanApplicationModel {
@@ -11,6 +13,25 @@ class LoanApplicationModel {
         null,
         isApproved
       );
+
+      const loanTypeMaxAmount = await loanTypeRepos.getLoanTypeMaxLoanId(id);
+      if (!loanTypeMaxAmount) {
+        throw new Error('Loan type with the given id does not exist.');
+      }
+      const maxLoanAmountId = loanTypeMaxAmount.max_loan_amount_id;
+
+      const maxLoanAmountInfo =
+        await maxLoanAmountRepos.getMaxLoanAmountByMaxAmountId(maxLoanAmountId);
+      if (!maxLoanAmountInfo) {
+        throw new Error('No max loan amount found with the given id.');
+      }
+      const maxLoanAmount = maxLoanAmountInfo.max_loan_amount;
+
+      if (maxLoanAmount < applicationDTO.desired_loan_amount) {
+        throw new Error(
+          `Can't create new loan application because the amount of money desired by the client exceeds the maximum available loan amount ${maxLoanAmount}`
+        );
+      }
 
       const loanId = await loanApplicationRepos.createLoanApplication(
         id,
