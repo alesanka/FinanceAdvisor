@@ -1,17 +1,26 @@
 import { pool } from '../../db/postgress/dbPool.js';
+import { documentRepos } from '../repositories/documentRepos.js';
+import { DocDTO } from '../dto/docDTO.js';
 
 class DocumentModel {
   async createDocument(applicationId, documentName, documentType) {
     try {
-      const result = await pool.query(
-        'INSERT INTO Documents (application_id, document_name, document_type) VALUES ($1, $2, $3) RETURNING document_id',
-        [applicationId, documentName, documentType]
+      const docDTO = new DocDTO(
+        null,
+        applicationId,
+        documentName,
+        documentType
       );
 
-      return result.rows[0].document_id;
+      const docId = await documentRepos.createDocument(
+        docDTO.application_id,
+        docDTO.document_name,
+        docDTO.document_type
+      );
+
+      return docId;
     } catch (err) {
-      console.error(`Unable to create document: ${err}`);
-      throw new Error(`Unable to create document.`);
+      throw new Error(`Unable to create document: ${err}.`);
     }
   }
   async findDocumentsByApplicationId(applicationId) {

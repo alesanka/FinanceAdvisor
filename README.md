@@ -815,7 +815,7 @@ In case of successful response:
 HTTP/1.1 201 Created
 Content-Type: text/html; charset=utf-8
 
-'Document was added successfully'
+`Document was added successfully. Document id - ${docId}`
 ```
 
 In case of error response:
@@ -834,7 +834,8 @@ HTTP/1.1 500 Internal Server Error
 Content-Type: application/json
 
 {
-  "error": err.message
+  message: `Something went wrong while adding document.`,
+  error: err.message,
 }
 ```
 

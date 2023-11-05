@@ -10,8 +10,7 @@ class DocumentRepos {
 
       return result.rows[0].document_id;
     } catch (err) {
-      console.error(`Unable to create document: ${err}`);
-      throw new Error(`Unable to create document.`);
+      throw new Error(`${err}`);
     }
   }
   async findDocumentsByApplicationId(applicationId) {
