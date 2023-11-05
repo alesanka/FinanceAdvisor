@@ -761,7 +761,7 @@ In case of successful response:
 HTTP/1.1 201 Created
 Content-Type: text/html; charset=utf-8
 
-`Loan application was created successfully. Loan application id - ${loanId}`
+Loan application was created successfully. Loan application id - ${loan_application_id}. Required doc - ${required_doc}.
 ```
 
 In case of error response:
@@ -786,59 +786,6 @@ Content-Type: application/json
 ```
 
 ---
-
-**Save information about a specific loan application with a specific loan type.**
-
-\*protected request (available only for admin and worker with access_token)
-\*(only bank worker can do this, user_id is required for checking user's role)
-
-| Parameter        | Type    | Description                                        |
-| ---------------- | ------- | -------------------------------------------------- |
-| `application_id` | integer | The unique ID of the loan application.             |
-| `loan_type_id`   | integer | The unique ID of the loan type associated with it. |
-
-Request:
-
-```
-POST /applications/save?application_id=1&loan_type_id=1
-Content-Type: application/json
-Authorization: Bearer {access_token}
-
-{
-  "user_id": 7
-}
-```
-
-In case of successful response:
-
-```
-HTTP/1.1 200 OK
-Content-Type: application/json
-
-{
-    "maxAvailableAmount id": 1
-}
-```
-
-In case of error response:
-
-```
-HTTP/1.1 403 Forbidden
-Content-Type: text/html; charset=utf-8
-
-'Only workers can modificate loan applications.'
-```
-
-or
-
-```
-HTTP/1.1 500 Internal Server Error
-Content-Type: application/json
-
-{
-  "error": err.message
-}
-```
 
 ## Endpoint /documents <a name="endpoints-documents"></a> [(Back to content)](#content)
 

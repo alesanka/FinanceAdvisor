@@ -2,6 +2,7 @@ import { pool } from '../../db/postgress/dbPool.js';
 import { loanApplicationRepos } from '../repositories/loanApplicationRepos.js';
 import { maxLoanAmountRepos } from '../repositories/maxLoanAmountRepos.js';
 import { loanTypeRepos } from '../repositories/loanTypeRepos.js';
+import { loanTypeMaxLoanAmountRepos } from '../repositories/loanType_MaxLoanAmountRepos.js';
 import { ApplicationDTO } from '../dto/applicationDTO.js';
 
 class LoanApplicationModel {
@@ -14,7 +15,8 @@ class LoanApplicationModel {
         isApproved
       );
 
-      const loanTypeMaxAmount = await loanTypeRepos.getLoanTypeMaxLoanId(id);
+      const loanTypeMaxAmount =
+        await loanTypeMaxLoanAmountRepos.getLoanTypeMaxLoanId(id);
       if (!loanTypeMaxAmount) {
         throw new Error('Loan type with the given id does not exist.');
       }
@@ -33,12 +35,20 @@ class LoanApplicationModel {
         );
       }
 
+      const loanTypeId = loanTypeMaxAmount.loan_type_id;
+      const loanTypeDetails = await loanTypeRepos.findLoanById(loanTypeId);
+      if (!loanTypeDetails) {
+        throw new Error('No loan type found with the given id.');
+      }
+
+      const requiredDoc = loanTypeDetails.required_doc;
+
       const loanId = await loanApplicationRepos.createLoanApplication(
         id,
         applicationDTO.desired_loan_amount,
         applicationDTO.is_approved
       );
-      return loanId;
+      return { loanId, requiredDoc };
     } catch (err) {
       throw new Error(`Unable to create loan application: ${err}.`);
     }

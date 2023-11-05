@@ -19,15 +19,16 @@ class LoanApplicationController {
           .send('Only workers can create loan applications.');
       }
 
-      const loanId = await loanApplicationModel.createLoanApplication(
-        id,
-        desired_loan_amount,
-        is_approved
-      );
+      const { loanId, requiredDoc } =
+        await loanApplicationModel.createLoanApplication(
+          id,
+          desired_loan_amount,
+          is_approved
+        );
       res
         .status(201)
         .send(
-          `Loan application was created successfully. Loan application id - ${loanId}`
+          `Loan application was created successfully. Loan application id - ${loanId}. Required doc - ${requiredDoc}. `
         );
     } catch (err) {
       console.error(err);
