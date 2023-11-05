@@ -5,18 +5,13 @@ class NotesRepos {
     try {
       const insertResult = await pool.query(
         `INSERT INTO PaymentNotes (repayment_schedule_id, payment_date, payment_amount)
-         VALUES ($1, $2, $3) RETURNING *;`,
+         VALUES ($1, $2, $3) RETURNING note_id;`,
         [repaymentScheduleId, paymentDate, paymentAmount]
       );
 
-      if (insertResult.rows.length === 0) {
-        throw new Error('Failed to insert payment notes.');
-      }
-
-      return insertResult.rows[0];
+      return insertResult.rows[0].note_id;
     } catch (err) {
-      console.error(`Unable to create payment notes: ${err}`);
-      throw new Error(`Unable to create payment notes.`);
+      throw new Error(`${err}`);
     }
   }
   async getPaymentAmountByScheduleIdAndMonthYear(
@@ -38,13 +33,10 @@ class NotesRepos {
       if (result.rows.length > 0) {
         return result.rows[0].payment_amount;
       } else {
-        throw new Error('Failed to find payment note with provided date.');
+        return null;
       }
-    } catch (error) {
-      console.error(
-        `Error in getPaymentAmountByScheduleIdAndMonthYear: ${error}`
-      );
-      throw new Error('Unable to get payment amount.');
+    } catch (err) {
+      throw new Error(`${err}`);
     }
   }
 }

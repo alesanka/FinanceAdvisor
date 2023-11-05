@@ -70,6 +70,7 @@ CREATE TABLE IF NOT EXISTS Documents (
     document_type docs_enum NOT NULL
 );
 
+
 CREATE TABLE IF NOT EXISTS RepaymentSchedules (
     repayment_schedule_id SERIAL PRIMARY KEY,
     application_id INT REFERENCES LoanApplications(application_id) ON DELETE CASCADE,

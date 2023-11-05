@@ -1007,49 +1007,35 @@ Content-Type: application/json
 \*protected request (available only for admin and worker with access_token)
 \*(only bank worker can do this, user_id is required for checking user's role)
 
-Query Parameters:
-
-| Parameter        | Type    | Description                                                 |
-| ---------------- | ------- | ----------------------------------------------------------- |
-| `application_id` | integer | The unique ID of the loan application.                      |
-| `loan_type`      | enum    | Type of loan from enum ('personal_loan', 'mortgage', etc.). |
-
 Request:
 
 ```
-POST /repayment_schedule/{application_id}/approved?loan_type=personal_loan
+POST /repayment_schedule
 Content-Type: application/json
 Authorization: Bearer {access_token}
 
 {
-    "application_id": 1,
-    "user_id": 2
+    "application_id": 7,
+    "user_id": 4
 }
 ```
 
 In case of successful response:
 
 ```
-HTTP/1.1 200 OK
-Content-Type: application/json
+HTTP/1.1 201 Created
+Content-Type: text/html; charset=utf-8
 
-{
-    "repaymentSchedule": {
-        "repayment_schedule_id": 1,
-        "application_id": 1,
-        "monthly_payment": "2824.06",
-        "remaining_balance": "549734.00"
-    }
-}
+`Repayment schedule was created successfully. Id - ${repaymentScheduleIdandDate.repaymentScheduleId}. First date for payment - ${repaymentScheduleIdandDate.firstPaymentDate}`
 ```
 
 In case of error response:
 
 ```
-HTTP/1.1 404 Not Found
+HTTP/1.1 403 Forbidden
 Content-Type: text/html; charset=utf-8
 
-'Loan application not found.'
+'Only workers can modify loan applications.'
 ```
 
 or
@@ -1059,7 +1045,8 @@ HTTP/1.1 500 Internal Server Error
 Content-Type: application/json
 
 {
-  "error": err.message
+  message: 'Something went wrong during repayment schedule creation.',
+  error: err.message,
 }
 ```
 

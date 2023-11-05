@@ -107,6 +107,7 @@ class LoanApplicationModel {
         throw new Error(`Application with id ${applicationId} does not exist.`);
       }
 
+      
       await loanApplicationRepos.deleteLoanApplication(applicationId);
       return;
     } catch (err) {

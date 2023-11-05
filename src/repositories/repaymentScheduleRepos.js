@@ -1,29 +1,17 @@
 import { pool } from '../../db/postgress/dbPool.js';
 
 class RepaymentScheduleRepos {
-  async createRepaymentSchedule(applicationId, loanTerm, annualRate, amount) {
-    const monthlyRate = annualRate / 12 / 100;
-    const loanTermMonths = loanTerm * 12;
-
-    const monthlyPayment =
-      (amount * (monthlyRate * Math.pow(1 + monthlyRate, loanTermMonths))) /
-      (Math.pow(1 + monthlyRate, loanTermMonths) - 1);
-
+  async createRepaymentSchedule(applicationId, monthlyPayment, loanAmount) {
     try {
       const insertResult = await pool.query(
         `INSERT INTO RepaymentSchedules (application_id, monthly_payment, remaining_balance)
-         VALUES ($1, $2, $3) RETURNING *;`,
-        [applicationId, monthlyPayment.toFixed(2), amount.toFixed(2)]
+         VALUES ($1, $2, $3) RETURNING repayment_schedule_id;`,
+        [applicationId, monthlyPayment, loanAmount]
       );
 
-      if (insertResult.rows.length === 0) {
-        throw new Error('Failed to insert repayment schedule.');
-      }
-
-      return insertResult.rows[0];
+      return insertResult.rows[0].repayment_schedule_id;
     } catch (err) {
-      console.error(`Unable to create repayment schedule: ${err}`);
-      throw new Error(`Unable to create repayment schedule.`);
+      throw new Error(`${err}`);
     }
   }
   async getRepaymentScheduleById(repaymentScheduleId) {
