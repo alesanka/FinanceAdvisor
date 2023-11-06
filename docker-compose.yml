@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  app:
+    image: alesiapekarchik/financeadvisor
+    container_name: container-finance-advisor
+    build: .
+    ports:
+      - '${APP_PORT}:${APP_PORT}'
+    env_file:
+      - .env
+    restart: unless-stopped
+    networks:
+      - some-network
+
+networks:
+  some-network:
+    external: true

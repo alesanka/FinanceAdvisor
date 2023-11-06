@@ -3,7 +3,7 @@ import redis from 'redis';
 const db = redis.createClient({
   socket: {
     port: 6379,
-    host: 'localhost',
+    host: 'redis-stack',
   },
 });
 

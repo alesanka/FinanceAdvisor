@@ -21,9 +21,6 @@ export async function initializeRedis() {
       await db.hSet('clients:client', 'grants', grants);
       console.log('Client credentials have been set successfully.');
     }
-
-    const clientData = await db.hGet('clients:client', 'clientId');
-    console.log('Retrieved client data:', clientData);
   } catch (error) {
     console.error(
       'Error setting or retrieving client credentials in Redis:',
