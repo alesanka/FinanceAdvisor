@@ -15,6 +15,7 @@ class RedisRepository {
   async getAccessToken(bearerToken) {
     try {
       const token = await db.hGetAll('tokens:accessToken', bearerToken);
+      console.log('1', token);
       return token;
     } catch (error) {
       console.error(`Error fetching access token: ${error.message}`);
@@ -25,6 +26,7 @@ class RedisRepository {
   async getRefreshToken(bearerToken) {
     try {
       const token = await db.hGetAll('tokens:refreshToken', bearerToken);
+      console.log('2', token);
       return token;
     } catch (error) {
       console.error(`Error fetching refresh token: ${error.message}`);
