@@ -2,7 +2,8 @@ import { userModel } from '../services/userModel.js';
 
 const checkUserRole = (roles) => async (req, res, next) => {
   try {
-    const { user_id } = req;
+    const { user_id } = req.body;
+    console.log(user_id);
     if (!user_id) {
       throw new Error('User id is required for checking role.');
     }
