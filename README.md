@@ -1050,62 +1050,11 @@ Content-Type: application/json
 }
 ```
 
-## Endpoint /repayment_notes <a name="endpoints-repayment-notes"></a> [(Back to content)](#content)
-
-**Add a list of payment notes for a specific repayment schedule.**
-
-After getting repayment_schedule_id a bank worker can create notes for client with month payment with dates of payment.
-
-\*protected request (available only for admin and worker with access_token)
-\*(only bank worker can do this, user_id is required for checking user's role)
-
-Request:
-
-```
-POST /repayment_notes
-Content-Type: application/json
-Authorization: Bearer {access_token}
-
-{
-    "repayment_schedule_id": 2,
-    "user_id": 2
-}
-```
-
-In case of successful response:
-
-```
-HTTP/1.1 200 OK
-Content-Type: text/html; charset=utf-8
-
-'Payment notes created successfully.'
-```
-
-In case of error response:
-
-```
-HTTP/1.1 404 Not Found
-Content-Type: text/html; charset=utf-8
-
-'User id is required for checking role.'
-```
-
-or
-
-```
-HTTP/1.1 500 Internal Server Error
-Content-Type: application/json
-
-{
-  "error": err.message
-}
-```
-
 ---
 
-**Get a note with for specific date.**
+**Get a month payment amount for specific date.**
 
-Client can get note with month payment for requested date.
+Client can get a month payment amount for requested date.
 
 \*public request
 
@@ -1120,7 +1069,7 @@ Query Parameters:
 Request:
 
 ```
-GET /repayment_notes/note?repayment_schedule_id=2&year=2024&month=5
+GET /repayment_schedule/note?repayment_schedule_id=2&year=2024&month=5
 ```
 
 In case of successful response:
@@ -1150,7 +1099,61 @@ HTTP/1.1 500 Internal Server Error
 Content-Type: application/json
 
 {
-  "error": err.message
+  message: 'Something went wrong during getting month payment.',
+  error: err.message,
+}
+```
+
+## Endpoint /repayment_notes <a name="endpoints-repayment-notes"></a> [(Back to content)](#content)
+
+**Add a payment note for a client about payment amount and the payment date.**
+
+After getting repayment_schedule_id a bank worker can create notes for client with month payment with dates of payment.
+
+\*protected request (available only for admin and worker with access_token)
+\*(only bank worker can do this, user_id is required for checking user's role)
+
+Request:
+
+```
+POST /repayment_notes
+Content-Type: application/json
+Authorization: Bearer {access_token}
+
+{
+    "repayment_schedule_id": 8,
+    "user_id": 4,
+    "repayment_date": "2024-05-01"
+}
+```
+
+In case of successful response:
+
+```
+HTTP/1.1 200 OK
+Content-Type: text/html; charset=utf-8
+
+`Payment note created successfully. Id - ${noteId}`
+```
+
+In case of error response:
+
+```
+HTTP/1.1 403 Forbidden
+Content-Type: text/html; charset=utf-8
+
+'Only workers can modify loan applications.'
+```
+
+or
+
+```
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+
+{
+  message: 'Something went wrong during payment note creation.',
+  error: err.message,
 }
 ```
 

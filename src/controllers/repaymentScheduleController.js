@@ -34,6 +34,33 @@ class RepaymentScheduleController {
       });
     }
   };
+  getPaymentAmountByScheduleIdAndMonthYear = async (req, res) => {
+    try {
+      const { repayment_schedule_id, year, month } = req.query;
+
+      if (!repayment_schedule_id || !year || !month) {
+        return res
+          .status(400)
+          .send(
+            'Missing required parameters: repayment_schedule_id, year, and month'
+          );
+      }
+
+      const paymentAmount = await repaymentScheduleModel.getByIdYearMonth(
+        repayment_schedule_id,
+        year,
+        month
+      );
+
+      res.status(200).send(`Month payment - ${paymentAmount}`);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({
+        message: 'Something went wrong during getting month payment.',
+        error: err.message,
+      });
+    }
+  };
 }
 
 export const repaymentScheduleController = new RepaymentScheduleController();

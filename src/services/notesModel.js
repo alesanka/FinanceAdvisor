@@ -1,50 +1,76 @@
-import { pool } from '../../db/postgress/dbPool.js';
+import { repaymentScheduleRepos } from '../repositories/repaymentScheduleRepos.js';
+import { loanTypeMaxLoanAmountRepos } from '../repositories/loanType_MaxLoanAmountRepos.js';
+import { loanApplicationRepos } from '../repositories/loanApplicationRepos.js';
+import { loanTypeRepos } from '../repositories/loanTypeRepos.js';
+import { notesRepos } from '../repositories/notesRepos.js';
+import { NotesDTO } from '../dto/notesDTO.js';
 
 class NotesModel {
-  async createNotes(repaymentScheduleId, paymentDate, paymentAmount) {
+  async createNotes(repaymentScheduleId, paymentDate) {
     try {
-      const insertResult = await pool.query(
-        `INSERT INTO PaymentNotes (repayment_schedule_id, payment_date, payment_amount)
-         VALUES ($1, $2, $3) RETURNING *;`,
-        [repaymentScheduleId, paymentDate, paymentAmount]
-      );
+      const repaymentInfo =
+        await repaymentScheduleRepos.getRepaymentScheduleById(
+          repaymentScheduleId
+        );
 
-      if (insertResult.rows.length === 0) {
-        throw new Error('Failed to insert payment notes.');
+      if (!repaymentInfo) {
+        throw new Error(' Can not find repayment schedule by id.');
       }
 
-      return insertResult.rows[0];
+      const applicationId = repaymentInfo.application_id;
+      const monthlyPayment = repaymentInfo.monthly_payment;
+
+      const application = await loanApplicationRepos.findApplicationById(
+        applicationId
+      );
+
+      const applicationDate = new Date(application.application_date);
+      if (isNaN(applicationDate)) {
+        throw new Error(
+          `Invalid application date: ${application.application_date}`
+        );
+      }
+
+      const loanTypeMaxAmount =
+        await loanTypeMaxLoanAmountRepos.getLoanTypeMaxLoanId(application.id);
+      const loanTypeId = loanTypeMaxAmount.loan_type_id;
+
+      const loanTypeDetails = await loanTypeRepos.findLoanById(loanTypeId);
+
+      const loanTerm = loanTypeDetails.loan_term;
+
+      const endTermDate = new Date(applicationDate);
+      endTermDate.setMonth(endTermDate.getMonth() + loanTerm);
+
+      if (
+        new Date(paymentDate) < applicationDate ||
+        new Date(paymentDate) > endTermDate
+      ) {
+        throw new Error(
+          `Payment date ${formattedPaymentDate} is out of range.`
+        );
+      }
+
+      const formattedPaymentDate = new Date(paymentDate)
+        .toISOString()
+        .split('T')[0];
+
+      const notesDTO = new NotesDTO(
+        repaymentScheduleId,
+        formattedPaymentDate,
+        monthlyPayment,
+        false
+      );
+
+      const noteId = await notesRepos.createNotes(
+        notesDTO.repayment_schedule_id,
+        notesDTO.payment_date,
+        notesDTO.payment_amount
+      );
+
+      return noteId;
     } catch (err) {
-      console.error(`Unable to create payment notes: ${err}`);
-      throw new Error(`Unable to create payment notes.`);
-    }
-  }
-  async getPaymentAmountByScheduleIdAndMonthYear(
-    repaymentScheduleId,
-    year,
-    month
-  ) {
-    try {
-      const query = `
-        SELECT payment_amount
-        FROM PaymentNotes
-        WHERE repayment_schedule_id = $1
-        AND EXTRACT(YEAR FROM payment_date) = $2
-        AND EXTRACT(MONTH FROM payment_date) = $3;
-      `;
-      const values = [repaymentScheduleId, year, month];
-      const result = await pool.query(query, values);
-
-      if (result.rows.length > 0) {
-        return result.rows[0].payment_amount;
-      } else {
-        throw new Error('Failed to find payment note with provided date.');
-      }
-    } catch (error) {
-      console.error(
-        `Error in getPaymentAmountByScheduleIdAndMonthYear: ${error}`
-      );
-      throw new Error('Unable to get payment amount.');
+      throw new Error(`Unable to create payment notes: ${err}.`);
     }
   }
 }

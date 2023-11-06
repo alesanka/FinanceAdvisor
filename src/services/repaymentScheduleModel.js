@@ -61,6 +61,11 @@ class RepaymentScheduleModel {
           repaymentScheduleDTO.remaining_balance
         );
 
+      const INFO = await repaymentScheduleRepos.getRepaymentScheduleById(
+        repaymentScheduleId
+      );
+
+      console.log('INFO', INFO);
       const firstPaymentDate = new Date(
         applicationDate.getFullYear(),
         applicationDate.getMonth() + 1,
@@ -74,8 +79,6 @@ class RepaymentScheduleModel {
         false
       );
 
-      console.log('noteDTO', noteDTO);
-
       await notesRepos.createNotes(
         noteDTO.repayment_schedule_id,
         noteDTO.payment_date,
@@ -85,6 +88,20 @@ class RepaymentScheduleModel {
       return { repaymentScheduleId, firstPaymentDate };
     } catch (err) {
       throw new Error(`Unable to create repayment schedule: ${err}`);
+    }
+  }
+
+  async getByIdYearMonth(repaymentScheduleId, year, month) {
+    try {
+      const monthPayment =
+        await repaymentScheduleRepos.getPaymentAmountByScheduleIdAndMonthYear(
+          repaymentScheduleId,
+          year,
+          month
+        );
+      return monthPayment;
+    } catch (err) {
+      throw new Error(`Something went wrong by getting month payment: ${err}`);
     }
   }
 }

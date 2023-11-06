@@ -9,5 +9,9 @@ router.post(
   token.getAuthorization,
   repaymentScheduleController.createRepaymentSchedule
 ); // protected
+router.get(
+  '/note',
+  repaymentScheduleController.getPaymentAmountByScheduleIdAndMonthYear
+); // public
 
 export default router;

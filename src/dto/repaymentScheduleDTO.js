@@ -16,7 +16,7 @@ export class RepaymentScheduleDTO {
   }
 
   get application_id() {
-    return this._desired_loan_amount;
+    return this._application_id;
   }
 
   get monthly_payment() {
