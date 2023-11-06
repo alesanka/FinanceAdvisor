@@ -7,15 +7,6 @@ class LoanTypeController {
       const { user_id, loan_type, interest_rate, loan_term, required_doc } =
         req.body;
 
-      if (!user_id) {
-        return res.status(400).send('User id is required for checking role.');
-      }
-
-      const isAdmin = await userModel.checkUserRoleById(user_id);
-      if (isAdmin !== 'admin') {
-        return res.status(403).send('Only admins can create loan types.');
-      }
-
       const loanId = await loanTypeModel.createLoanType(
         loan_type,
         interest_rate,
@@ -67,13 +58,6 @@ class LoanTypeController {
   updateLoanTypeData = async (req, res) => {
     try {
       const loanTypeId = req.params.loan_type_id;
-
-      const userId = req.body.user_id;
-
-      const isAdmin = await userModel.checkUserRoleById(userId);
-      if (isAdmin !== 'admin') {
-        return res.status(403).send('Only admins can update loan types.');
-      }
 
       await loanTypeModel.updateLoanTypeData(loanTypeId, req.body);
 

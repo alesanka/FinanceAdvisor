@@ -6,13 +6,6 @@ class MaxLoanAmountController {
     try {
       const { user_id, client_id, loan_type_id } = req.body;
 
-      const isWorker = await userModel.checkUserRoleById(user_id);
-      if (isWorker !== 'worker') {
-        return res
-          .status(403)
-          .send('Only workers can save max available loan amounts.');
-      }
-
       const id = await maxLoanAmountModel.saveMaxLoan(client_id, loan_type_id);
 
       res

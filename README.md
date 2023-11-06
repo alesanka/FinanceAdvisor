@@ -9,7 +9,6 @@ The Personal Finance Advisor API is a web service that provides functionality fo
 - [Implementation details](#imp-details)
 - [Technical requirements](#tech-details)
 - [Endpoints](#endpoints)
-
   - [Endpoint /register](#endpoints-register)
   - [Endpoint /login](#endpoints-login)
   - [Endpoint /user](#endpoints-users)
@@ -17,8 +16,8 @@ The Personal Finance Advisor API is a web service that provides functionality fo
   - [Endpoint /max_available_amount](#endpoints-max-available-amount)
   - [Endpoint /documents](#endpoints-documents)
   - [Endpoint /applications](#endpoints-applications)
-
   - [Endpoint /application/{application_id}/approved](#endpoints-applications-approved)
+  - [Endpoint /repayment_schedule](#endpoint-repayment_schedule)
   - [Endpoint /repayment_notes](#endpoints-repayment-notes)
 
 ## Implementation details <a name="imp-details"></a>
@@ -1000,7 +999,7 @@ Content-Type: application/json
 }
 ```
 
-## Endpoint /repayment_schedule <a name="endpoints-applications-approved"></a> [(Back to content)](#content)
+## Endpoint /repayment_schedule <a name="endpoints-repayment_schedule"></a> [(Back to content)](#content)
 
 **Add a repayment schedule for a specific application.**
 

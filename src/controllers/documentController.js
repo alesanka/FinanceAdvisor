@@ -7,16 +7,6 @@ class DocumentController {
       const { user_id, application_id, document_name, document_type } =
         req.body;
 
-      if (!user_id) {
-        return res.status(400).send('User id is required for checking role.');
-      }
-
-      const isWorker = await userModel.checkUserRoleById(user_id);
-
-      if (isWorker !== 'worker') {
-        return res.status(403).send('Only workers can add documents.');
-      }
-
       const docId = await documentModel.createDocument(
         application_id,
         document_name,

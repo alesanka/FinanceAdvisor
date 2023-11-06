@@ -1,4 +1,3 @@
-import { pool } from '../../db/postgress/dbPool.js';
 import { documentRepos } from '../repositories/documentRepos.js';
 import { DocDTO } from '../dto/docDTO.js';
 

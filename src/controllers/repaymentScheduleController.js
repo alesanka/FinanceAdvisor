@@ -6,18 +6,6 @@ class RepaymentScheduleController {
     try {
       const { application_id, user_id } = req.body;
 
-      if (!user_id) {
-        return res.status(400).send('User id is required for checking role.');
-      }
-
-      const isWorker = await userModel.checkUserRoleById(user_id);
-
-      if (isWorker !== 'worker') {
-        return res
-          .status(403)
-          .send('Only workers can modify loan applications.');
-      }
-
       const repaymentScheduleIdandDate =
         await repaymentScheduleModel.createRepaymentSchedule(application_id);
 
