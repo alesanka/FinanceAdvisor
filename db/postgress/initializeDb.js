@@ -7,16 +7,28 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const absolutePath = path.resolve(__dirname, 'dbPG.sql');
 
-export const initializeDatabase = () => {
-  fs.readFile(absolutePath, 'utf-8', (err, sqlQuery) => {
-    if (err) throw err;
+export const initializeDatabase = async () => {
+  let connected = false;
+  while (!connected) {
+    try {
+      await pool.connect();
+      connected = true;
+      console.log('Successfully connected with PostgreSQL.');
+    } catch (err) {
+      console.error(
+        'Error in connection with PostgreSQL, new attempt after 5s:',
+        err
+      );
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+    }
+  }
 
-    pool.query(sqlQuery, (err) => {
-      if (err) {
-        throw err;
-      } else {
-        console.log('DB created successfully');
-      }
-    });
-  });
+  try {
+    const sqlQuery = fs.readFile(absolutePath, 'utf-8');
+    pool.query(sqlQuery);
+    console.log('Db postgres was successfully initialized');
+  } catch (err) {
+    console.error('Error while initialization db postgres', err);
+    throw err;
+  }
 };

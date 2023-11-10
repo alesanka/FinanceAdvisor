@@ -1,43 +1,42 @@
-version: '3.8'
+version: '4.23.0'
 
 services:
-  postgres:
-    hostname: postgres
-    image: postgres:latest
-    restart: always
-    environment:
-      POSTGRES_DB: 'finansialSystemDB'
-      POSTGRES_USER: 'user_user'
-      POSTGRES_PASSWORD: 'pgpwd4habr'
-    ports:
-      - '5432:5432'
-    volumes:
-      - ./my-custom-pg-hba.conf:/var/lib/postgresql/data/pg_hba.conf
-      - ./db/postgres/dbPG.sql:/docker-entrypoint-initdb.d/init.sql
+  db:
+    image: postgres:16
     networks:
-      - some-network
-
+      - my-network
+    environment:
+      POSTGRES_USER: user_user
+      POSTGRES_PASSWORD: pgpwd4habr
+    ports:
+      - '5434:5432'
+  AuthDB:
+    image: redis:7.2.1
+    networks:
+      - my-network
+    depends_on:
+      - db
   app:
-    image: alesiapekarchik/financeadvisor
-    container_name: financeadvisor
     build: .
     ports:
-      - '${APP_PORT}:${APP_PORT}'
-    env_file:
-      - .env
-    restart: unless-stopped
+      - '5000:5000'
     depends_on:
-      - postgres
+      - AuthDB
     networks:
-      - some-network
-
-  redis-stack:
-    image: redis/redis-stack:latest
-    container_name: redis-stack
-    ports:
-      - '6379:6379'
-    networks:
-      - some-network
+      - my-network
+    environment:
+      AUTH_DB_HOST: redis://AuthDB:6379
+      POSTGRES_USER: user_user
+      DB_HOST: db
+      POSTGRES_PASSWORD: pgpwd4habr
+      DB_DB: finansialSystemDB
+      DB_PORT: 5434
+    volumes:
+      - postgres_db:/var/lib/postgresql/data
 
 networks:
-  some-network: {}
+  my-network:
+    driver: bridge
+
+volumes:
+  postgres_db:
