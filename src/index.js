@@ -23,6 +23,7 @@ const start = async () => {
   try {
     await initializeDatabase();
     await initializeRedis();
+
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
     });

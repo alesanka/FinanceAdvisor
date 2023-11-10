@@ -6,10 +6,11 @@ services:
     networks:
       - my-network
     environment:
+      POSTGRES_DB: finansialSystemDB
       POSTGRES_USER: user_user
       POSTGRES_PASSWORD: pgpwd4habr
     ports:
-      - '5434:5432'
+      - '5432:5432'
   AuthDB:
     image: redis:7.2.1
     networks:
@@ -22,15 +23,11 @@ services:
       - '5000:5000'
     depends_on:
       - AuthDB
+      - db
     networks:
       - my-network
-    environment:
-      AUTH_DB_HOST: redis://AuthDB:6379
-      POSTGRES_USER: user_user
-      DB_HOST: db
-      POSTGRES_PASSWORD: pgpwd4habr
-      DB_DB: finansialSystemDB
-      DB_PORT: 5434
+    env_file:
+      - .env
     volumes:
       - postgres_db:/var/lib/postgresql/data
 

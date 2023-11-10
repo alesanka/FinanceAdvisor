@@ -19,13 +19,21 @@ export const initializeDatabase = async () => {
         'Error in connection with PostgreSQL, new attempt after 5s:',
         err
       );
+
       await new Promise((resolve) => setTimeout(resolve, 5000));
     }
   }
 
   try {
-    const sqlQuery = fs.readFile(absolutePath, 'utf-8');
-    pool.query(sqlQuery);
+    fs.readFile(absolutePath, 'utf-8', (err, sqlQuery) => {
+      if (err) throw err;
+      pool.query(sqlQuery, (err, res) => {
+        console.log(err);
+        if (err) throw err;
+        console.log('Script executed successfully');
+      });
+    });
+
     console.log('Db postgres was successfully initialized');
   } catch (err) {
     console.error('Error while initialization db postgres', err);
