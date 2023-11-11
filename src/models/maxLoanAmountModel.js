@@ -63,9 +63,7 @@ class MaxLoanAmountModel {
       );
 
       const max_loan_amount_id = await maxLoanAmountRepos.saveMaxLoan(
-        maxLoanDTO.client_id,
-        maxLoanDTO.max_loan_amount,
-        maxLoanDTO.total_interest_amount
+        maxLoanDTO
       );
 
       await loanTypeMaxLoanAmountRepos.saveLoanTypeMaxLoan(
@@ -112,36 +110,6 @@ class MaxLoanAmountModel {
       return result;
     } catch (err) {
       throw new Error(`Unable to get max loan amount by id: ${err}`);
-    }
-  }
-
-  async getMaxLoanAmountByApplicationId(applicationId) {
-    try {
-      const result = await pool.query(
-        `SELECT 
-          m.max_loan_amount_id,
-          m.application_id,  
-          m.max_loan_amount, 
-          m.total_interest_amount, 
-          lta.loan_type_id,
-          lt.loan_type,
-          lt.interest_rate,
-          lt.loan_term
-       FROM MaximumLoanAmounts AS m
-       JOIN LoanTypes_LoanApplications AS lta ON m.loan_app_loan_type_id = lta.id
-       JOIN LoanTypes AS lt ON lta.loan_type_id = lt.loan_type_id
-       WHERE m.application_id = $1;`,
-        [applicationId]
-      );
-
-      if (result.rows.length === 0) {
-        throw new Error('Data not found for the provided application ID.');
-      }
-
-      return result.rows[0];
-    } catch (err) {
-      console.error(`Unable to get max loan amount by application id: ${err}`);
-      throw new Error(`Unable to get max loan amount by application id.`);
     }
   }
 }

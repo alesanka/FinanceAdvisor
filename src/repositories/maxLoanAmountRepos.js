@@ -1,11 +1,16 @@
 import { pool } from '../../db/postgress/dbPool.js';
+import { MaxLoanDTO } from '../dto/maxLoanDTO.js';
 
 class MaxLoanAmountRepos {
-  async saveMaxLoan(client_id, max_amount, total_interest_amount) {
+  async saveMaxLoan(maxLoanDto) {
     try {
       const result = await pool.query(
-        'INSERT INTO MaximumLoanAmounts (client_id,  max_loan_amount,  total_interest_amount) VALUES ($1, $2, $3) RETURNING max_loan_amount_id',
-        [client_id, max_amount, total_interest_amount]
+        'INSERT INTO MaximumLoanAmounts (client_id, max_loan_amount, total_interest_amount) VALUES ($1, $2, $3) RETURNING max_loan_amount_id',
+        [
+          maxLoanDto.client_id,
+          maxLoanDto.max_loan_amount,
+          maxLoanDto.total_interest_amount,
+        ]
       );
       return result.rows[0].max_loan_amount_id;
     } catch (err) {
@@ -41,7 +46,15 @@ class MaxLoanAmountRepos {
       );
 
       if (result.rows.length > 0) {
-        return result.rows[0];
+        const maxLoan = result.rows[0];
+
+        const maxLoanDTO = new MaxLoanDTO(
+          maxLoan.max_loan_amount_id,
+          maxLoan.client_id,
+          maxLoan.max_loan_amount,
+          maxLoan.total_interest_amount
+        );
+        return maxLoanDTO;
       } else {
         return null;
       }
