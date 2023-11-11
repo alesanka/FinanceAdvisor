@@ -1,9 +1,9 @@
 import * as dotenv from 'dotenv';
-import * as model from './tokenService.js';
+import * as model from './tokenModel.js';
 import pkg from '@node-oauth/oauth2-server';
 import OAuthServer from '@node-oauth/oauth2-server';
 const { Request, Response } = pkg;
-import { TokenDTO } from './tokenDTO.js';
+import { TokenDTO } from '../src/dto/tokenDTO.js';
 dotenv.config();
 
 const oauth = new OAuthServer({

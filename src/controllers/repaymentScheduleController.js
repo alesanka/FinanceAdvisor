@@ -1,13 +1,12 @@
-import { userModel } from '../services/userModel.js';
-import { repaymentScheduleModel } from '../services/repaymentScheduleModel.js';
+import { userModel } from '../models/userModel.js';
+import { repaymentScheduleModel } from '../models/repaymentScheduleModel.js';
 
 class RepaymentScheduleController {
   createRepaymentSchedule = async (req, res) => {
     try {
-      const { application_id, user_id } = req.body;
 
       const repaymentScheduleIdandDate =
-        await repaymentScheduleModel.createRepaymentSchedule(application_id);
+        await repaymentScheduleModel.createRepaymentSchedule(req.body);
 
       res
         .status(201)

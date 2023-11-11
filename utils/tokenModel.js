@@ -1,5 +1,5 @@
 import { userRepos } from '../src/repositories/userRepos.js';
-import { redisRepository } from './redisRepository.js';
+import { redisRepository } from '../db/redis/redisRepository.js';
 
 const enabledScopes = ['admin', 'worker'];
 

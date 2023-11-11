@@ -1,4 +1,4 @@
-import db from '../db/redis/redisConfig.js';
+import db from './redisConfig.js';
 
 class RedisRepository {
   async getClient(clientId) {

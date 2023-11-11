@@ -1,20 +1,8 @@
-import { userModel } from '../services/userModel.js';
+import { userModel } from '../models/userModel.js';
 
 class UserController {
   registerUser = async (req, res) => {
     try {
-      const {
-        username,
-        password,
-        first_name,
-        last_name,
-        email,
-        phone_number,
-        role,
-        salary,
-        credit_story,
-      } = req.body;
-
       const requiredFields = [
         'username',
         'password',
@@ -30,17 +18,7 @@ class UserController {
         }
       }
 
-      const id = await userModel.registerUser(
-        username,
-        password,
-        first_name,
-        last_name,
-        email,
-        phone_number,
-        role,
-        salary,
-        credit_story
-      );
+      const id = await userModel.registerUser(req.body);
       res.status(201).send(`User was registered successfully. Id - ${id}`);
     } catch (err) {
       console.error(err);
@@ -67,8 +45,7 @@ class UserController {
 
   getUserById = async (req, res) => {
     try {
-      const userId = req.params.userId;
-      const user = await userModel.getUserById(userId);
+      const user = await userModel.getUserById(req.params.userId);
       res.status(200).json(user);
     } catch (err) {
       console.error(err);
@@ -80,8 +57,7 @@ class UserController {
   };
   filterByParameter = async (req, res) => {
     try {
-      const params = req.query;
-      const users = await userModel.filterByParameter(params);
+      const users = await userModel.filterByParameter(req.query);
       if (!users.length) {
         return res.status(404).send('No users found matching the criteria.');
       }
@@ -96,15 +72,13 @@ class UserController {
   };
 
   updateData = async (req, res) => {
-    const userId = req.params.userId;
-    if (!req.body) {
-      return res.status(400).send('No data provided in request body.');
-    }
     try {
-      await userModel.updateData(userId, req.body);
+      await userModel.updateData(req.params.userId, req.body);
       res
         .status(200)
-        .send(`User's data with id - ${userId} was updated successfully.`);
+        .send(
+          `User's data with id - ${req.params.userId} was updated successfully.`
+        );
     } catch (err) {
       console.error(err);
       res.status(500).json({
@@ -114,10 +88,8 @@ class UserController {
     }
   };
   deleteUser = async (req, res) => {
-    const userId = req.params.userId;
-
     try {
-      await userModel.deleteUser(userId);
+      await userModel.deleteUser(req.params.userId);
       res.status(204).end();
     } catch (err) {
       console.error(err);

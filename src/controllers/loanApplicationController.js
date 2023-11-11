@@ -1,17 +1,11 @@
-import { loanApplicationModel } from '../services/loanApplicationModel.js';
-import { userModel } from '../services/userModel.js';
+import { loanApplicationModel } from '../models/loanApplicationModel.js';
+import { userModel } from '../models/userModel.js';
 
 class LoanApplicationController {
   createLoanApplication = async (req, res) => {
     try {
-      const { user_id, id, desired_loan_amount, is_approved } = req.body;
-   
       const { loanId, requiredDoc } =
-        await loanApplicationModel.createLoanApplication(
-          id,
-          desired_loan_amount,
-          is_approved
-        );
+        await loanApplicationModel.createLoanApplication(req.body);
       res
         .status(201)
         .send(
@@ -27,9 +21,7 @@ class LoanApplicationController {
   };
   changeApprovement = async (req, res) => {
     try {
-      const application_id = req.params.application_id;
-
-      await loanApplicationModel.changeApprovement(application_id);
+      await loanApplicationModel.changeApprovement(req.params.application_id);
 
       res.status(200).send('Loan application status changed on approved');
     } catch (err) {
@@ -42,9 +34,9 @@ class LoanApplicationController {
   };
   deleteLoanApplication = async (req, res) => {
     try {
-      const application_id = req.params.application_id;
-
-      await loanApplicationModel.deleteLoanApplication(application_id);
+      await loanApplicationModel.deleteLoanApplication(
+        req.params.application_id
+      );
 
       res.status(204).end();
     } catch (err) {

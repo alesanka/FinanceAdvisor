@@ -1,10 +1,10 @@
-import { maxLoanAmountModel } from '../services/maxLoanAmountModel.js';
-import { userModel } from '../services/userModel.js';
+import { maxLoanAmountModel } from '../models/maxLoanAmountModel.js';
+import { userModel } from '../models/userModel.js';
 
 class MaxLoanAmountController {
   saveMaxLoan = async (req, res) => {
     try {
-      const { user_id, client_id, loan_type_id } = req.body;
+      const { client_id, loan_type_id } = req.body;
 
       const id = await maxLoanAmountModel.saveMaxLoan(client_id, loan_type_id);
 
@@ -24,10 +24,8 @@ class MaxLoanAmountController {
 
   getMaxLoanAmount = async (req, res) => {
     try {
-      const { max_loan_amount_id } = req.params;
-
       const maxAvailableAmount = await maxLoanAmountModel.getMaxLoanAmount(
-        max_loan_amount_id
+        req.params
       );
 
       res.status(200).json(maxAvailableAmount);

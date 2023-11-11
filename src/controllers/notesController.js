@@ -1,15 +1,9 @@
-import { userModel } from '../services/userModel.js';
-import { notesModel } from '../services/notesModel.js';
+import { notesModel } from '../models/notesModel.js';
 
 class NotesController {
   createNotes = async (req, res) => {
     try {
-      const { repayment_schedule_id, user_id, repayment_date } = req.body;
-
-      const noteId = await notesModel.createNotes(
-        repayment_schedule_id,
-        repayment_date
-      );
+      const noteId = await notesModel.createNotes(req.body);
 
       res.status(201).send(`Payment note created successfully. Id - ${noteId}`);
     } catch (err) {

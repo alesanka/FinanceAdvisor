@@ -1,17 +1,10 @@
-import { documentModel } from '../services/documentModel.js';
-import { userModel } from '../services/userModel.js';
+import { documentModel } from '../models/documentModel.js';
+import { userModel } from '../models/userModel.js';
 
 class DocumentController {
   createDocument = async (req, res) => {
     try {
-      const { user_id, application_id, document_name, document_type } =
-        req.body;
-
-      const docId = await documentModel.createDocument(
-        application_id,
-        document_name,
-        document_type
-      );
+      const docId = await documentModel.createDocument(req.body);
 
       res
         .status(201)
@@ -26,9 +19,8 @@ class DocumentController {
   };
   findAllDocumentsByApplicationId = async (req, res) => {
     try {
-      const applicationId = req.params.application_id;
       const documents = await documentModel.findAllDocumentsByApplicationId(
-        applicationId
+        req.params.application_id
       );
       res.status(200).json(documents);
     } catch (err) {
@@ -40,9 +32,8 @@ class DocumentController {
     }
   };
   deleteDocument = async (req, res) => {
-    const documentId = req.params.documentId;
     try {
-      await documentModel.deleteDocument(documentId);
+      await documentModel.deleteDocument(req.params.documentId);
       res.status(204).end();
     } catch (err) {
       console.error(err);

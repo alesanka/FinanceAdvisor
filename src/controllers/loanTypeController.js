@@ -1,18 +1,10 @@
-import { loanTypeModel } from '../services/loanTypeModel.js';
-import { userModel } from '../services/userModel.js';
+import { loanTypeModel } from '../models/loanTypeModel.js';
+import { userModel } from '../models/userModel.js';
 
 class LoanTypeController {
   createLoanType = async (req, res) => {
     try {
-      const { user_id, loan_type, interest_rate, loan_term, required_doc } =
-        req.body;
-
-      const loanId = await loanTypeModel.createLoanType(
-        loan_type,
-        interest_rate,
-        loan_term,
-        required_doc
-      );
+      const loanId = await loanTypeModel.createLoanType(req.body);
       res
         .status(201)
         .send(`Loan type was created successfully. Loan type id - ${loanId}`);
@@ -39,7 +31,6 @@ class LoanTypeController {
   getSpecificLoanType = async (req, res) => {
     try {
       const loanType = req.params.loan_type;
-      console.log(loanType);
 
       if (!loanType) {
         return res.status(400).send(`No valid loan_type is provided`);
@@ -57,14 +48,12 @@ class LoanTypeController {
   };
   updateLoanTypeData = async (req, res) => {
     try {
-      const loanTypeId = req.params.loan_type_id;
-
-      await loanTypeModel.updateLoanTypeData(loanTypeId, req.body);
+      await loanTypeModel.updateLoanTypeData(req.params.loan_type_id, req.body);
 
       res
         .status(200)
         .send(
-          `Loan type's data with id - ${loanTypeId} was updated successfully.`
+          `Loan type's data with id - ${req.params.loan_type_id} was updated successfully.`
         );
     } catch (err) {
       console.error(err);

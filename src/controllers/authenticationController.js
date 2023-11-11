@@ -1,4 +1,4 @@
-import { userModel } from '../services/userModel.js';
+import { userModel } from '../models/userModel.js';
 
 class AuthenticationController {
   authenticateUser = async (req, res, next) => {

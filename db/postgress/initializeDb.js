@@ -28,7 +28,6 @@ export const initializeDatabase = async () => {
     fs.readFile(absolutePath, 'utf-8', (err, sqlQuery) => {
       if (err) throw err;
       pool.query(sqlQuery, (err, res) => {
-        console.log(err);
         if (err) throw err;
         console.log('Script executed successfully');
       });
