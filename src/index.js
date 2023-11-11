@@ -21,8 +21,10 @@ app.use('/api/v1', apiRoutes);
 
 const start = async () => {
   try {
-    await initializeDatabase();
-    await initializeRedis();
+    if (process.env.NODE_ENV !== 'test') {
+      await initializeDatabase();
+      await initializeRedis();
+    }
 
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);

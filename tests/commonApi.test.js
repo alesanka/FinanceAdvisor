@@ -3,12 +3,12 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import apiRoutes from '../src/routers.js';
 
-jest.mock('../db/redis/client', () => ({
-  initializeRedis: jest.fn().mockResolvedValue({}),
-}));
-jest.mock('../db/redis/redisConfig.js', () => ({
-  db: jest.fn().mockResolvedValue({}),
-}));
+// jest.mock('../db/redis/client', () => ({
+//   initializeRedis: jest.fn().mockResolvedValue({}),
+// }));
+// jest.mock('../db/redis/redisConfig.js', () => ({
+//   db: jest.fn().mockResolvedValue({}),
+// }));
 
 const app = express();
 
