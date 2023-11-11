@@ -1,11 +1,11 @@
 import { pool } from '../../db/postgress/dbPool.js';
 
 class DocumentRepos {
-  async createDocument(applicationId, documentName, documentType) {
+  async createDocument(docDto) {
     try {
       const result = await pool.query(
         'INSERT INTO Documents (application_id, document_name, document_type) VALUES ($1, $2, $3) RETURNING document_id',
-        [applicationId, documentName, documentType]
+        [docDto.application_id, docDto.document_name, docDto.document_type]
       );
 
       return result.rows[0].document_id;
@@ -20,7 +20,15 @@ class DocumentRepos {
         [applicationId]
       );
       if (result.rows.length > 0) {
-        return result.rows;
+        const documentsDTOs = result.rows.map((doc) => {
+          return new DocDTO(
+            doc.document_id,
+            doc.application_id,
+            doc.document_name,
+            doc.document_type
+          );
+        });
+        return documentsDTOs;
       } else {
         return null;
       }

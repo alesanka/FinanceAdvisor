@@ -11,11 +11,7 @@ class DocumentModel {
         documentType
       );
 
-      const docId = await documentRepos.createDocument(
-        docDTO.application_id,
-        docDTO.document_name,
-        docDTO.document_type
-      );
+      const docId = await documentRepos.createDocument(docDTO);
 
       return docId;
     } catch (err) {
