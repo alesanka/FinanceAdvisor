@@ -1,19 +1,21 @@
 import { pool } from '../../db/postgress/dbPool.js';
+import { UserDTO } from '../dto/userDTO.js';
+import { ClientDTO } from '../dto/clientDTO.js';
 
 class UserRepos {
-  async createUser(
-    username,
-    password,
-    firstName,
-    lastName,
-    email,
-    phoneNumber,
-    role
-  ) {
+  async createUser(userDto, password) {
     try {
       const result = await pool.query(
         'INSERT INTO users (username, password, first_name, last_name, email, phone_number, role) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING user_id',
-        [username, password, firstName, lastName, email, phoneNumber, role]
+        [
+          userDto.username,
+          password,
+          userDto.first_name,
+          userDto.last_name,
+          userDto.email,
+          userDto.phone_number,
+          userDto.role,
+        ]
       );
 
       return result.rows[0].user_id;
@@ -21,11 +23,11 @@ class UserRepos {
       throw new Error(`${err}`);
     }
   }
-  async createClient(userId, salary, isCreditStory) {
+  async createClient(clientDto) {
     try {
       const resultClient = await pool.query(
         'INSERT INTO clients (user_id, salary, credit_story) VALUES ($1, $2, $3) RETURNING client_id',
-        [userId, salary, isCreditStory]
+        [clientDto.user_id, clientDto.salary, clientDto.is_credit_story]
       );
 
       return resultClient.rows[0].client_id;
@@ -68,7 +70,18 @@ class UserRepos {
   async getAllUsers() {
     try {
       const result = await pool.query('SELECT * FROM users');
-      return result.rows;
+      return result.rows.map(
+        (row) =>
+          new UserDTO(
+            row.user_id,
+            row.username,
+            row.first_name,
+            row.last_name,
+            row.email,
+            row.phone_number,
+            row.role
+          )
+      );
     } catch (err) {
       throw new Error(`${err}`);
     }
@@ -81,7 +94,12 @@ class UserRepos {
       );
 
       if (resultClient.rows.length > 0) {
-        return resultClient.rows[0];
+        return new ClientDTO(
+          row.client_id,
+          row.user_id,
+          row.salary,
+          row.credit_story
+        );
       } else {
         return null;
       }
@@ -250,7 +268,12 @@ class UserRepos {
         [clientId]
       );
       if (result.rows.length > 0) {
-        return result.rows[0];
+        return new ClientDTO(
+          row.client_id,
+          row.user_id,
+          row.salary,
+          row.credit_story
+        );
       } else {
         return null;
       }

@@ -46,15 +46,7 @@ class UserModel {
       throw new Error(`The username is already taken!`);
     }
     try {
-      const userId = await userRepos.createUser(
-        userDto.username,
-        password,
-        userDto.first_name,
-        userDto.last_name,
-        userDto.email,
-        userDto.phone_number,
-        userDto.role
-      );
+      const userId = await userRepos.createUser(userDto, password);
 
       if (userDto.role === 'client') {
         await userRepos.createClient(userId, salary, isCreditStory);
@@ -98,21 +90,29 @@ class UserModel {
       const users = await userRepos.getAllUsers();
 
       const userDTOs = users.map((user) => {
-        const dto = new UserDTO(
-          user.user_id,
-          user.username,
-          user.first_name,
-          user.last_name,
-          user.email,
-          user.phone_number,
-          user.role
-        );
-        return {
-          id_user: dto.id_user,
-          first_name: dto.first_name,
-          last_name: dto.last_name,
-          role: dto.role,
-        };
+        try {
+          const dto = new UserDTO(
+            user.user_id,
+            user.username,
+            user.first_name,
+            user.last_name,
+            user.email,
+            user.phone_number,
+            user.role
+          );
+
+          return {
+            id_user: dto.id_user,
+            username: dto.username,
+            first_name: dto.first_name,
+            last_name: dto.last_name,
+            email: dto.email,
+            phone_number: dto.phone_number,
+            role: dto.role,
+          };
+        } catch (error) {
+          throw new Error(`Error creating UserDTO: ${error.message}`);
+        }
       });
 
       return userDTOs;
