@@ -2,18 +2,23 @@
 
 ## Description
 
-The Personal Finance Advisor API is a web service that provides functionality for managing user financial data and loan applications. The API allows access to user, client, administrator, and bank worker data, as well as the ability to create and manage loan applications and loan types. The API also provides information on maximum loan amounts, repayment schedules, and payment notes.
+The Personal Finance Advisor API is a web service that provides functionality for managing user financial data and loan applications. The API allows access to user's (which can be a client, a bank worker or an administrator) data, as well as the ability to create and manage loan applications. An administator can create different loan types for calculating loan details. The API also provides information on maximum loan amounts, repayment schedules, and payment notes.
 
 ## Content: <a name="content"></a>
 
 - [Implementation details](#imp-details)
 - [Technical requirements](#tech-details)
 - [Endpoints](#endpoints)
+  - [Endpoint /register](#endpoints-register)
   - [Endpoint /login](#endpoints-login)
   - [Endpoint /user](#endpoints-users)
-  - [Endpoint /loan-types](#endpoints-loan-types)
+  - [Endpoint /loan_types](#endpoints-loan-types)
+  - [Endpoint /max_available_amount](#endpoints-max-available-amount)
+  - [Endpoint /documents](#endpoints-documents)
   - [Endpoint /applications](#endpoints-applications)
-  - [Endpoint /application/{application_id}/loan-information](#endpoints-applications-details)
+  - [Endpoint /application/{application_id}/approved](#endpoints-applications-approved)
+  - [Endpoint /repayment_schedule](#endpoint-repayment_schedule)
+  - [Endpoint /repayment_notes](#endpoints-repayment-notes)
 
 ## Implementation details <a name="imp-details"></a>
 
@@ -25,17 +30,19 @@ http://localhost:5000/api/v1/
 
 ## Technical requirements <a name="tech-details"></a>
 
-- Task should be implemented on JavaScript
-- Framework - express
-- (Database - MySQL)????
+- Implementation language: JavaScript
+- Framework: Express
+- Database: PostgresSQL
 - Use 18.18.1 LTS version of Node.js
 - Docker container
 
 ## Endpoints <a name="endpoints"></a>
 
-### Endpoint /login <a name="endpoints-login"></a> [(Back to content)](#content)
+### Endpoint /register <a name="endpoints-register"></a> [(Back to content)](#content)
 
 **Register a new user account.**
+
+\*In case of registering user with the role 'client' - the "salary" field in request body is required.
 
 Request:
 
@@ -44,8 +51,15 @@ POST /register
 Content-Type: application/json
 Request Body:
 {
-  "login": "user-shmyser",
-  "password": "securepassword123"
+  "username": "anna",
+  "password": "abrakadabra",
+  "first_name": "Anna",
+  "last_name": "Smith",
+  "email": "thebestanna@email.com",
+  "phone_number": "1234567890",
+  "role": "client",
+  "salary": 15000,
+  "credit_story": true
 }
 ```
 
@@ -53,23 +67,19 @@ In case of successful response:
 
 ```
 HTTP/1.1 201 Created
-Content-Type: application/json
-{
-  "success": true
-  "message": "User registration is successful."
-}
+Content-Type: text/html; charset=utf-8
+
+User was registered successfully. Id - 1
+
 ```
 
 In case of error response:
 
 ```
 HTTP/1.1 400 Bad Request
-Content-Type: application/json
+Content-Type: text/html; charset=utf-8
 
-{
-   "success": false,
-   "message": "Password should be at least 8 characters long"
-}
+`Missing required parameter: ${field}`
 ```
 
 or
@@ -79,32 +89,57 @@ HTTP/1.1 500 Internal Server Error
 Content-Type: application/json
 
 {
-   "success": false,
-   "message": "Server error"
+    message: 'Something went wrong during user registration',
+    error: err.message,
 }
 ```
 
-## Endpoint /users <a name="endpoints-users"></a> [(Back to content)](#content)
+### Endpoint /login <a name="endpoints-login"></a> [(Back to content)](#content)
 
-**Create a new user account.**
+**Login an existing user.**
+When a user attempts to authenticate:
+The system first verifies if the provided username exists within the database.
+If the username is validated, the system compares the provided password with the one stored against that username.
+On successful password validation, the system checks the user's scope.
+If the scope is either 'worker' or 'admin', the system engages with the node-oauth2-server to retrieve an access token. Both the access and refresh tokens are then stored securely for subsequent interactions.
+If the scope is neither 'worker' nor 'admin', only the password and username are verified.
+Post-authentication, interactions involve token-based authorization. Users with 'worker' or 'admin' scope can access protected endpoints. Others are limited to public endpoints.
+Each authorized request must include: Authorization: Bearer {{token}}.
+Access tokens are valid for 1 hour. If an access token expires, a token-refresh process is mandated to obtain a new one.
 
 Request:
 
 ```
-POST /users HTTP/1.1
+POST /login
+Content-Type: application/x-www-form-urlencoded
+Request Body: {
+        grant_type: password,
+        scope: admin,
+        client_id: this-client-id-is-for-demo-only,
+        client_secret: this-secret-id-is-for-demo-only,
+        username: maria,
+        password: abrakadabra,
+      }
 ```
 
 In case of successful response:
 
 ```
-HTTP/1.1 201 Created
+HTTP/1.1 200 OK
 Content-Type: application/json
-
 {
-  "user_id": 3,
-  "email": "newuser@example.com",
-  "phone_number": "+9876543210",
-  "role": "worker"
+    "accessToken": "9e84379ff46ee5d01f1212c19491473864baff98fc92515d94f289ce6e91414c",
+    "refreshToken": "6a326acdc64827fe7445dc2980ad4c22b6cb5c9d801c37ee6d324f170e557a5b"
+}
+```
+
+or
+
+```
+HTTP/1.1 200 OK
+Content-Type: text/html; charset=utf-8
+{
+    'User logged in successfully'
 }
 ```
 
@@ -112,11 +147,10 @@ In case of error response:
 
 ```
 HTTP/1.1 400 Bad Request
-Content-Type: application/json
+Content-Type: text/html; charset=utf-8
 
-{
-  "error": "Email address 'newuser@example.com' is already registered."
-}
+`Missing parameter: "${field}" in requst body`
+
 ```
 
 or
@@ -126,13 +160,53 @@ HTTP/1.1 500 Internal Server Error
 Content-Type: application/json
 
 {
-  "error": "Internal server error occurred. Please try again later or contact support."
+    message: 'Something went wrong during attempt to log in user.',
+    error: err.message,
 }
 ```
 
 ---
 
+**Get refresh token.**
+
+Request:
+
+```
+POST login/refresh_token
+Content-Type: application/x-www-form-urlencoded
+Request Body: {
+        grant_type: refresh_token,
+        client_id: this-client-id-is-for-demo-only,
+        client_secret: this-secret-id-is-for-demo-only,
+        refresh_token: {refresh_token}
+      }
+```
+
+In case of successful response:
+
+```
+HTTP/1.1 200 OK
+Content-Type: application/json
+{
+    "accessToken": "9e84379ff46ee5d01f1212c19491473864baff98fc92515d94f289ce6e91414c",
+    "refreshToken": "6a326acdc64827fe7445dc2980ad4c22b6cb5c9d801c37ee6d324f170e557a5b"
+}
+```
+
+In case of error response:
+
+```
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+
+{ error: err.message }
+```
+
+## Endpoint /users <a name="endpoints-users"></a> [(Back to content)](#content)
+
 **Retrieve the users profile information.**
+
+\*public request
 
 Request:
 
@@ -146,23 +220,37 @@ Response:
 [
   {
     "user_id": 1,
-    "email": "user1@example.com",
-    "phone_number": "+1234567890",
+    "first_name": "Anna",
+    "last_name": "Smith",
     "role": "client"
   },
   {
     "user_id": 2,
-    "email": "user2@example.com",
-    "phone_number": "+9876543210",
+    "first_name": "George",
+    "last_name": "Baker",
     "role": "worker"
   }
   // ... more users
 ]
 ```
 
+In case of error response:
+
+```
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+
+{
+    message: 'Something went wrong during getting all users.',
+    error: err.message,
+}
+```
+
 ---
 
-**Retrieve a specific user's profile information.**
+**Retrieve a specific user's profile information by user id.**
+
+\*protected request (available only for admin and worker with access_token)
 
 Query Parameters:
 
@@ -174,6 +262,7 @@ Request:
 
 ```
 GET /users/:user_id
+Authorization: Bearer {access_token}
 ```
 
 In case of successful response:
@@ -183,11 +272,16 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
-    "user_id":{user_id},
-    "email": "user1@example.com",
-    "phone_number": "+1234567890",
-    "role": "client"
-  }
+    "first_name": "Polya",
+    "last_name": "B.",
+    "email": "polina@email.com",
+    "phone_number": "1234567890",
+    "role": "client",
+    "client_info": {
+        "salary": 50000,
+        "credit_story": false
+    }
+}
 ```
 
 In case of error response:
@@ -197,7 +291,8 @@ HTTP/1.1 404 Not Found
 Content-Type: application/json
 
 {
-  "error": "Invalid user's id"
+    message: `Something went wrong during getting user ${userId}.`,
+    error: err.message,
 }
 ```
 
@@ -205,20 +300,26 @@ Content-Type: application/json
 
 **Retrieve a list of users with optional query parameters for filtering and sorting.**
 
+\*protected request (available only for admin and worker with access_token)
+
 Query Parameters:
 
-| Parameter   | Type   | Description                                                |
-| ----------- | ------ | ---------------------------------------------------------- |
-| `role`      | string | Filter users by role (e.g., "client").                     |
-| `client_id` | number | Filter users by client_id.                                 |
-| `salary`    | number | Filter users by salary (e.g., "5000").                     |
-| `name`      | string | Filter users by name (e.g., "client").                     |
-| `sort`      | string | Filter users by different parameters (e.g., name, salary). |
+| Parameter      | Type    | Description                                                                         |
+| -------------- | ------- | ----------------------------------------------------------------------------------- |
+| `role`         | string  | Filter users by role (e.g., "client", "admin", "worker").                           |
+| `salary`       | number  | Filter users by salary (e.g., 5000)(avaible only for role "client").                |
+| `credit_story` | boolean | Filter users by provided credit story (e.g., true)(avaible only for role "client"). |
+| `email`        | string  | Filter users by email (e.g., cool@email.com).                                       |
+| `first_name`   | string  | Filter users by first name (e.g., "anna").                                          |
+| `last_name`    | string  | Filter users by last name (e.g., "smith").                                          |
+| `phone`        | string  | Filter users by phone (e.g., "1234567890").                                         |
+| `sort`         | string  | Filter users by salary (only for role "client").                                    |
 
 Request:
 
 ```
-GET /users?role=client&sort=salary HTTP/1.1
+GET /users/filter?role=client&sort=salary HTTP/1.1
+Authorization: Bearer {access_token}
 ```
 
 In case of successful response:
@@ -227,37 +328,59 @@ In case of successful response:
 HTTP/1.1 200 OK
 Content-Type: application/json
 
-{
-    "user_id": 1,
-    "name": Name Name,
-    "salary": 7000,
-    "role": "client"
-  }
+ {
+        "_id_user": 5,
+        "_first_name": "Kassia",
+        "_last_name": "K.",
+        "_email": "kasia@email.com",
+        "_phone_number": "1234567890",
+        "_role": "client",
+        "client": {
+            "_client_id": 3,
+            "_user_id": 5,
+            "_salary": 70000,
+            "_credit_story": true
+        }
+    }
 ```
 
 In case of error response:
 
 ```
-HTTP/1.1 400 Bad Request
+HTTP/1.1 404 Not Found
+Content-Type: text/html; charset=utf-8
+
+'No users found matching the criteria.'
+```
+
+or
+
+```
+HTTP/1.1 500 Internal Server Error
 Content-Type: application/json
 
 {
-  "error": "Invalid query parameters. Please check your request."
-}
+    message: `Something went wrong during getting users by parameters.`,
+    error: err.message,
+  }
 ```
 
 ---
 
 **Update user information.**
 
+\*protected request (available only for admin and worker with access_token)
+There is a possibillity to update user's first_name, last_name, email, phone_number, salary and client_story (if user is a client).
+
 Request:
 
 ```
 PUT /users/:userId HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer {access_token}
 
 {
-  "phone_number": "+9999999999"
+  "phone_number": "9999999999"
 }
 ```
 
@@ -265,12 +388,30 @@ In case of successful response:
 
 ```
 HTTP/1.1 200 OK
+Content-Type: text/html; charset=utf-8
+
+`User ${userId} data updated successfully.`
+
+```
+
+In case of error response:
+
+```
+HTTP/1.1 400 Bad Request
+Content-Type: text/html; charset=utf-8
+
+'No data provided in request body.'
+```
+
+or
+
+```
+HTTP/1.1 500 Internal Server Error
 Content-Type: application/json
+
 {
-  "user_id": {userId},
-  "email": "user1@example.com",
-  "phone_number": "+9999999999",
-  "role": "client"
+    message: `Something went wrong during updating user's data.`,
+    error: err.message,
 }
 ```
 
@@ -278,10 +419,13 @@ Content-Type: application/json
 
 **Delete a user account.**
 
+\*protected request (available only for admin and worker with access_token)
+
 Request:
 
 ```
 DELETE /users/:user_id HTTP/1.1
+Authorization: Bearer {access_token}
 ```
 
 In case of successful response:
@@ -298,27 +442,32 @@ HTTP/1.1 500 Internal Server Error
 Content-Type: application/json
 
 {
-  "error": "Internal server error occurred. Please try again later or contact support."
+  message: `Something went wrong while deleting user.`,
+  error: err.message,
 }
 
 ```
 
-## Endpoint /loan-types <a name="endpoints-loan-types"></a> [(Back to content)](#content)
+## Endpoint /loan_types <a name="endpoints-loan-types"></a> [(Back to content)](#content)
 
 **Create a new type of loan.**
-(only admin can do this)
+
+\*protected request (available only for admin and worker with access_token)
+\*(only admins can do this, user_id is required for checking user's role)
 
 Request:
 
 ```
-POST /api/loan-types
+POST /api/loan_types
 Content-Type: application/json
+Authorization: Bearer {access_token}
 
 {
-  "admin_id": 4,
-  "loan_type": "personal loan",
-  "interest_rate": 6.0,
-  "loan_term": 36
+  "user_id": 4,
+  "loan_type": "personal_loan",
+  "interest_rate": 6,
+  "loan_term": 36,
+  "required_doc": "passport"
 }
 ```
 
@@ -326,26 +475,19 @@ In case of successful response:
 
 ```
 HTTP/1.1 201 Created
-Content-Type: application/json
+Content-Type: text/html; charset=utf-8
 
-{
-  "loan_type_id": 3,
-  "admin_id": 4,
-  "loan_type": "personal loan",
-  "interest_rate": 6.0,
-  "loan_term": 36
-}
+`Loan type was created successfully. Loan type id - ${loanId}`
+
 ```
 
 In case of error response:
 
 ```
-HTTP/1.1 400 Bad Request
-Content-Type: application/json
+HTTP/1.1 409 Conflict
+Content-Type: text/html; charset=utf-8
 
-{
-  "error": "Type of loan is already exists."
-}
+'Only admins can create loan types.'
 ```
 
 or
@@ -355,19 +497,21 @@ HTTP/1.1 500 Internal Server Error
 Content-Type: application/json
 
 {
-  "error": "Internal server error occurred. Please try again later or contact support."
+  message: `Something went wrong while creating new type loan.`,
+   error: err.message,
 }
 ```
 
 ---
 
 **Retrieve the information about existing loan types.**
-(only admin can do this)
+
+\*public request
 
 Request:
 
 ```
-GET /loan-types HTTP/1.1
+GET /loan_types HTTP/1.1
 ```
 
 In case of successful response:
@@ -378,39 +522,32 @@ Content-Type: application/json
 
 [
   {
-    "loan_type_id": 1,
-    "admin_id": 3,
-    "loan_type": "personal loan",
-    "interest_rate": 5.5,
-    "loan_term": 12
-  },
-  {
-    "loan_type_id": 2,
-    "admin_id": 4,
-    "loan_type": "auto loan",
-    "interest_rate": 4.8,
-    "loan_term": 24
-  }
-  // ... more loan types
+        "loan_type_id": 1,
+        "loan_type": "mortgage",
+        "interest_rate": "4.00",
+        "loan_term": 360,
+        "required_doc": "purcase_agreement"
+    }
+    // ... more loan types
 ]
 ```
 
 ---
 
 **Retrieve a specific loan type information.**
-(only admin can do this)
+
+\*public request
 
 Query Parameters:
 
-| Parameter      | Type   | Description                        |
-| -------------- | ------ | ---------------------------------- |
-| `loan_type_id` | number | Filter loan types by loan_type_id. |
-| `loan_type`    | string | Filter by loan types.              |
+| Parameter   | Type   | Description                 |
+| ----------- | ------ | --------------------------- |
+| `loan_type` | string | Get loan type by loan_type. |
 
 Request:
 
 ```
-GET /loan-types/:loan_type_id
+GET /loan_types/:loan_type/
 ```
 
 In case of successful response:
@@ -421,36 +558,151 @@ Content-Type: application/json
 
 {
   "loan_type_id": {loan_type_id},
-  "admin_id": 3,
+  "loan_type": "personal_type",
   "interest_rate": 5.5,
-  "loan_term": 12
+  "loan_term": 12,
+  "required_doc": "passport"
 }
 ```
 
 In case of error response:
 
 ```
-HTTP/1.1 404 Not Found
+HTTP/1.1 400 Bad Request
+Content-Type: text/html; charset=utf-8
+
+`No valid loan_type is provided`
+```
+
+or
+
+```
+HTTP/1.1 500 Internal Server Error
 Content-Type: application/json
 
 {
-  "error": "Invalid loan's type id"
+  message: `Something went wrong while getting loan type.`,
+  error: err.message,
 }
 ```
 
 ---
 
 **Update loan type information.**
-(only admin can do this)
+
+\*protected request (available only for admin and worker with access_token)
+\*(only admins can do this, user_id is required for checking user's role)
 
 Request:
 
 ```
-PUT /api/loan-types/:loanTypeId
+PUT /api/loan_types/:loan_type_id
+Content-Type: application/json
+Authorization: Bearer {access_token}
 
 {
+  "user_id": 2,
   "interest_rate": 5.2
 }
+```
+
+In case of successful response:
+
+```
+HTTP/1.1 200 OK
+Content-Type: text/html; charset=utf-8
+
+`Loan type's data with id - ${loanTypeId} was updated successfully.`
+```
+
+In case of error response:
+
+```
+HTTP/1.1 403 Forbidden
+Content-Type: text/html; charset=utf-8
+
+'Only admins can update loan types.
+```
+
+or
+
+```
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+
+{
+   message: `Something went wrong while updating loan type.`,
+  error: err.message,
+}
+```
+
+## Endpoint /max_available_amount <a name="endpoints-max-available-amount"></a> [(Back to content)](#content)
+
+**Worker save information about max available loan amount for a client with requested loan type.**
+
+\*protected request (available only for admin and worker with access_token)
+\*(only workers can do this, user_id is required for checking user's role)
+
+Request:
+
+```
+POST /max_available_amount
+Content-Type: application/json
+Authorization: Bearer {access_token}
+
+{
+    "user_id": 4,
+    "client_id": 2,
+    "loan_type_id": 3
+}
+```
+
+In case of successful response:
+
+```
+HTTP/1.1 200 OK
+Content-Type: text/html; charset=utf-8
+
+Max avaiable loan amount with id - ${id} was saved successfully.
+```
+
+In case of error response:
+
+```
+HTTP/1.1 403 Forbidden
+Content-Type: text/html; charset=utf-8
+
+'Only workers can save max available loan amounts.'
+```
+
+or
+
+```
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+
+{
+  message: `Something went wrong while saving max available loan amount.`,
+  error: err.message,
+}
+```
+
+---
+
+**Client can retrieve an information about max available loan amount by id**
+
+\*public request
+
+Query Parameters:
+
+| Parameter            | Type   | Description                          |
+| -------------------- | ------ | ------------------------------------ |
+| `max_loan_amount_id` | number | Get max available loan amount by id. |
+
+Request:
+
+```
+GET /max_available_amount/:max_loan_amount_id/
 ```
 
 In case of successful response:
@@ -460,22 +712,90 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
-  "loan_type_id": 1,
-  "admin_id": 3,
-  "interest_rate": 5.2,
-  "loan_term": 12
+    "max_loan_amount": 4712878,
+    "total_interest_amount": "3387122.15",
+    "loan_type": "mortgage",
+    "interest_rate": "4.00",
+    "loan_term": 360
+}
+```
+
+In case of error response:
+
+```
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+
+{
+  message: `Something went wrong while getting max available loan amount.`,
+  error: err.message,
+}
+```
+
+## Endpoint /applications <a name="endpoints-applications"></a> [(Back to content)](#content)
+
+**Create a new loan application.**
+
+\*protected request (available only for admin and worker with access_token)
+\*(only bank worker can do this, user_id is required for checking user's role)
+
+Request:
+
+```
+POST /applications
+Content-Type: application/json
+Authorization: Bearer {access_token}
+
+{
+    "user_id": 4,
+    "id": 1,
+    "desired_loan_amount": 50000,
+    "is_approved": false
+}
+```
+
+In case of successful response:
+
+```
+HTTP/1.1 201 Created
+Content-Type: text/html; charset=utf-8
+
+Loan application was created successfully. Loan application id - ${loan_application_id}. Required doc - ${required_doc}.
+```
+
+In case of error response:
+
+```
+HTTP/1.1 403 Forbidden
+Content-Type: text/html; charset=utf-8
+
+'Only workers can create loan applications.'
+```
+
+or
+
+```
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+
+{
+    message: `Something went wrong while creating new loan application.`,
+    error: err.message,
 }
 ```
 
 ---
 
-**Delete a loan type.**
-(only admin can do this)
+**Delete a loan application.**
+
+\*protected request (available only for admin and worker with access_token)
+\*(only bank worker can do this, user_id is required for checking user's role)
 
 Request:
 
 ```
-DELETE /loan-types/:loan_type_id
+DELETE /applications/:loan_application_id
+Authorization: Bearer {access_token}
 ```
 
 In case of successful response:
@@ -492,27 +812,31 @@ HTTP/1.1 500 Internal Server Error
 Content-Type: application/json
 
 {
-  "error": "Internal server error occurred. Please try again later or contact support."
+    message: `Something went wrong while deleting loan application.`,
+    error: err.message,
 }
 
 ```
 
-## Endpoint /applications <a name="endpoints-applications"></a> [(Back to content)](#content)
+## Endpoint /documents <a name="endpoints-documents"></a> [(Back to content)](#content)
 
-**Create a new loan application.**
-(only bank worker can do this)
+**Create a new document.**
+
+\*protected request (available only for admin and worker with access_token)
+\*(only bank worker can do this, user_id is required for checking user's role)
 
 Request:
 
 ```
-POST /applications
+POST /documents
 Content-Type: application/json
+Authorization: Bearer {access_token}
 
 {
-  "client_id": 4,
-  "worker_id": 6,
-  "desired_loan_amount": 20000,
-  "loan_type_id": 3
+    "user_id": 2,
+    "application_id": 1,
+    "document_name": "Client passport",
+    "document_type": "passport"
 }
 ```
 
@@ -520,26 +844,46 @@ In case of successful response:
 
 ```
 HTTP/1.1 201 Created
+Content-Type: text/html; charset=utf-8
+
+`Document was added successfully. Document id - ${docId}`
+```
+
+In case of error response:
+
+```
+HTTP/1.1 403 Forbidden
+Content-Type: text/html; charset=utf-8
+
+'Only workers can add documents.'
+```
+
+or
+
+```
+HTTP/1.1 500 Internal Server Error
 Content-Type: application/json
 
 {
-  "application_id": 3,
-  "client_id": 4,
-  "worker_id": 6,
-  "desired_loan_amount": 20000,
-  "loan_type_id": 3
+  message: `Something went wrong while adding document.`,
+  error: err.message,
 }
 ```
 
----
+**Get all documents by application id.**
 
-**Retrieve a list of all loan applications.**
-(only bank worker can do this)
+\*protected request (available only for admin and worker with access_token)
+
+| Parameter        | Type    | Description                            |
+| ---------------- | ------- | -------------------------------------- |
+| `application_id` | integer | The unique ID of the loan application. |
 
 Request:
 
 ```
-GET /applications
+Get /documents/:application_id
+Authorization: Bearer {access_token}
+
 ```
 
 In case of successful response:
@@ -549,39 +893,182 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 [
-  {
-    "application_id": 1,
-    "client_id": 3,
-    "worker_id": 5,
-    "desired_loan_amount": 10000,
-    "loan_type_id": 2
-  },
-  {
-    "application_id": 2,
-    "client_id": 4,
-    "worker_id": 6,
-    "desired_loan_amount": 15000,
-    "loan_type_id": 1
-  }
-  // ... more credit loan applications
+    {
+        "document_id": 1,
+        "document_name": "Client passport",
+        "document_type": "passport"
+    }
 ]
 ```
 
----
+In case of error response:
 
-**Retrieve information about a specific loan application.**
-(only bank worker can do this)
+```
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
 
-Query Parameters:
+{
+  message: `Something went wrong while finding documents by application id.`,
+  error: err.message,
+}
+```
 
-| Parameter        | Type   | Description                        |
-| ---------------- | ------ | ---------------------------------- |
-| `application_id` | number | Filter loan types by loan_type_id. |
+**Delete a document by document id.**
+
+\*protected request (available only for admin and worker with access_token)
 
 Request:
 
 ```
-GET /applications/:application_id
+DELETE /documents/:documentId HTTP/1.1
+Authorization: Bearer {access_token}
+```
+
+In case of successful response:
+
+```
+HTTP/1.1 204 No Content
+
+```
+
+In case of error response:
+
+```
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+
+{
+    message: `Something went wrong while deleting document by id.`,
+    error: err.message,
+}
+
+```
+
+## Endpoint /application/{application_id}/approved <a name="endpoints-applications-approved"></a> [(Back to content)](#content)
+
+**Approve the application with the loan amount desired by the client if the required documents are attached to the application.**
+
+\*protected request (available only for admin and worker with access_token)
+\*(only bank worker can do this, user_id is required for checking user's role)
+
+Query Parameters:
+
+| Parameter        | Type    | Description                            |
+| ---------------- | ------- | -------------------------------------- |
+| `application_id` | integer | The unique ID of the loan application. |
+
+Request:
+
+```
+PUT /application/{application_id}/approved/
+Content-Type: application/json
+Authorization: Bearer {access_token}
+
+{
+  "user_id": 7
+}
+```
+
+In case of successful response:
+
+```
+HTTP/1.1 200 OK
+Content-Type: text/html; charset=utf-8
+
+'Loan application status changed on approved'
+```
+
+In case of error response:
+
+```
+HTTP/1.1 403 Forbidden
+Content-Type: text/html; charset=utf-8
+
+'Only workers can create loan applications.'
+```
+
+or
+
+```
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+
+{
+  message: `Something went wrong while updating status on application.`,
+  error: err.message,
+}
+```
+
+## Endpoint /repayment_schedule <a name="endpoints-repayment_schedule"></a> [(Back to content)](#content)
+
+**Add a repayment schedule for a specific application.**
+
+\*protected request (available only for admin and worker with access_token)
+\*(only bank worker can do this, user_id is required for checking user's role)
+
+Request:
+
+```
+POST /repayment_schedule
+Content-Type: application/json
+Authorization: Bearer {access_token}
+
+{
+    "application_id": 7,
+    "user_id": 4
+}
+```
+
+In case of successful response:
+
+```
+HTTP/1.1 201 Created
+Content-Type: text/html; charset=utf-8
+
+`Repayment schedule was created successfully. Id - ${repaymentScheduleIdandDate.repaymentScheduleId}. First date for payment - ${repaymentScheduleIdandDate.firstPaymentDate}`
+```
+
+In case of error response:
+
+```
+HTTP/1.1 403 Forbidden
+Content-Type: text/html; charset=utf-8
+
+'Only workers can modify loan applications.'
+```
+
+or
+
+```
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+
+{
+  message: 'Something went wrong during repayment schedule creation.',
+  error: err.message,
+}
+```
+
+---
+
+**Get a month payment amount for specific date.**
+
+Client can get a month payment amount for requested date.
+
+\*public request
+
+Query Parameters:
+
+| Parameter               | Type    | Required | Description                                               |
+| ----------------------- | ------- | -------- | --------------------------------------------------------- |
+| `repayment_schedule_id` | integer | Yes      | The unique ID of the repayment schedule.                  |
+| `year`                  | integer | Yes      | The year part of the date for which to find the payment.  |
+| `month`                 | integer | Yes      | The month part of the date for which to find the payment. |
+
+Request:
+
+```
+GET /repayment_schedule/note?repayment_schedule_id=2&year=2024&month=5
 ```
 
 In case of successful response:
@@ -591,67 +1078,84 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
-  "application_id": {application_id},
-  "client_id": 3,
-  "worker_id": 5,
-  "desired_loan_amount": 10000,
-  "loan_type_id": 2
+    "payment_amount": "2824.06"
 }
 ```
 
 In case of error response:
 
 ```
-HTTP/1.1 404 Not Found
+HTTP/1.1 400 Bad Request
+Content-Type: text/html; charset=utf-8
+
+'Missing required parameters: repayment_schedule_id, year, and month'
+```
+
+or
+
+```
+HTTP/1.1 500 Internal Server Error
 Content-Type: application/json
 
 {
-  "error": "Invalid application id"
+  message: 'Something went wrong during getting month payment.',
+  error: err.message,
 }
 ```
 
-## Endpoint /application/{application_id}/loan-information <a name="endpoints-applications-details"></a> [(Back to content)](#content)
+## Endpoint /repayment_notes <a name="endpoints-repayment-notes"></a> [(Back to content)](#content)
 
-**Get information about loan details on a specific application.**
+**Add a payment note for a client about payment amount and the payment date.**
+
+After getting repayment_schedule_id a bank worker can create notes for client with month payment with dates of payment.
+
+\*protected request (available only for admin and worker with access_token)
+\*(only bank worker can do this, user_id is required for checking user's role)
 
 Request:
 
 ```
-GET /applications/1/details
+POST /repayment_notes
+Content-Type: application/json
+Authorization: Bearer {access_token}
+
+{
+    "repayment_schedule_id": 8,
+    "user_id": 4,
+    "repayment_date": "2024-05-01"
+}
 ```
 
 In case of successful response:
 
 ```
 HTTP/1.1 200 OK
+Content-Type: text/html; charset=utf-8
+
+`Payment note created successfully. Id - ${noteId}`
+```
+
+In case of error response:
+
+```
+HTTP/1.1 403 Forbidden
+Content-Type: text/html; charset=utf-8
+
+'Only workers can modify loan applications.'
+```
+
+or
+
+```
+HTTP/1.1 500 Internal Server Error
 Content-Type: application/json
 
 {
-  "application_id": 1,
-  "max_loan_amount": {
-    "max_loan_amount_id": 456,
-    "max_loan_amount": 20000,
-    "total_interest_amount": 3000
-  },
-  "repayment_schedule": {
-    "repayment_schedule_id": 789,
-    "monthly_payment": 1000,
-    "remaining_balance": 7000
-  },
-  "payment_notes": [
-    {
-      "note_id": 1,
-      "payment_date": "2023-10-01",
-      "payment_amount": 1000
-    },
-    {
-      "note_id": 2,
-      "payment_date": "2023-11-01",
-      "payment_amount": 1000
-    }
-    // ... more payment notes
-  ]
+  message: 'Something went wrong during payment note creation.',
+  error: err.message,
 }
 ```
+
+---
 
 [⬆ Go Up ⬆](#content)
