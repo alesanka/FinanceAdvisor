@@ -42,8 +42,7 @@ class LoanApplicationModel {
 
       const loanId = await loanApplicationRepos.createLoanApplication(
         id,
-        applicationDTO.desired_loan_amount,
-        applicationDTO.is_approved
+        applicationDTO
       );
       return { loanId, requiredDoc };
     } catch (err) {
@@ -107,7 +106,6 @@ class LoanApplicationModel {
         throw new Error(`Application with id ${applicationId} does not exist.`);
       }
 
-      
       await loanApplicationRepos.deleteLoanApplication(applicationId);
       return;
     } catch (err) {

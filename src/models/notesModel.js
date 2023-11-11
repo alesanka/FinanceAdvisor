@@ -24,10 +24,10 @@ class NotesModel {
         applicationId
       );
 
-      const applicationDate = new Date(application.application_date);
+      const applicationDate = new Date(application.dto.application_date);
       if (isNaN(applicationDate)) {
         throw new Error(
-          `Invalid application date: ${application.application_date}`
+          `Invalid application date: ${application.dto.application_date}`
         );
       }
 

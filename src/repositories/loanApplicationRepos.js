@@ -1,11 +1,12 @@
 import { pool } from '../../db/postgress/dbPool.js';
+import { ApplicationDTO } from '../dto/applicationDTO.js';
 
 class LoanApplicationRepos {
-  async createLoanApplication(id, desiredLoanAmount, isApproved) {
+  async createLoanApplication(id, applicationDto) {
     try {
       const result = await pool.query(
         'INSERT INTO LoanApplications (id, desired_loan_amount, application_date, is_approved) VALUES ($1, $2, CURRENT_DATE, $3) RETURNING application_id',
-        [id, desiredLoanAmount, isApproved]
+        [id, applicationDto.desired_loan_amount, applicationDto.is_approved]
       );
 
       return result.rows[0].application_id;
@@ -20,7 +21,17 @@ class LoanApplicationRepos {
         [applicationId]
       );
       if (result.rows.length > 0) {
-        return result.rows[0];
+        const app = result.rows[0];
+        const applicationDTO = new ApplicationDTO(
+          app.application_id,
+          app.desired_loan_amount,
+          app.application_date,
+          app.is_approved
+        );
+        return {
+          dto: applicationDTO,
+          id: app.id,
+        };
       } else {
         return null;
       }
