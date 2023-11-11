@@ -19,12 +19,7 @@ class LoanTypeModel {
         throw new Error(`Loan type ${loanTypeDTO.loan_type} already exists`);
       }
 
-      const loanTypeId = await loanTypeRepos.createLoanType(
-        loanTypeDTO.loan_type,
-        loanTypeDTO.interest_rate,
-        loanTypeDTO.loan_term,
-        loanTypeDTO.required_doc
-      );
+      const loanTypeId = await loanTypeRepos.createLoanType(loanTypeDTO);
 
       return loanTypeId;
     } catch (err) {

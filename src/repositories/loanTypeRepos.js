@@ -1,11 +1,17 @@
 import { pool } from '../../db/postgress/dbPool.js';
+import { LoanTypeDTO } from '../dto/loanTypesDTO.js';
 
 class LoanTypeRepos {
-  async createLoanType(loanType, interestRate, loanTerm, requiredDoc) {
+  async createLoanType(loanTypeDto) {
     try {
       const result = await pool.query(
         'INSERT INTO loanTypes (loan_type, interest_rate, loan_term, required_doc) VALUES ($1, $2, $3, $4) RETURNING loan_type_id',
-        [loanType, interestRate, loanTerm, requiredDoc]
+        [
+          loanTypeDto.loan_type,
+          loanTypeDto.interest_rate,
+          loanTypeDto.loan_term,
+          loanTypeDto.required_doc,
+        ]
       );
 
       return result.rows[0].loan_type_id;
@@ -20,7 +26,16 @@ class LoanTypeRepos {
         [loan_type]
       );
       if (result.rows.length > 0) {
-        return result.rows[0];
+        const loan = result.rows[0];
+
+        const loanTypeDTO = new LoanTypeDTO(
+          loan.loan_type_id,
+          loan.loan_type,
+          loan.interest_rate,
+          loan.loan_term,
+          loan.required_doc
+        );
+        return loanTypeDTO;
       } else {
         return null;
       }
@@ -32,7 +47,18 @@ class LoanTypeRepos {
     try {
       const result = await pool.query('SELECT * FROM loanTypes');
 
-      return result.rows;
+      const loanTypeDTOs = result.rows.map(
+        (loan) =>
+          new LoanTypeDTO(
+            loan.loan_type_id,
+            loan.loan_type,
+            loan.interest_rate,
+            loan.loan_term,
+            loan.required_doc
+          )
+      );
+
+      return loanTypeDTOs;
     } catch (err) {
       throw new Error(`${err}`);
     }
@@ -46,7 +72,16 @@ class LoanTypeRepos {
       );
 
       if (result.rows.length > 0) {
-        return result.rows[0];
+        const loan = result.rows[0];
+
+        const loanTypeDTO = new LoanTypeDTO(
+          loan.loan_type_id,
+          loan.loan_type,
+          loan.interest_rate,
+          loan.loan_term,
+          loan.required_doc
+        );
+        return loanTypeDTO;
       } else {
         return null;
       }

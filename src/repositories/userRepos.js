@@ -42,7 +42,17 @@ class UserRepos {
         [username]
       );
       if (result.rows.length > 0) {
-        return result.rows[0];
+        const user = result.rows[0];
+        const userDTO = new UserDTO(
+          user.user_id,
+          user.username,
+          user.first_name,
+          user.last_name,
+          user.email,
+          user.phone_number,
+          user.role
+        );
+        return userDTO;
       } else {
         return null;
       }
@@ -58,8 +68,19 @@ class UserRepos {
         'SELECT * FROM users WHERE user_id = $1;',
         [userId]
       );
+
       if (result.rows.length > 0) {
-        return result.rows[0];
+        const user = result.rows[0];
+        const userDTO = new UserDTO(
+          user.user_id,
+          user.username,
+          user.first_name,
+          user.last_name,
+          user.email,
+          user.phone_number,
+          user.role
+        );
+        return userDTO;
       } else {
         return null;
       }
