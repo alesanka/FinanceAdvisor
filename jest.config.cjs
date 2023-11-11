@@ -1,4 +1,4 @@
 module.exports = {
   transform: {},
-  extensionsToTreatAsEsm: ['.js'],
+  extensionsToTreatAsEsm: [],
 };
