@@ -53,19 +53,12 @@ class RepaymentScheduleModel {
         monthlyPayment,
         loanAmount
       );
-      console.log('repaymentScheduleDTO', repaymentScheduleDTO);
+
       const repaymentScheduleId =
         await repaymentScheduleRepos.createRepaymentSchedule(
-          repaymentScheduleDTO.application_id,
-          repaymentScheduleDTO.monthly_payment,
-          repaymentScheduleDTO.remaining_balance
+          repaymentScheduleDTO
         );
 
-      const INFO = await repaymentScheduleRepos.getRepaymentScheduleById(
-        repaymentScheduleId
-      );
-
-      console.log('INFO', INFO);
       const firstPaymentDate = new Date(
         applicationDate.getFullYear(),
         applicationDate.getMonth() + 1,
@@ -79,11 +72,7 @@ class RepaymentScheduleModel {
         false
       );
 
-      await notesRepos.createNotes(
-        noteDTO.repayment_schedule_id,
-        noteDTO.payment_date,
-        noteDTO.payment_amount
-      );
+      await notesRepos.createNotes(noteDTO);
 
       return { repaymentScheduleId, firstPaymentDate };
     } catch (err) {

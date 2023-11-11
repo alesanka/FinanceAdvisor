@@ -1,12 +1,12 @@
 import { pool } from '../../db/postgress/dbPool.js';
 
 class NotesRepos {
-  async createNotes(repaymentScheduleId, paymentDate, paymentAmount) {
+  async createNotes(notesDto) {
     try {
       const insertResult = await pool.query(
         `INSERT INTO PaymentNotes (repayment_schedule_id, payment_date, payment_amount)
          VALUES ($1, $2, $3) RETURNING note_id;`,
-        [repaymentScheduleId, paymentDate, paymentAmount]
+        [notesDto.repayment_schedule_id, notesDto.payment_date, notesDto.payment_amount]
       );
 
       return insertResult.rows[0].note_id;

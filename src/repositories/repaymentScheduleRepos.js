@@ -1,12 +1,17 @@
 import { pool } from '../../db/postgress/dbPool.js';
+import { RepaymentScheduleDTO } from '../dto/repaymentScheduleDTO.js';
 
 class RepaymentScheduleRepos {
-  async createRepaymentSchedule(applicationId, monthlyPayment, loanAmount) {
+  async createRepaymentSchedule(repaymentScheduleDto) {
     try {
       const insertResult = await pool.query(
         `INSERT INTO RepaymentSchedules (application_id, monthly_payment, remaining_balance)
          VALUES ($1, $2, $3) RETURNING repayment_schedule_id;`,
-        [applicationId, monthlyPayment, loanAmount]
+        [
+          repaymentScheduleDto.application_id,
+          repaymentScheduleDto.monthly_payment,
+          repaymentScheduleDto.remaining_balance,
+        ]
       );
 
       return insertResult.rows[0].repayment_schedule_id;
@@ -21,7 +26,15 @@ class RepaymentScheduleRepos {
         [repaymentScheduleId]
       );
 
-      return result.rows[0];
+      const schedule = result.rows[0];
+
+      const repaymentScheduleDTO = new RepaymentScheduleDTO(
+        schedule.repayment_schedule_id,
+        schedule.application_id,
+        schedule.monthly_payment,
+        schedule.remaining_balance
+      );
+      return repaymentScheduleDTO;
     } catch (err) {
       throw new Error(`${err}`);
     }

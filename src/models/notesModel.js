@@ -62,11 +62,7 @@ class NotesModel {
         false
       );
 
-      const noteId = await notesRepos.createNotes(
-        notesDTO.repayment_schedule_id,
-        notesDTO.payment_date,
-        notesDTO.payment_amount
-      );
+      const noteId = await notesRepos.createNotes(notesDTO);
 
       return noteId;
     } catch (err) {
