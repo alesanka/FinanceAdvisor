@@ -14,10 +14,10 @@ export class DocDTO {
     document_name,
     document_type
   ) {
-    this._document_id = document_id;
-    this._application_id = application_id;
-    this._document_name = document_name;
-    this._document_type = this.validateDoc(document_type);
+    this.document_id = document_id;
+    this.application_id = application_id;
+    this.document_name = document_name;
+    this.document_type = this.validateDoc(document_type);
   }
 
   validateDoc(doc) {
@@ -26,37 +26,5 @@ export class DocDTO {
     } catch (e) {
       throw new Error('Invalid document type');
     }
-  }
-
-  get document_id() {
-    return this._document_id;
-  }
-
-  get application_id() {
-    return this._application_id;
-  }
-
-  get document_name() {
-    return this._document_name;
-  }
-
-  get document_type() {
-    return this._document_type;
-  }
-
-  set document_id(value) {
-    this._document_id = value;
-  }
-
-  set document_name(value) {
-    this._document_name = value;
-  }
-
-  set application_id(value) {
-    this._application_id = value;
-  }
-
-  set document_type(value) {
-    this._document_type = this.validateDoc(value);
   }
 }

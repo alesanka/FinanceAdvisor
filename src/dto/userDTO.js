@@ -12,18 +12,17 @@ export class UserDTO {
     phone_number,
     role
   ) {
-    this._id_user = id_user;
-    this._username = username;
-    this._first_name = first_name;
-    this._last_name = last_name;
-    this._email = this.validateEmail(email);
-    this._phone_number = this.validatePhone(phone_number);
-    this._role = this.validateRole(role);
+    this.id_user = id_user;
+    this.username = username;
+    this.first_name = first_name;
+    this.last_name = last_name;
+    this.email = UserDTO.validateEmail(email);
+    this.phone_number = UserDTO.validatePhone(phone_number);
+    this.role = UserDTO.validateRole(role);
   }
 
-  validateEmail(email) {
+  static validateEmail(email) {
     const emailSchema = z.string().email();
-
     try {
       return emailSchema.parse(email);
     } catch (e) {
@@ -31,7 +30,7 @@ export class UserDTO {
     }
   }
 
-  validatePhone(phone_number) {
+  static validatePhone(phone_number) {
     const phoneSchema = z.string().length(10);
     try {
       return phoneSchema.parse(phone_number);
@@ -40,63 +39,11 @@ export class UserDTO {
     }
   }
 
-  validateRole(role) {
+  static validateRole(role) {
     try {
       return RoleSchema.parse(role);
     } catch (e) {
       throw new Error('Invalid role');
     }
-  }
-
-  get id_user() {
-    return this._id_user;
-  }
-
-  get username() {
-    return this._username;
-  }
-
-  get first_name() {
-    return this._first_name;
-  }
-
-  get last_name() {
-    return this._last_name;
-  }
-
-  get phone_number() {
-    return this._phone_number;
-  }
-
-  get email() {
-    return this._email;
-  }
-
-  get role() {
-    return this._role;
-  }
-
-  set id_user(value) {
-    this._id_user = value;
-  }
-
-  set first_name(value) {
-    this._first_name = value;
-  }
-
-  set last_name(value) {
-    this._last_name = value;
-  }
-
-  set phone_number(value) {
-    this._phone_number = this.validatePhone(value);
-  }
-
-  set email(value) {
-    this._email = this.validateEmail(value);
-  }
-
-  set role(value) {
-    this._role = value;
   }
 }
