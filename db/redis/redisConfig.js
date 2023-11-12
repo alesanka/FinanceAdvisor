@@ -12,6 +12,12 @@ const db = redis.createClient({
 
 db.on('error', (err) => console.log('Redis Client Error', err));
 
-await db.connect();
+(async () => {
+  try {
+    await db.connect();
+  } catch (err) {
+    console.error('Redis connection error:', err);
+  }
+})();
 
 export default db;
