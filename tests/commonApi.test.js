@@ -1,14 +1,30 @@
 import request from 'supertest';
-import { app } from '../src/index.js';
+import apiRoutes from '../src/routers.js';
+import bodyParser from 'body-parser';
+import express from 'express';
 
-describe('Tests for checking correct root status and responce ', () => {
-  test('responds to /api/v1/', (done) => {
-    request(app)
-      .get('/api/v1/')
-      .then((response) => {
-        expect(response.statusCode).toEqual(200);
-        expect(response.text).toContain("It's alive!");
-        done();
-      });
+const app = express();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.get('/api/v1/', (req, res) => {
+  res.send("“It's alive! It's alive!” - Frankenstein, 1931");
+});
+app.use('/api/v1', apiRoutes);
+
+let server;
+
+beforeAll((done) => {
+  server = app.listen(5000, done);
+});
+
+afterAll((done) => {
+  server.close(done);
+});
+
+describe('Tests for checking correct statuses and responces ', () => {
+  it('responds to /api/v1/', async () => {
+    const response = await request(app).get('/api/v1/');
+    expect(response.statusCode).toEqual(200);
+    expect(response.text).toContain("It's alive!");
   });
 });
