@@ -1,18 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1699801935013" clover="3.2.0">
-  <project timestamp="1699801935014" name="All files">
-    <metrics statements="980" coveredstatements="111" conditionals="223" coveredconditionals="0" methods="130" coveredmethods="1" elements="1333" coveredelements="112" complexity="0" loc="980" ncloc="980" packages="10" files="48" classes="48"/>
+<coverage generated="1699802465177" clover="3.2.0">
+  <project timestamp="1699802465177" name="All files">
+    <metrics statements="1033" coveredstatements="132" conditionals="233" coveredconditionals="0" methods="138" coveredmethods="4" elements="1404" coveredelements="136" complexity="0" loc="1033" ncloc="1033" packages="10" files="51" classes="51"/>
     <package name="db.postgress">
-      <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <metrics statements="24" coveredstatements="11" conditionals="4" coveredconditionals="0" methods="4" coveredmethods="1"/>
       <file name="dbPool.js" path="E:\JavaScript\FinanceAdvisor\db\postgress\dbPool.js">
         <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="4" count="1" type="stmt"/>
         <line num="6" count="1" type="stmt"/>
         <line num="8" count="1" type="stmt"/>
       </file>
+      <file name="initializeDb.js" path="E:\JavaScript\FinanceAdvisor\db\postgress\initializeDb.js">
+        <metrics statements="21" coveredstatements="8" conditionals="4" coveredconditionals="0" methods="4" coveredmethods="1"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="29" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="31" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="32" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+      </file>
     </package>
     <package name="db.redis">
-      <metrics statements="33" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="7" coveredmethods="0"/>
+      <metrics statements="48" coveredstatements="6" conditionals="6" coveredconditionals="0" methods="8" coveredmethods="0"/>
+      <file name="client.js" path="E:\JavaScript\FinanceAdvisor\db\redis\client.js">
+        <metrics statements="15" coveredstatements="1" conditionals="6" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="7" count="0" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="11" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="12" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="18" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+      </file>
       <file name="redisConfig.js" path="E:\JavaScript\FinanceAdvisor\db\redis\redisConfig.js">
         <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="4" count="1" type="stmt"/>
@@ -54,7 +96,27 @@
       </file>
     </package>
     <package name="src">
-      <metrics statements="10" coveredstatements="10" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <metrics statements="27" coveredstatements="22" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="2"/>
+      <file name="index.js" path="E:\JavaScript\FinanceAdvisor\src\index.js">
+        <metrics statements="17" coveredstatements="12" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="2"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="23" count="1" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="32" count="0" type="stmt"/>
+        <line num="36" count="1" type="stmt"/>
+      </file>
       <file name="routers.js" path="E:\JavaScript\FinanceAdvisor\src\routers.js">
         <metrics statements="10" coveredstatements="10" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="12" count="1" type="stmt"/>
