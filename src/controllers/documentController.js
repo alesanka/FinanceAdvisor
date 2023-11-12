@@ -1,5 +1,4 @@
 import { documentModel } from '../models/documentModel.js';
-import { userModel } from '../models/userModel.js';
 
 class DocumentController {
   createDocument = async (req, res) => {
