@@ -6,7 +6,7 @@ describe('Tests for checking correct root status and responce ', () => {
     request(app)
       .get('/api/v1/')
       .then((response) => {
-        expect(response.statusCode).toBe(200);
+        expect(response.statusCode).toEqual(200);
         expect(response.text).toContain("It's alive!");
         done();
       });
