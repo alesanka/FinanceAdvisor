@@ -1,11 +1,11 @@
-import { documentController } from '../path/to/DocumentController';
-import { documentModel } from '../path/to/models/documentModel';
+import { documentController } from '../src/controllers/documentController.js';
+import { documentModel } from '../src/models/documentModel.js';
 
 jest.mock('../path/to/models/documentModel');
 
 describe('DocumentController', () => {
   describe('createDocument', () => {
-    it('should create a document and send a response', async () => {
+    test('should create a document and send a response', async () => {
       const req = {
         body: {},
       };
