@@ -8,7 +8,12 @@ import { repaymentScheduleRepos } from '../src/repositories/repaymentScheduleRep
 import { loanTypeMaxLoanAmountRepos } from '../src/repositories/loanType_MaxLoanAmountRepos.js';
 import { pool } from '../db/postgress/dbPool.js';
 
-jest.mock('../db/postgress/dbPool.js');
+jest.mock('../db/postgress/dbPool.js', () => ({
+  ...jest.requireActual('../db/postgress/dbPool.js'),
+  pool: {
+    query: jest.fn(),
+  },
+}));
 
 describe('User repository methods', () => {
   test('should be defined', () => {
