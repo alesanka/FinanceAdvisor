@@ -12,7 +12,17 @@ app.get('/api/v1/', (req, res) => {
 });
 app.use('/api/v1', apiRoutes);
 
-describe('first test for common GET ', () => {
+let server;
+
+beforeAll((done) => {
+  server = app.listen(5000, done);
+});
+
+afterAll((done) => {
+  server.close(done);
+});
+
+describe('Tests for checking correct statuses and responces ', () => {
   it('responds to /api/v1/', async () => {
     const response = await request(app).get('/api/v1/');
     expect(response.statusCode).toEqual(200);
