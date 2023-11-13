@@ -123,5 +123,16 @@ export class LoanTypeRepos {
       throw new Error(`${err}`);
     }
   }
+  async deleteLoanType(loan_type_id) {
+    try {
+      await this.connection.query(
+        'DELETE FROM LoanTypes WHERE loan_type_id = $1',
+        [loan_type_id]
+      );
+      return;
+    } catch (err) {
+      throw new Error(`${err}`);
+    }
+  }
 }
 export const loanTypeRepos = new LoanTypeRepos(pool);

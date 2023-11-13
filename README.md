@@ -636,6 +636,39 @@ Content-Type: application/json
 }
 ```
 
+---
+
+**Delete loan type by loan type id.**
+
+\*protected request (available only for admin and worker with access_token)
+
+Request:
+
+```
+DELETE /loan_types/:loan_type_id
+Authorization: Bearer {access_token}
+```
+
+In case of successful response:
+
+```
+HTTP/1.1 204 No Content
+
+```
+
+In case of error response:
+
+```
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+
+{
+    message: `Something went wrong while deleting loan type.`,
+    error: err.message,
+}
+
+```
+
 ## Endpoint /max_available_amount <a name="endpoints-max-available-amount"></a> [(Back to content)](#content)
 
 **Worker save information about max available loan amount for a client with requested loan type.**

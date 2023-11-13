@@ -20,4 +20,11 @@ router.put(
   checkUserRole(['admin']),
   loanTypeController.updateLoanTypeData
 ); // protected
+
+router.delete(
+  '/:loan_type_id',
+  token.getAuthorization,
+  loanTypeController.deleteLoanType
+); // protected
+
 export default router;

@@ -74,6 +74,18 @@ export class LoanTypeController {
       });
     }
   };
+  deleteLoanType = async (req, res) => {
+    try {
+      await this.loanTypeModel.deleteLoanType(req.params.loan_type_id);
+      res.status(204).end();
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({
+        message: `Something went wrong while deleting loan type.`,
+        error: err.message,
+      });
+    }
+  };
 }
 
 export const loanTypeController = new LoanTypeController(loanTypeModel);

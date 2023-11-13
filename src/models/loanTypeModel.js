@@ -15,6 +15,12 @@ export const checkDocType = (doc) => {
   }
 };
 
+export const assertValueExists = (value, error) => {
+  if (!value) {
+    throw new Error(error);
+  }
+};
+
 export class LoanTypeModel {
   constructor(loanTypeRepos) {
     this.loanTypeRepos = loanTypeRepos;
@@ -140,6 +146,21 @@ export class LoanTypeModel {
       await this.loanTypeRepos.updateLoanTypeData(loanTypeId, data);
     } catch (err) {
       throw new Error(`Unable to update loan type: ${err}.`);
+    }
+  }
+  async deleteLoanType(loanTypeId) {
+    try {
+      const loanType = await this.loanTypeRepos.findLoanByIdloanTypeId(
+        loanTypeId
+      );
+      assertValueExists(loanType, `No loan type found with id ${loanTypeId}`);
+
+      await this.loanTypeRepos.deleteLoanType(loanTypeId);
+      return;
+    } catch (err) {
+      throw new Error(
+        `Unable to delete loan type with id ${loanTypeId}: ${err}.`
+      );
     }
   }
 }
