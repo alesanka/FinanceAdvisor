@@ -73,6 +73,21 @@ export class RepaymentScheduleController {
       });
     }
   };
+
+  deleteSchedule = async (req, res) => {
+    try {
+      await this.repaymentScheduleModel.deleteSchedule(
+        req.params.repayment_schedule_id
+      );
+      res.status(204).end();
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({
+        message: `Something went wrong while deleting repayment schedule.`,
+        error: err.message,
+      });
+    }
+  };
 }
 
 export const repaymentScheduleController = new RepaymentScheduleController(

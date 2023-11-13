@@ -79,6 +79,18 @@ export class RepaymentScheduleRepos {
       throw new Error(`${err}`);
     }
   }
+  async deleteSchedule(repayment_schedule_id) {
+    try {
+      await this.connection.query(
+        'DELETE FROM RepaymentSchedules WHERE repayment_schedule_id = $1',
+        [repayment_schedule_id]
+      );
+
+      return;
+    } catch (err) {
+      throw new Error(`${err}`);
+    }
+  }
 }
 
 export const repaymentScheduleRepos = new RepaymentScheduleRepos(pool);

@@ -458,7 +458,7 @@ Content-Type: application/json
 Request:
 
 ```
-POST /api/loan_types
+POST /loan_types
 Content-Type: application/json
 Authorization: Bearer {access_token}
 
@@ -596,7 +596,7 @@ Content-Type: application/json
 Request:
 
 ```
-PUT /api/loan_types/:loan_type_id
+PUT /loan_types/:loan_type_id
 Content-Type: application/json
 Authorization: Bearer {access_token}
 
@@ -1057,7 +1057,7 @@ Content-Type: application/json
 Request:
 
 ```
-PUT /api/repayment_schedule/:repayment_schedule_id/
+PUT /repayment_schedule/:repayment_schedule_id/
 Content-Type: application/json
 Authorization: Bearer {access_token}
 
@@ -1149,6 +1149,39 @@ Content-Type: application/json
   message: 'Something went wrong during getting month payment.',
   error: err.message,
 }
+```
+
+---
+
+**Delete a repayment schedule by repayment schedule id.**
+
+\*protected request (available only for admin and worker with access_token)
+
+Request:
+
+```
+DELETE /repayment_schedule/:repayment_schedule_id/ HTTP/1.1
+Authorization: Bearer {access_token}
+```
+
+In case of successful response:
+
+```
+HTTP/1.1 204 No Content
+
+```
+
+In case of error response:
+
+```
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+
+{
+    message: `Something went wrong while deleting repayment schedule by id.`,
+    error: err.message,
+}
+
 ```
 
 ## Endpoint /repayment_notes <a name="endpoints-repayment-notes"></a> [(Back to content)](#content)

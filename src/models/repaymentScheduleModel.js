@@ -164,6 +164,25 @@ export class RepaymentScheduleModel {
       );
     }
   }
+  async deleteSchedule(repaymentScheduleId) {
+    try {
+      const repaymentShedule =
+        await this.repaymentScheduleRepos.getRepaymentScheduleById(
+          repaymentScheduleId
+        );
+      assertValueExists(
+        repaymentShedule,
+        `Repayment schedule with id ${repaymentScheduleId} does not exist.`
+      );
+
+      await this.repaymentScheduleRepos.deleteSchedule(repaymentScheduleId);
+      return;
+    } catch (err) {
+      throw new Error(
+        `Something went wrong while deleting repayment shedule: ${err}`
+      );
+    }
+  }
 }
 
 export const repaymentScheduleModel = new RepaymentScheduleModel(

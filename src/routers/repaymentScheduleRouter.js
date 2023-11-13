@@ -21,5 +21,10 @@ router.get(
   '/note',
   repaymentScheduleController.getPaymentAmountByScheduleIdAndMonthYear
 ); // public
+router.delete(
+  '/:repayment_schedule_id',
+  token.getAuthorization,
+  repaymentScheduleController.deleteSchedule
+); // protected
 
 export default router;
