@@ -53,6 +53,26 @@ export class RepaymentScheduleController {
       });
     }
   };
+  updateRemainBalance = async (req, res) => {
+    try {
+      await this.repaymentScheduleModel.updateRemainBalance(
+        req.body.new_balance,
+        req.params.repayment_schedule_id
+      );
+
+      res
+        .status(200)
+        .send(
+          `Remaining balance in repayment shedule with id ${req.params.repayment_schedule_id} was updated.`
+        );
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({
+        message: 'Something went wrong while updating remaing balance.',
+        error: err.message,
+      });
+    }
+  };
 }
 
 export const repaymentScheduleController = new RepaymentScheduleController(

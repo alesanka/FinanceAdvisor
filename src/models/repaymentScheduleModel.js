@@ -6,6 +6,12 @@ import { notesRepos } from '../repositories/notesRepos.js';
 import { RepaymentScheduleDTO } from '../dto/repaymentScheduleDTO.js';
 import { NotesDTO } from '../dto/notesDTO.js';
 
+export const assertValueExists = (value, error) => {
+  if (!value) {
+    throw new Error(error);
+  }
+};
+
 export const createDate = (date) => {
   const createdDate = new Date(date);
   if (isNaN(createdDate)) {
@@ -61,9 +67,10 @@ export class RepaymentScheduleModel {
         applicationId
       );
 
-      if (!application) {
-        throw new Error(`Application with id ${applicationId} does not exist.`);
-      }
+      assertValueExists(
+        application,
+        `Application with id ${applicationId} does not exist.`
+      );
 
       if (!application.is_approved) {
         throw new Error(
@@ -133,6 +140,28 @@ export class RepaymentScheduleModel {
       return monthPayment;
     } catch (err) {
       throw new Error(`Something went wrong by getting month payment: ${err}`);
+    }
+  }
+  async updateRemainBalance(sum, repaymentScheduleId) {
+    try {
+      const repaymentShedule =
+        await this.repaymentScheduleRepos.getRepaymentScheduleById(
+          repaymentScheduleId
+        );
+      assertValueExists(
+        repaymentShedule,
+        `Repayment schedule with id ${repaymentScheduleId} does not exist.`
+      );
+
+      await this.repaymentScheduleRepos.updateRemainBalance(
+        sum,
+        repaymentScheduleId
+      );
+      return;
+    } catch (err) {
+      throw new Error(
+        `Something went wrong while updating remaining balance in repayment shedule: ${err}`
+      );
     }
   }
 }

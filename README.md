@@ -1049,6 +1049,54 @@ Content-Type: application/json
 }
 ```
 
+**Update repayment schedule remaining balance.**
+
+\*protected request (available only for admin and worker with access_token)
+\*(only workers can do this, user_id is required for checking user's role)
+
+Request:
+
+```
+PUT /api/repayment_schedule/:repayment_schedule_id/
+Content-Type: application/json
+Authorization: Bearer {access_token}
+
+{
+  "user_id": 2,
+  "new_balance": 5000
+}
+```
+
+In case of successful response:
+
+```
+HTTP/1.1 200 OK
+Content-Type: text/html; charset=utf-8
+
+`Remaining balance in repayment shedule with id ${repayment_schedule_id} was updated.`
+```
+
+In case of error response:
+
+```
+HTTP/1.1 403 Forbidden
+Content-Type: text/html; charset=utf-8
+
+'Access denied. Invalid user role.'
+```
+
+or
+
+```
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+
+{
+   message: 'Something went wrong while updating remaing balance.',
+  error: err.message,
+}
+```
+
 ---
 
 **Get a month payment amount for specific date.**

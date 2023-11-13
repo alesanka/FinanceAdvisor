@@ -67,6 +67,18 @@ export class RepaymentScheduleRepos {
       throw new Error(`${err}`);
     }
   }
+  async updateRemainBalance(sum, repayment_schedule_id) {
+    try {
+      await this.connection.query(
+        `UPDATE RepaymentSchedules SET remaining_balance = $1 WHERE repayment_schedule_id = $2`,
+        [sum, repayment_schedule_id]
+      );
+
+      return;
+    } catch (err) {
+      throw new Error(`${err}`);
+    }
+  }
 }
 
 export const repaymentScheduleRepos = new RepaymentScheduleRepos(pool);

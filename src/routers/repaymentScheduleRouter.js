@@ -11,6 +11,12 @@ router.post(
   checkUserRole(['worker']),
   repaymentScheduleController.createRepaymentSchedule
 ); // protected
+router.put(
+  '/:repayment_schedule_id',
+  token.getAuthorization,
+  checkUserRole(['worker']),
+  repaymentScheduleController.updateRemainBalance
+); // protected
 router.get(
   '/note',
   repaymentScheduleController.getPaymentAmountByScheduleIdAndMonthYear
