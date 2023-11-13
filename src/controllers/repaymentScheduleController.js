@@ -1,12 +1,25 @@
-import { userModel } from '../models/userModel.js';
 import { repaymentScheduleModel } from '../models/repaymentScheduleModel.js';
 
+export const checkIfAllRequiredParamsRepaymentSchedule = (params) => {
+  if (!params.repayment_schedule_id || !params.year || !params.month) {
+    return res
+      .status(400)
+      .send(
+        'Missing required parameters: repayment_schedule_id, year, and month'
+      );
+  }
+  return true;
+};
+
 class RepaymentScheduleController {
+  constructor(repaymentScheduleModel) {
+    this.repaymentScheduleModel = repaymentScheduleModel;
+  }
+
   createRepaymentSchedule = async (req, res) => {
     try {
-
       const repaymentScheduleIdandDate =
-        await repaymentScheduleModel.createRepaymentSchedule(req.body);
+        await this.repaymentScheduleModel.createRepaymentSchedule(req.body);
 
       res
         .status(201)
@@ -23,20 +36,12 @@ class RepaymentScheduleController {
   };
   getPaymentAmountByScheduleIdAndMonthYear = async (req, res) => {
     try {
-      const { repayment_schedule_id, year, month } = req.query;
+      checkIfAllRequiredParamsRepaymentSchedule(req.query);
 
-      if (!repayment_schedule_id || !year || !month) {
-        return res
-          .status(400)
-          .send(
-            'Missing required parameters: repayment_schedule_id, year, and month'
-          );
-      }
-
-      const paymentAmount = await repaymentScheduleModel.getByIdYearMonth(
-        repayment_schedule_id,
-        year,
-        month
+      const paymentAmount = await this.repaymentScheduleModel.getByIdYearMonth(
+        req.query.repayment_schedule_id,
+        req.query.year,
+        req.query.month
       );
 
       res.status(200).send(`Month payment - ${paymentAmount}`);
@@ -50,4 +55,6 @@ class RepaymentScheduleController {
   };
 }
 
-export const repaymentScheduleController = new RepaymentScheduleController();
+export const repaymentScheduleController = new RepaymentScheduleController(
+  repaymentScheduleModel
+);

@@ -1,27 +1,36 @@
 import { userModel } from '../models/userModel.js';
 
+export const checkAllRequiredParamsForToken = (body) => {
+  const requiredFields = [
+    'grant_type',
+    'scope',
+    'client_id',
+    'client_secret',
+    'username',
+    'password',
+  ];
+
+  for (const field of requiredFields) {
+    if (!body[field]) {
+      return res
+        .status(400)
+        .send(`Missing parameter: "${field}" in requst body`);
+    }
+  }
+  return true;
+};
+
 class AuthenticationController {
+  constructor(userModel) {
+    this.userModel = userModel;
+  }
   authenticateUser = async (req, res, next) => {
     try {
       const { username, password } = req.body;
 
-      const requiredFields = [
-        'grant_type',
-        'scope',
-        'client_id',
-        'client_secret',
-        'username',
-        'password',
-      ];
+      checkAllRequiredParamsForToken(req.body);
 
-      for (const field of requiredFields) {
-        if (!req.body[field]) {
-          return res
-            .status(400)
-            .send(`Missing parameter: "${field}" in requst body`);
-        }
-      }
-      const role = await userModel.loginUser(username, password);
+      const role = await this.userModel.loginUser(username, password);
       if (role === 'admin' || role === 'worker') {
         next();
       } else {
@@ -37,4 +46,4 @@ class AuthenticationController {
   };
 }
 
-export const authenticationController = new AuthenticationController();
+export const authenticationController = new AuthenticationController(userModel);

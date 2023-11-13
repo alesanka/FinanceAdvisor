@@ -1,10 +1,18 @@
 import { loanTypeModel } from '../models/loanTypeModel.js';
-import { userModel } from '../models/userModel.js';
 
 class LoanTypeController {
+  constructor(loanTypeModel) {
+    this.loanTypeModel = loanTypeModel;
+  }
+
   createLoanType = async (req, res) => {
     try {
-      const loanId = await loanTypeModel.createLoanType(req.body);
+      const loanId = await this.loanTypeModel.createLoanType(
+        req.body.loan_type,
+        req.body.interest_rate,
+        req.body.loan_term,
+        req.body.required_doc
+      );
       res
         .status(201)
         .send(`Loan type was created successfully. Loan type id - ${loanId}`);
@@ -18,7 +26,7 @@ class LoanTypeController {
   };
   getAllLoanTypes = async (req, res) => {
     try {
-      const loanTypes = await loanTypeModel.getAllLoanTypes();
+      const loanTypes = await this.loanTypeModel.getAllLoanTypes();
       res.status(200).json(loanTypes);
     } catch (err) {
       console.error(err);
@@ -36,7 +44,7 @@ class LoanTypeController {
         return res.status(400).send(`No valid loan_type is provided`);
       }
 
-      const loanData = await loanTypeModel.findLoanByType(loanType);
+      const loanData = await this.loanTypeModel.findLoanByType(loanType);
       res.status(200).json(loanData);
     } catch (err) {
       console.error(err);
@@ -48,7 +56,10 @@ class LoanTypeController {
   };
   updateLoanTypeData = async (req, res) => {
     try {
-      await loanTypeModel.updateLoanTypeData(req.params.loan_type_id, req.body);
+      await this.loanTypeModel.updateLoanTypeData(
+        req.params.loan_type_id,
+        req.body
+      );
 
       res
         .status(200)
@@ -65,4 +76,4 @@ class LoanTypeController {
   };
 }
 
-export const loanTypeController = new LoanTypeController();
+export const loanTypeController = new LoanTypeController(loanTypeModel);

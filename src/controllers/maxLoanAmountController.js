@@ -1,12 +1,15 @@
 import { maxLoanAmountModel } from '../models/maxLoanAmountModel.js';
-import { userModel } from '../models/userModel.js';
 
 class MaxLoanAmountController {
+  constructor(maxLoanAmountModel) {
+    this.maxLoanAmountModel = maxLoanAmountModel;
+  }
   saveMaxLoan = async (req, res) => {
     try {
-      const { client_id, loan_type_id } = req.body;
-
-      const id = await maxLoanAmountModel.saveMaxLoan(client_id, loan_type_id);
+      const id = await this.maxLoanAmountModel.saveMaxLoan(
+        req.body.client_id,
+        req.body.loan_type_id
+      );
 
       res
         .status(200)
@@ -24,8 +27,8 @@ class MaxLoanAmountController {
 
   getMaxLoanAmount = async (req, res) => {
     try {
-      const maxAvailableAmount = await maxLoanAmountModel.getMaxLoanAmount(
-        req.params
+      const maxAvailableAmount = await this.maxLoanAmountModel.getMaxLoanAmount(
+        req.params.max_loan_amount_id
       );
 
       res.status(200).json(maxAvailableAmount);
@@ -39,4 +42,6 @@ class MaxLoanAmountController {
   };
 }
 
-export const maxLoanAmountController = new MaxLoanAmountController();
+export const maxLoanAmountController = new MaxLoanAmountController(
+  maxLoanAmountModel
+);

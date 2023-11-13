@@ -1,9 +1,12 @@
 import { notesModel } from '../models/notesModel.js';
 
 class NotesController {
+  constructor(notesModel) {
+    this.notesModel = notesModel;
+  }
   createNotes = async (req, res) => {
     try {
-      const noteId = await notesModel.createNotes(req.body);
+      const noteId = await this.notesModel.createNotes(req.body);
 
       res.status(201).send(`Payment note created successfully. Id - ${noteId}`);
     } catch (err) {
@@ -16,4 +19,4 @@ class NotesController {
   };
 }
 
-export const notesController = new NotesController();
+export const notesController = new NotesController(notesModel);
