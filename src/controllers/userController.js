@@ -1,24 +1,41 @@
 import { userModel } from '../models/userModel.js';
 
+export const checkAreAllRequaredParams = (param) => {
+  const requiredFields = [
+    'username',
+    'password',
+    'email',
+    'first_name',
+    'last_name',
+    'phone_number',
+    'role',
+  ];
+  for (const field of requiredFields) {
+    if (!param[field]) {
+      return res.status(400).send(`Missing required parameter: ${field}`);
+    }
+  }
+};
+
 class UserController {
+  constructor(userModel) {
+    this.userModel = userModel;
+  }
   registerUser = async (req, res) => {
     try {
-      const requiredFields = [
-        'username',
-        'password',
-        'email',
-        'first_name',
-        'last_name',
-        'phone_number',
-        'role',
-      ];
-      for (const field of requiredFields) {
-        if (!req.body[field]) {
-          return res.status(400).send(`Missing required parameter: ${field}`);
-        }
-      }
+      checkAreAllRequaredParams(req.body);
 
-      const id = await userModel.registerUser(req.body);
+      const id = await this.userModel.registerUser(
+        req.body.username,
+        req.body.password,
+        req.body.first_Name,
+        req.body.last_Name,
+        req.body.email,
+        req.body.phone_number,
+        req.body.role,
+        req.body.salary,
+        req.body.is_credit_story
+      );
       res.status(201).send(`User was registered successfully. Id - ${id}`);
     } catch (err) {
       console.error(err);
@@ -31,7 +48,7 @@ class UserController {
 
   getAllUsers = async (req, res) => {
     try {
-      const users = await userModel.getAllUsers();
+      const users = await this.userModel.getAllUsers();
 
       res.status(200).json(users);
     } catch (err) {
@@ -45,7 +62,7 @@ class UserController {
 
   getUserById = async (req, res) => {
     try {
-      const user = await userModel.getUserById(req.params.userId);
+      const user = await this.userModel.getUserById(req.params.userId);
       res.status(200).json(user);
     } catch (err) {
       console.error(err);
@@ -57,7 +74,7 @@ class UserController {
   };
   filterByParameter = async (req, res) => {
     try {
-      const users = await userModel.filterByParameter(req.query);
+      const users = await this.userModel.filterByParameter(req.query);
       if (!users.length) {
         return res.status(404).send('No users found matching the criteria.');
       }
@@ -73,7 +90,7 @@ class UserController {
 
   updateData = async (req, res) => {
     try {
-      await userModel.updateData(req.params.userId, req.body);
+      await this.userModel.updateData(req.params.userId, req.body);
       res
         .status(200)
         .send(
@@ -89,7 +106,7 @@ class UserController {
   };
   deleteUser = async (req, res) => {
     try {
-      await userModel.deleteUser(req.params.userId);
+      await this.userModel.deleteUser(req.params.userId);
       res.status(204).end();
     } catch (err) {
       console.error(err);
@@ -101,4 +118,4 @@ class UserController {
   };
 }
 
-export const userController = new UserController();
+export const userController = new UserController(userModel);

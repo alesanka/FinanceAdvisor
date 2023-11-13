@@ -5,49 +5,86 @@ import { loanTypeMaxLoanAmountRepos } from '../repositories/loanType_MaxLoanAmou
 import { MaxLoanDTO } from '../dto/maxLoanDTO.js';
 import { LoanTypeDTO } from '../dto/loanTypesDTO.js';
 
+export const calculateMaxMonthlyPayment = (salary) => {
+  const payment = salary * 0.5;
+  return payment;
+};
+
+export const calculateInterestRate = (rate) => {
+  const i = rate / 12 / 100;
+  return i;
+};
+
+export const decreeseMaxLoanAmount = (max_loan_amount) => {
+  const newMaxLoanAmount = max_loan_amount * 0.9;
+  return Math.round(newMaxLoanAmount);
+};
+
+export const calculateMaxLoanAmount = (maxMonthlyPayment, interest, term) => {
+  const maxLoan =
+    maxMonthlyPayment *
+    ((Math.pow(1 + interest, term) - 1) /
+      (interest * Math.pow(1 + interest, term)));
+  return Math.round(maxLoan);
+};
+
+export const calculateTotalInterest = (
+  principalAmount,
+  interestRate,
+  numberOfMonths
+) => {
+  const monthlyRate = interestRate / 12 / 100;
+  const annuityCoefficient =
+    (monthlyRate * Math.pow(1 + monthlyRate, numberOfMonths)) /
+    (Math.pow(1 + monthlyRate, numberOfMonths) - 1);
+  const monthlyPayment = principalAmount * annuityCoefficient;
+  const totalPayments = monthlyPayment * numberOfMonths;
+  const totalInterest = totalPayments - principalAmount;
+  return totalInterest;
+};
+
 class MaxLoanAmountModel {
+  constructor(
+    maxLoanAmountRepos,
+    userRepos,
+    loanTypeRepos,
+    loanTypeMaxLoanAmountRepos
+  ) {
+    (this.maxLoanAmountRepos = maxLoanAmountRepos),
+      (this.userRepos = userRepos),
+      (this.loanTypeRepos = loanTypeRepos),
+      (this.loanTypeMaxLoanAmountRepos = loanTypeMaxLoanAmountRepos);
+  }
   async saveMaxLoan(client_id, loan_type_id) {
     try {
-      const loanTypeDetails = await loanTypeRepos.findLoanById(loan_type_id);
+      const loanTypeDetails = await this.loanTypeRepos.findLoanById(
+        loan_type_id
+      );
       if (!loanTypeDetails) {
         throw new Error('Invalid loan type id.');
       }
       const rate = loanTypeDetails.interest_rate;
       const term = loanTypeDetails.loan_term;
-      const clientDetails = await userRepos.findClientById(client_id);
+      const clientDetails = await this.userRepos.findClientById(client_id);
       if (!clientDetails) {
         throw new Error('Invalid client id.');
       }
       const credit_story = clientDetails.credit_story;
       const salary = clientDetails.salary;
 
-      const maxMonthlyPayment = salary * 0.5;
-      const i = rate / 12 / 100;
-      let max_loan_amount =
-        maxMonthlyPayment *
-        ((Math.pow(1 + i, term) - 1) / (i * Math.pow(1 + i, term)));
+      const maxMonthlyPayment = calculateMaxMonthlyPayment(salary);
 
+      const interest = calculateInterestRate(rate);
+
+      let max_loan_amount = calculateMaxLoanAmount(
+        maxMonthlyPayment,
+        interest,
+        term
+      );
       // If client does not have a credit story - his max loan amount is decreased by 10%
       if (!credit_story) {
-        max_loan_amount *= 0.9;
+        decreeseMaxLoanAmount(max_loan_amount);
       }
-
-      max_loan_amount = Math.round(max_loan_amount);
-
-      const calculateTotalInterest = (
-        principalAmount,
-        interestRate,
-        numberOfMonths
-      ) => {
-        const monthlyRate = interestRate / 12 / 100;
-        const annuityCoefficient =
-          (monthlyRate * Math.pow(1 + monthlyRate, numberOfMonths)) /
-          (Math.pow(1 + monthlyRate, numberOfMonths) - 1);
-        const monthlyPayment = principalAmount * annuityCoefficient;
-        const totalPayments = monthlyPayment * numberOfMonths;
-        const totalInterest = totalPayments - principalAmount;
-        return totalInterest;
-      };
 
       const total_interest_amount = calculateTotalInterest(
         max_loan_amount,
@@ -62,11 +99,11 @@ class MaxLoanAmountModel {
         total_interest_amount
       );
 
-      const max_loan_amount_id = await maxLoanAmountRepos.saveMaxLoan(
+      const max_loan_amount_id = await this.maxLoanAmountRepos.saveMaxLoan(
         maxLoanDTO
       );
 
-      await loanTypeMaxLoanAmountRepos.saveLoanTypeMaxLoan(
+      await this.loanTypeMaxLoanAmountRepos.saveLoanTypeMaxLoan(
         loan_type_id,
         max_loan_amount_id
       );
@@ -79,7 +116,7 @@ class MaxLoanAmountModel {
   async getMaxLoanAmount(maxLoanAmountId) {
     try {
       const maxAmountLoanType =
-        await maxLoanAmountRepos.getMaxLoanAmountLoanType(maxLoanAmountId);
+        await this.maxLoanAmountRepos.getMaxLoanAmountLoanType(maxLoanAmountId);
       if (!maxAmountLoanType) {
         throw new Error('Invalid max_loan_amount_id');
       }
@@ -114,4 +151,9 @@ class MaxLoanAmountModel {
   }
 }
 
-export const maxLoanAmountModel = new MaxLoanAmountModel();
+export const maxLoanAmountModel = new MaxLoanAmountModel(
+  maxLoanAmountRepos,
+  userRepos,
+  loanTypeRepos,
+  loanTypeMaxLoanAmountRepos
+);

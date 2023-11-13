@@ -6,10 +6,49 @@ import { z } from 'zod';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
-
 const SALTY = parseInt(process.env.SALT);
 
+export const passwordCheck = (pswrd) => {
+  const passwordSchema = z.string().min(8);
+  try {
+    passwordSchema.parse(pswrd);
+  } catch (e) {
+    throw new Error('Password should contain 8 or more symbols.');
+  }
+};
+
+export const passwordHash = async (pswrd) => {
+  const password = await bcrypt.hash(pswrd, SALTY);
+  return password;
+};
+
+export const passwordValidation = async (pswrd, reposPswrd) => {
+  await bcrypt.compare(pswrd, reposPswrd);
+};
+
+export const emailCheck = (email) => {
+  const emailSchema = z.string().email();
+  try {
+    emailSchema.parse(email);
+  } catch (e) {
+    throw new Error(`Invalid email format`);
+  }
+};
+
+export const phoneCheck = (phone) => {
+  const phoneSchema = z.string().length(10);
+  try {
+    phoneSchema.parse(phone);
+  } catch (e) {
+    throw new Error('Phone number must contain 10 digits');
+  }
+};
+
 class UserModel {
+  constructor(userRepos) {
+    this.userRepos = userRepos;
+  }
+
   async registerUser(
     username,
     passwordRaw,
@@ -31,25 +70,20 @@ class UserModel {
       role
     );
 
-    const passwordSchema = z.string().min(8);
-    try {
-      passwordSchema.parse(passwordRaw);
-    } catch (e) {
-      throw new Error('Password should contain 8 or more symbols.');
-    }
+    passwordCheck(passwordRaw);
+    const password = await passwordHash(passwordRaw);
 
-    const password = await bcrypt.hash(passwordRaw, SALTY);
-    const isUsernameTaken = await userRepos.findUserByUsername(
+    const isUsernameTaken = await this.userRepos.findUserByUsername(
       userDto.username
     );
     if (isUsernameTaken) {
       throw new Error(`The username is already taken!`);
     }
     try {
-      const userId = await userRepos.createUser(userDto, password);
+      const userId = await this.userRepos.createUser(userDto, password);
 
       if (userDto.role === 'client') {
-        await userRepos.createClient(userId, salary, isCreditStory);
+        await this.userRepos.createClient(userId, salary, isCreditStory);
       }
       return userId;
     } catch (err) {
@@ -59,26 +93,21 @@ class UserModel {
 
   async loginUser(username, passwordRaw) {
     try {
-      const passwordSchema = z.string().min(8);
-      try {
-        passwordSchema.parse(passwordRaw);
-      } catch (e) {
-        throw new Error('Password should contain 8 or more symbols.');
-      }
+      passwordCheck(passwordRaw);
 
-      const user = await userRepos.findUserByUsername(username);
+      const user = await this.userRepos.findUserByUsername(username);
 
       if (!user) {
         throw new Error('Username is incorrect.');
       }
 
-      const validPassword = await bcrypt.compare(passwordRaw, user.password);
+      const validPassword = passwordValidation(passwordRaw, user.password);
 
       if (!validPassword) {
         throw new Error('Password is incorrect.');
       }
 
-      const role = await userRepos.checkRoleByUserId(user.user_id);
+      const role = await this.userRepos.checkRoleByUserId(user.user_id);
 
       return role;
     } catch (err) {
@@ -87,7 +116,7 @@ class UserModel {
   }
   async getAllUsers() {
     try {
-      const users = await userRepos.getAllUsers();
+      const users = await this.userRepos.getAllUsers();
 
       const userDTOs = users.map((user) => {
         try {
@@ -122,7 +151,7 @@ class UserModel {
   }
   async getUserById(userId) {
     try {
-      const user = await userRepos.findUserById(userId);
+      const user = await this.userRepos.findUserById(userId);
       if (!user) {
         throw new Error('Invalid user id');
       }
@@ -146,7 +175,7 @@ class UserModel {
       };
 
       if (userDTO.role === 'client') {
-        const client = await userRepos.findClientByUserId(userId);
+        const client = await this.userRepos.findClientByUserId(userId);
         if (client) {
           const clientDTO = new ClientDTO(
             client.client_id,
@@ -169,18 +198,18 @@ class UserModel {
   }
   async checkUserRoleById(userId) {
     try {
-      const user = await userRepos.findUserById(userId);
+      const user = await this.userRepos.findUserById(userId);
       if (!user) {
         throw new Error('Invalid user id');
       }
-      return await userRepos.checkRoleByUserId(userId);
+      return await this.userRepos.checkRoleByUserId(userId);
     } catch (err) {
       throw new Error(`Unable to check user role by id: ${err}.`);
     }
   }
   async filterByParameter(params) {
     try {
-      const users = await userRepos.filterByParameter(params);
+      const users = await this.userRepos.filterByParameter(params);
 
       const combinedDTOs = users.map((user) => {
         const userDto = new UserDTO(
@@ -216,30 +245,21 @@ class UserModel {
 
   async updateData(userId, data) {
     try {
-      const isUserExists = await userRepos.findUserById(userId);
+      const isUserExists = await this.userRepos.findUserById(userId);
 
       if (!isUserExists) {
         throw new Error(`No user found with userId ${userId}`);
       }
 
       if (data.email) {
-        const emailSchema = z.string().email();
-        try {
-          emailSchema.parse(data.email);
-        } catch (e) {
-          throw new Error(`Invalid email format`);
-        }
+        emailCheck(data.email);
       }
 
       if (data.phone_number) {
-        const phoneSchema = z.string().length(10);
-        try {
-          phoneSchema.parse(data.phone_number);
-        } catch (e) {
-          throw new Error('Phone number must contain 10 digits');
-        }
+        phoneCheck(data.phone_number);
       }
-      await userRepos.updateData(userId, data);
+
+      await this.userRepos.updateData(userId, data);
       return;
     } catch (err) {
       throw new Error(`Unable to update data for userId ${userId}: ${err}.`);
@@ -247,12 +267,12 @@ class UserModel {
   }
   async deleteUser(userId) {
     try {
-      const isUserExists = await userRepos.findUserById(userId);
+      const isUserExists = await this.userRepos.findUserById(userId);
 
       if (!isUserExists) {
         throw new Error(`No user found with userId ${userId}`);
       }
-      await userRepos.deleteUser(userId);
+      await this.userRepos.deleteUser(userId);
       return;
     } catch (err) {
       throw new Error(`Unable to delete userId ${userId}: ${err}.`);
@@ -260,4 +280,4 @@ class UserModel {
   }
 }
 
-export const userModel = new UserModel();
+export const userModel = new UserModel(userRepos);

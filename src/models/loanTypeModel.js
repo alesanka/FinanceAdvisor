@@ -1,7 +1,24 @@
 import { LoanTypeDTO } from '../dto/loanTypesDTO.js';
 import { loanTypeRepos } from '../repositories/loanTypeRepos.js';
 
+export const checkDocType = (doc) => {
+  const DocSchema = z.enum([
+    'passport',
+    'student_verification',
+    'business_plan',
+    'purchase_agreement',
+  ]);
+  try {
+    DocSchema.parse(doc);
+  } catch (e) {
+    throw new Error('Invalid document type');
+  }
+};
+
 class LoanTypeModel {
+  constructor(loanTypeRepos) {
+    this.loanTypeRepos = loanTypeRepos;
+  }
   async createLoanType(loanType, interestRate, loanTerm, requiredDoc) {
     try {
       const loanTypeDTO = new LoanTypeDTO(
@@ -12,14 +29,14 @@ class LoanTypeModel {
         requiredDoc
       );
 
-      const isLoanTypeExists = await loanTypeRepos.findLoanByType(
+      const isLoanTypeExists = await this.loanTypeRepos.findLoanByType(
         loanTypeDTO.loan_type
       );
       if (isLoanTypeExists) {
         throw new Error(`Loan type ${loanTypeDTO.loan_type} already exists`);
       }
 
-      const loanTypeId = await loanTypeRepos.createLoanType(loanTypeDTO);
+      const loanTypeId = await this.loanTypeRepos.createLoanType(loanTypeDTO);
 
       return loanTypeId;
     } catch (err) {
@@ -29,7 +46,7 @@ class LoanTypeModel {
 
   async getAllLoanTypes() {
     try {
-      const loans = await loanTypeRepos.getAllLoanTypes();
+      const loans = await this.loanTypeRepos.getAllLoanTypes();
 
       const loanDTOs = loans.map((loan) => {
         const dto = new LoanTypeDTO(
@@ -56,7 +73,7 @@ class LoanTypeModel {
 
   async findLoanByType(loan_type) {
     try {
-      const loan = await loanTypeRepos.findLoanByType(loan_type);
+      const loan = await this.loanTypeRepos.findLoanByType(loan_type);
       if (!loan) {
         throw new Error('Invalid loan type');
       }
@@ -84,7 +101,7 @@ class LoanTypeModel {
 
   async findLoanById(loan_id) {
     try {
-      const loan = await loanTypeRepos.findLoanById(loan_id);
+      const loan = await this.loanTypeRepos.findLoanById(loan_id);
       if (!loan) {
         throw new Error('Invalid loan id');
       }
@@ -112,28 +129,18 @@ class LoanTypeModel {
 
   async updateLoanTypeData(loanTypeId, data) {
     try {
-      const loan = await loanTypeRepos.findLoanById(loanTypeId);
+      const loan = await this.loanTypeRepos.findLoanById(loanTypeId);
       if (!loan) {
         throw new Error('Invalid loan id');
       }
       if (data.required_doc) {
-        const DocSchema = z.enum([
-          'passport',
-          'student_verification',
-          'business_plan',
-          'purchase_agreement',
-        ]);
-        try {
-          DocSchema.parse(doc);
-        } catch (e) {
-          throw new Error('Invalid document type');
-        }
+        checkDocType(data.required_doc);
       }
 
-      await loanTypeRepos.updateLoanTypeData(loanTypeId, data);
+      await this.loanTypeRepos.updateLoanTypeData(loanTypeId, data);
     } catch (err) {
       throw new Error(`Unable to update loan type: ${err}.`);
     }
   }
 }
-export const loanTypeModel = new LoanTypeModel();
+export const loanTypeModel = new LoanTypeModel(loanTypeRepos);

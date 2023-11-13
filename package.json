@@ -5,7 +5,7 @@
   "description": "The Financial Advisor API provides the functionality for users to input key financial details such as their salary, preferred currency, and desired annual interest rate, and receive valuable insights, including the maximum loan amount they can obtain, a detailed repayment plan, and the total interest paid over the loan term.",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
+    "test": "set NODE_OPTIONS=--experimental-vm-modules && jest --detectOpenHandles --coverage",
     "start": "node src/index.js",
     "dev": "nodemon src/index.js"
   },

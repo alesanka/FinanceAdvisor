@@ -4,12 +4,42 @@ import { loanApplicationRepos } from '../repositories/loanApplicationRepos.js';
 import { loanTypeRepos } from '../repositories/loanTypeRepos.js';
 import { notesRepos } from '../repositories/notesRepos.js';
 import { NotesDTO } from '../dto/notesDTO.js';
+export { createDate, toMyISOFormat } from '../models/repaymentScheduleModel.js';
+
+export const calculateEndTermDate = (date, loanTerm) => {
+  let endTermDate = new Date(date);
+  endTermDate.setMonth(endTermDate.getMonth() + loanTerm);
+  return endTermDate;
+};
+
+export const checkIsRightTerm = (paymentDate, applicationDate, endTermDate) => {
+  if (
+    new Date(paymentDate) < applicationDate ||
+    new Date(paymentDate) > endTermDate
+  ) {
+    throw new Error(`Payment date is out of range.`);
+  }
+};
 
 class NotesModel {
+  constructor(
+    repaymentScheduleRepos,
+    loanTypeMaxLoanAmountRepos,
+    loanApplicationRepos,
+    loanTypeRepos,
+    notesRepos
+  ) {
+    (this.repaymentScheduleRepos = repaymentScheduleRepos),
+      (this.loanTypeMaxLoanAmountRepos = loanTypeMaxLoanAmountRepos),
+      (this.loanApplicationRepos = loanApplicationRepos),
+      (this.loanTypeRepos = loanTypeRepos),
+      (this.notesRepos = notesRepos);
+  }
+
   async createNotes(repaymentScheduleId, paymentDate) {
     try {
       const repaymentInfo =
-        await repaymentScheduleRepos.getRepaymentScheduleById(
+        await this.repaymentScheduleRepos.getRepaymentScheduleById(
           repaymentScheduleId
         );
 
@@ -20,40 +50,28 @@ class NotesModel {
       const applicationId = repaymentInfo.application_id;
       const monthlyPayment = repaymentInfo.monthly_payment;
 
-      const application = await loanApplicationRepos.findApplicationById(
+      const application = await this.loanApplicationRepos.findApplicationById(
         applicationId
       );
 
-      const applicationDate = new Date(application.dto.application_date);
-      if (isNaN(applicationDate)) {
-        throw new Error(
-          `Invalid application date: ${application.dto.application_date}`
-        );
-      }
+      const applicationDate = createDate(application.dto.application_date);
 
       const loanTypeMaxAmount =
-        await loanTypeMaxLoanAmountRepos.getLoanTypeMaxLoanId(application.id);
+        await this.loanTypeMaxLoanAmountRepos.getLoanTypeMaxLoanId(
+          application.id
+        );
+
       const loanTypeId = loanTypeMaxAmount.loan_type_id;
 
-      const loanTypeDetails = await loanTypeRepos.findLoanById(loanTypeId);
+      const loanTypeDetails = await this.loanTypeRepos.findLoanById(loanTypeId);
 
       const loanTerm = loanTypeDetails.loan_term;
 
-      const endTermDate = new Date(applicationDate);
-      endTermDate.setMonth(endTermDate.getMonth() + loanTerm);
+      const endTermDate = calculateEndTermDate(applicationDate, loanTerm);
 
-      if (
-        new Date(paymentDate) < applicationDate ||
-        new Date(paymentDate) > endTermDate
-      ) {
-        throw new Error(
-          `Payment date ${formattedPaymentDate} is out of range.`
-        );
-      }
+      checkIsRightTerm(paymentDate, applicationDate, endTermDate);
 
-      const formattedPaymentDate = new Date(paymentDate)
-        .toISOString()
-        .split('T')[0];
+      const formattedPaymentDate = new Date(toMyISOFormat(paymentDate));
 
       const notesDTO = new NotesDTO(
         repaymentScheduleId,
@@ -62,7 +80,7 @@ class NotesModel {
         false
       );
 
-      const noteId = await notesRepos.createNotes(notesDTO);
+      const noteId = await this.notesRepos.createNotes(notesDTO);
 
       return noteId;
     } catch (err) {
@@ -71,4 +89,10 @@ class NotesModel {
   }
 }
 
-export const notesModel = new NotesModel();
+export const notesModel = new NotesModel(
+  repaymentScheduleRepos,
+  loanTypeMaxLoanAmountRepos,
+  loanApplicationRepos,
+  loanTypeRepos,
+  notesRepos
+);

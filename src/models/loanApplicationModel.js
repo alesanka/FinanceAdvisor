@@ -5,7 +5,30 @@ import { loanTypeRepos } from '../repositories/loanTypeRepos.js';
 import { loanTypeMaxLoanAmountRepos } from '../repositories/loanType_MaxLoanAmountRepos.js';
 import { ApplicationDTO } from '../dto/applicationDTO.js';
 
+export const checkIfLoanAmountAvailable = (maxLoanAmount, desiredAmount) => {
+  if (maxLoanAmount < desiredAmount) {
+    throw new Error(
+      `Can't create new loan application because the amount of money desired by the client exceeds the maximum available loan amount ${maxLoanAmount}`
+    );
+  }
+  return true;
+};
+
 class LoanApplicationModel {
+  constructor(
+    loanApplicationRepos,
+    documentRepos,
+    maxLoanAmountRepos,
+    loanTypeRepos,
+    loanTypeMaxLoanAmountRepos
+  ) {
+    (this.loanApplicationRepos = loanApplicationRepos),
+      (this.documentRepos = documentRepos),
+      (this.maxLoanAmountRepos = maxLoanAmountRepos),
+      (this.loanTypeRepos = loanTypeRepos),
+      (this.loanTypeMaxLoanAmountRepos = loanTypeMaxLoanAmountRepos);
+  }
+
   async createLoanApplication(id, desiredLoanAmount, isApproved) {
     try {
       const applicationDTO = new ApplicationDTO(
@@ -16,31 +39,32 @@ class LoanApplicationModel {
       );
 
       const loanTypeMaxAmount =
-        await loanTypeMaxLoanAmountRepos.getLoanTypeMaxLoanId(id);
+        await this.loanTypeMaxLoanAmountRepos.getLoanTypeMaxLoanId(id);
       const maxLoanAmountId = loanTypeMaxAmount.max_loan_amount_id;
 
       const maxLoanAmountInfo =
-        await maxLoanAmountRepos.getMaxLoanAmountByMaxAmountId(maxLoanAmountId);
+        await this.maxLoanAmountRepos.getMaxLoanAmountByMaxAmountId(
+          maxLoanAmountId
+        );
       if (!maxLoanAmountInfo) {
         throw new Error('No max loan amount found with the given id.');
       }
       const maxLoanAmount = maxLoanAmountInfo.max_loan_amount;
 
-      if (maxLoanAmount < applicationDTO.desired_loan_amount) {
-        throw new Error(
-          `Can't create new loan application because the amount of money desired by the client exceeds the maximum available loan amount ${maxLoanAmount}`
-        );
-      }
+      checkIfLoanAmountAvailable(
+        maxLoanAmount,
+        applicationDTO.desired_loan_amount
+      );
 
       const loanTypeId = loanTypeMaxAmount.loan_type_id;
-      const loanTypeDetails = await loanTypeRepos.findLoanById(loanTypeId);
+      const loanTypeDetails = await this.loanTypeRepos.findLoanById(loanTypeId);
       if (!loanTypeDetails) {
         throw new Error('No loan type found with the given id.');
       }
 
       const requiredDoc = loanTypeDetails.required_doc;
 
-      const loanId = await loanApplicationRepos.createLoanApplication(
+      const loanId = await this.loanApplicationRepos.createLoanApplication(
         id,
         applicationDTO
       );
@@ -52,7 +76,7 @@ class LoanApplicationModel {
 
   async changeApprovement(applicationId) {
     try {
-      const application = await loanApplicationRepos.findApplicationById(
+      const application = await this.loanApplicationRepos.findApplicationById(
         applicationId
       );
       if (!application) {
@@ -60,17 +84,18 @@ class LoanApplicationModel {
       }
 
       const loanTypeMaxAmount =
-        await loanTypeMaxLoanAmountRepos.getLoanTypeMaxLoanId(application.id);
+        await this.loanTypeMaxLoanAmountRepos.getLoanTypeMaxLoanId(
+          application.id
+        );
       const loanTypeId = loanTypeMaxAmount.loan_type_id;
-      const loanTypeDetails = await loanTypeRepos.findLoanById(loanTypeId);
+      const loanTypeDetails = await this.loanTypeRepos.findLoanById(loanTypeId);
       if (!loanTypeDetails) {
         throw new Error('No loan type found with the given id.');
       }
       const requiredDoc = loanTypeDetails.required_doc;
 
-      const attachedDocs = await documentRepos.findAllDocumentsByApplicationId(
-        applicationId
-      );
+      const attachedDocs =
+        await this.documentRepos.findAllDocumentsByApplicationId(applicationId);
       if (!attachedDocs) {
         throw new Error('No documents are atteched to application.');
       }
@@ -83,9 +108,8 @@ class LoanApplicationModel {
         );
       }
 
-      const updateApplication = await loanApplicationRepos.changeApprovement(
-        applicationId
-      );
+      const updateApplication =
+        await this.loanApplicationRepos.changeApprovement(applicationId);
 
       if (updateApplication) {
         return;
@@ -99,18 +123,24 @@ class LoanApplicationModel {
 
   async deleteLoanApplication(applicationId) {
     try {
-      const application = await loanApplicationRepos.findApplicationById(
+      const application = await this.loanApplicationRepos.findApplicationById(
         applicationId
       );
       if (!application) {
         throw new Error(`Application with id ${applicationId} does not exist.`);
       }
 
-      await loanApplicationRepos.deleteLoanApplication(applicationId);
+      await this.loanApplicationRepos.deleteLoanApplication(applicationId);
       return;
     } catch (err) {
       throw new Error(`Unable to delete loan application: ${err}`);
     }
   }
 }
-export const loanApplicationModel = new LoanApplicationModel();
+export const loanApplicationModel = new LoanApplicationModel(
+  loanApplicationRepos,
+  documentRepos,
+  maxLoanAmountRepos,
+  loanTypeRepos,
+  loanTypeMaxLoanAmountRepos
+);

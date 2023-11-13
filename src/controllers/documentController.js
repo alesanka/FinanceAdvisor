@@ -3,7 +3,11 @@ import { documentModel } from '../models/documentModel.js';
 class DocumentController {
   createDocument = async (req, res) => {
     try {
-      const docId = await documentModel.createDocument(req.body);
+      const docId = await documentModel.createDocument(
+        req.body.application_id,
+        req.body.document_name,
+        req.body.document_type
+      );
 
       res
         .status(201)

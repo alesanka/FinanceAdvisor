@@ -22,7 +22,7 @@ afterAll((done) => {
 });
 
 describe('Tests for checking correct statuses and responces ', () => {
-  it('responds to /api/v1/', async () => {
+  test('responds to /api/v1/', async () => {
     const response = await request(app).get('/api/v1/');
     expect(response.statusCode).toEqual(200);
     expect(response.text).toContain("It's alive!");
