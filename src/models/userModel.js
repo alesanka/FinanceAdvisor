@@ -8,12 +8,19 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 const SALTY = parseInt(process.env.SALT);
 
+export const assertValueExists = (value, error) => {
+  if (!value) {
+    throw new Error(error);
+  }
+};
+
 export const passwordCheck = (pswrd) => {
   const passwordSchema = z.string().min(8);
   try {
     passwordSchema.parse(pswrd);
+    return true;
   } catch (e) {
-    throw new Error('Password should contain 8 or more symbols.');
+    return false;
   }
 };
 
@@ -24,23 +31,27 @@ export const passwordHash = async (pswrd) => {
 
 export const passwordValidation = async (pswrd, reposPswrd) => {
   await bcrypt.compare(pswrd, reposPswrd);
+  return true;
 };
 
 export const emailCheck = (email) => {
   const emailSchema = z.string().email();
   try {
     emailSchema.parse(email);
+    return true;
   } catch (e) {
-    throw new Error(`Invalid email format`);
+    return false;
   }
 };
 
 export const phoneCheck = (phone) => {
-  const phoneSchema = z.string().length(10);
+  const phoneSchema = z.string().length(10).regex(/^\d+$/);
+
   try {
     phoneSchema.parse(phone);
+    return true;
   } catch (e) {
-    throw new Error('Phone number must contain 10 digits');
+    return false;
   }
 };
 
@@ -70,12 +81,16 @@ export class UserModel {
       role
     );
 
-    passwordCheck(passwordRaw);
+    assertValueExists(
+      passwordCheck(passwordRaw),
+      'Password should contain 8 symbols at least'
+    );
     const password = await passwordHash(passwordRaw);
 
     const isUsernameTaken = await this.userRepos.findUserByUsername(
       userDto.username
     );
+
     if (isUsernameTaken) {
       throw new Error(`The username is already taken!`);
     }
@@ -93,19 +108,18 @@ export class UserModel {
 
   async loginUser(username, passwordRaw) {
     try {
-      passwordCheck(passwordRaw);
+      assertValueExists(
+        passwordCheck(passwordRaw),
+        'Password should contain 8 symbols at least'
+      );
 
       const user = await this.userRepos.findUserByUsername(username);
 
-      if (!user) {
-        throw new Error('Username is incorrect.');
-      }
+      assertValueExists(user, 'Username is incorrect.');
 
       const validPassword = passwordValidation(passwordRaw, user.password);
 
-      if (!validPassword) {
-        throw new Error('Password is incorrect.');
-      }
+      assertValueExists(validPassword, 'Password is incorrect.');
 
       const role = await this.userRepos.checkRoleByUserId(user.user_id);
 
@@ -152,9 +166,9 @@ export class UserModel {
   async getUserById(userId) {
     try {
       const user = await this.userRepos.findUserById(userId);
-      if (!user) {
-        throw new Error('Invalid user id');
-      }
+
+      assertValueExists(user, 'Invalid user id');
+
       const userDTO = new UserDTO(
         user.user_id,
         user.username,
@@ -199,9 +213,9 @@ export class UserModel {
   async checkUserRoleById(userId) {
     try {
       const user = await this.userRepos.findUserById(userId);
-      if (!user) {
-        throw new Error('Invalid user id');
-      }
+
+      assertValueExists(user, 'Invalid user id');
+
       return await this.userRepos.checkRoleByUserId(userId);
     } catch (err) {
       throw new Error(`Unable to check user role by id: ${err}.`);
@@ -245,18 +259,19 @@ export class UserModel {
 
   async updateData(userId, data) {
     try {
-      const isUserExists = await this.userRepos.findUserById(userId);
+      const user = await this.userRepos.findUserById(userId);
 
-      if (!isUserExists) {
-        throw new Error(`No user found with userId ${userId}`);
-      }
+      assertValueExists(user, `No user found with userId ${userId}`);
 
       if (data.email) {
-        emailCheck(data.email);
+        assertValueExists(emailCheck(data.email), `Invalid email format`);
       }
 
       if (data.phone_number) {
-        phoneCheck(data.phone_number);
+        assertValueExists(
+          phoneCheck(data.phone_number),
+          'Phone number must contain 10 digits'
+        );
       }
 
       await this.userRepos.updateData(userId, data);
@@ -267,11 +282,9 @@ export class UserModel {
   }
   async deleteUser(userId) {
     try {
-      const isUserExists = await this.userRepos.findUserById(userId);
+      const user = await this.userRepos.findUserById(userId);
+      assertValueExists(user, `No user found with userId ${userId}`);
 
-      if (!isUserExists) {
-        throw new Error(`No user found with userId ${userId}`);
-      }
       await this.userRepos.deleteUser(userId);
       return;
     } catch (err) {

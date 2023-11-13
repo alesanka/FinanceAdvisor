@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0.79% </span>
+                <span class="strong">1.57% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>1/126</span>
+                <span class='fraction'>2/127</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">7.69% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>1/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0.79% </span>
+                <span class="strong">1.57% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>1/126</span>
+                <span class='fraction'>2/127</span>
             </div>
         
             
@@ -369,12 +369,21 @@
 <a name='L304'></a><a href='#L304'>304</a>
 <a name='L305'></a><a href='#L305'>305</a>
 <a name='L306'></a><a href='#L306'>306</a>
-<a name='L307'></a><a href='#L307'>307</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L307'></a><a href='#L307'>307</a>
+<a name='L308'></a><a href='#L308'>308</a>
+<a name='L309'></a><a href='#L309'>309</a>
+<a name='L310'></a><a href='#L310'>310</a>
+<a name='L311'></a><a href='#L311'>311</a>
+<a name='L312'></a><a href='#L312'>312</a>
+<a name='L313'></a><a href='#L313'>313</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -633,6 +642,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -671,6 +682,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -679,10 +691,13 @@
 import { UserDTO } from '../dto/userDTO.js';
 import { ClientDTO } from '../dto/clientDTO.js';
 &nbsp;
-class UserRepos {
+export class UserRepos {
+  constructor(connection) {
+    this.connection = connection;
+  }
 <span class="fstat-no" title="function not covered" >  as</span>ync createUser(userDto, password) {
 <span class="cstat-no" title="statement not covered" >    try {</span>
-      const result = <span class="cstat-no" title="statement not covered" >await pool.query(</span>
+      const result = <span class="cstat-no" title="statement not covered" >await this.connection.query(</span>
         'INSERT INTO users (username, password, first_name, last_name, email, phone_number, role) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING user_id',
         [
           userDto.username,
@@ -702,7 +717,7 @@ class UserRepos {
   }
 <span class="fstat-no" title="function not covered" >  as</span>ync createClient(clientDto) {
 <span class="cstat-no" title="statement not covered" >    try {</span>
-      const resultClient = <span class="cstat-no" title="statement not covered" >await pool.query(</span>
+      const resultClient = <span class="cstat-no" title="statement not covered" >await this.connection.query(</span>
         'INSERT INTO clients (user_id, salary, credit_story) VALUES ($1, $2, $3) RETURNING client_id',
         [clientDto.user_id, clientDto.salary, clientDto.is_credit_story]
       );
@@ -714,7 +729,7 @@ class UserRepos {
   }
 <span class="fstat-no" title="function not covered" >  as</span>ync findUserByUsername(username) {
 <span class="cstat-no" title="statement not covered" >    try {</span>
-      const result = <span class="cstat-no" title="statement not covered" >await pool.query(</span>
+      const result = <span class="cstat-no" title="statement not covered" >await this.connection.query(</span>
         'SELECT user_id, username, password FROM users WHERE username = $1;',
         [username]
       );
@@ -741,7 +756,7 @@ class UserRepos {
 &nbsp;
 <span class="fstat-no" title="function not covered" >  as</span>ync findUserById(userId) {
 <span class="cstat-no" title="statement not covered" >    try {</span>
-      const result = <span class="cstat-no" title="statement not covered" >await pool.query(</span>
+      const result = <span class="cstat-no" title="statement not covered" >await this.connection.query(</span>
         'SELECT * FROM users WHERE user_id = $1;',
         [userId]
       );
@@ -767,7 +782,7 @@ class UserRepos {
   }
 <span class="fstat-no" title="function not covered" >  as</span>ync getAllUsers() {
 <span class="cstat-no" title="statement not covered" >    try {</span>
-      const result = <span class="cstat-no" title="statement not covered" >await pool.query('SELECT * FROM users');</span>
+      const result = <span class="cstat-no" title="statement not covered" >await this.connection.query('SELECT * FROM users');</span>
 <span class="cstat-no" title="statement not covered" >      return result.rows.map(</span>
 <span class="fstat-no" title="function not covered" >        (r</span>ow) =&gt;
 <span class="cstat-no" title="statement not covered" >          new UserDTO(</span>
@@ -786,7 +801,7 @@ class UserRepos {
   }
 <span class="fstat-no" title="function not covered" >  as</span>ync findClientByUserId(userId) {
 <span class="cstat-no" title="statement not covered" >    try {</span>
-      const resultClient = <span class="cstat-no" title="statement not covered" >await pool.query(</span>
+      const resultClient = <span class="cstat-no" title="statement not covered" >await this.connection.query(</span>
         `SELECT * FROM clients WHERE user_id = $1;`,
         [userId]
       );
@@ -862,7 +877,7 @@ class UserRepos {
 <span class="cstat-no" title="statement not covered" >        baseQuery += ' ORDER BY clients.salary';</span>
       }
 &nbsp;
-      const result = <span class="cstat-no" title="statement not covered" >await pool.query(baseQuery, values);</span>
+      const result = <span class="cstat-no" title="statement not covered" >await this.connection.query(baseQuery, values);</span>
 <span class="cstat-no" title="statement not covered" >      return result.rows;</span>
     } catch (err) {
 <span class="cstat-no" title="statement not covered" >      throw new Error(`${err}`);</span>
@@ -907,7 +922,7 @@ class UserRepos {
 <span class="cstat-no" title="statement not covered" >        userQuery += ` WHERE user_id = $${userValues.length + 1}`;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        userValues.push(userId);</span>
-<span class="cstat-no" title="statement not covered" >        await pool.query(userQuery, userValues);</span>
+<span class="cstat-no" title="statement not covered" >        await this.connection.query(userQuery, userValues);</span>
       }
 <span class="cstat-no" title="statement not covered" >      if ('credit_story' in data || data.salary) {</span>
         let query = <span class="cstat-no" title="statement not covered" >'UPDATE clients SET ';</span>
@@ -929,7 +944,7 @@ class UserRepos {
 <span class="cstat-no" title="statement not covered" >        query += ` WHERE user_id = $${values.length + 1}`;</span>
 <span class="cstat-no" title="statement not covered" >        values.push(userId);</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        await pool.query(query, values);</span>
+<span class="cstat-no" title="statement not covered" >        await this.connection.query(query, values);</span>
       }
 <span class="cstat-no" title="statement not covered" >      return;</span>
     } catch (err) {
@@ -938,7 +953,9 @@ class UserRepos {
   }
 <span class="fstat-no" title="function not covered" >  as</span>ync deleteUser(userId) {
 <span class="cstat-no" title="statement not covered" >    try {</span>
-<span class="cstat-no" title="statement not covered" >      await pool.query('DELETE FROM users WHERE user_id = $1', [userId]);</span>
+<span class="cstat-no" title="statement not covered" >      await this.connection.query('DELETE FROM users WHERE user_id = $1', [</span>
+        userId,
+      ]);
 <span class="cstat-no" title="statement not covered" >      return;</span>
     } catch (err) {
 <span class="cstat-no" title="statement not covered" >      throw new Error(`${err}`);</span>
@@ -946,7 +963,7 @@ class UserRepos {
   }
 <span class="fstat-no" title="function not covered" >  as</span>ync checkRoleByUserId(userId) {
 <span class="cstat-no" title="statement not covered" >    try {</span>
-      const result = <span class="cstat-no" title="statement not covered" >await pool.query(</span>
+      const result = <span class="cstat-no" title="statement not covered" >await this.connection.query(</span>
         `SELECT role FROM users WHERE user_id = $1;`,
         [userId]
       );
@@ -961,7 +978,7 @@ class UserRepos {
   }
 <span class="fstat-no" title="function not covered" >  as</span>ync findClientById(clientId) {
 <span class="cstat-no" title="statement not covered" >    try {</span>
-      const result = <span class="cstat-no" title="statement not covered" >await pool.query(</span>
+      const result = <span class="cstat-no" title="statement not covered" >await this.connection.query(</span>
         'SELECT * FROM clients WHERE client_id = $1;',
         [clientId]
       );
@@ -980,7 +997,8 @@ class UserRepos {
     }
   }
 }
-export const userRepos = new UserRepos();
+&nbsp;
+export const userRepos = new UserRepos(pool);
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -988,7 +1006,7 @@ export const userRepos = new UserRepos();
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-13T00:34:31.984Z
+                at 2023-11-13T19:26:02.003Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
