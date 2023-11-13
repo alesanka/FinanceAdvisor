@@ -1,10 +1,14 @@
 import { pool } from '../../db/postgress/dbPool.js';
 import { MaxLoanDTO } from '../dto/maxLoanDTO.js';
 
-class MaxLoanAmountRepos {
+export class MaxLoanAmountRepos {
+  connection(connection) {
+    this.connection = connection;
+  }
+
   async saveMaxLoan(maxLoanDto) {
     try {
-      const result = await pool.query(
+      const result = await this.connection.query(
         'INSERT INTO MaximumLoanAmounts (client_id, max_loan_amount, total_interest_amount) VALUES ($1, $2, $3) RETURNING max_loan_amount_id',
         [
           maxLoanDto.client_id,
@@ -19,7 +23,7 @@ class MaxLoanAmountRepos {
   }
   async getMaxLoanAmountLoanType(maxLoanAmountId) {
     try {
-      const result = await pool.query(
+      const result = await this.connection.query(
         `SELECT *
              FROM MaximumLoanAmounts AS m
              JOIN LoanTypes_MaximumLoanAmounts AS lm ON m.max_loan_amount_id = lm.max_loan_amount_id
@@ -40,7 +44,7 @@ class MaxLoanAmountRepos {
 
   async getMaxLoanAmountByMaxAmountId(max_loan_amount_id) {
     try {
-      const result = await pool.query(
+      const result = await this.connection.query(
         `SELECT * FROM MaximumLoanAmounts WHERE max_loan_amount_id = $1;`,
         [max_loan_amount_id]
       );
@@ -64,4 +68,4 @@ class MaxLoanAmountRepos {
   }
 }
 
-export const maxLoanAmountRepos = new MaxLoanAmountRepos();
+export const maxLoanAmountRepos = new MaxLoanAmountRepos(pool);

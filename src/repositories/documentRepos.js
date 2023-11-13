@@ -1,9 +1,12 @@
 import { pool } from '../../db/postgress/dbPool.js';
 
-class DocumentRepos {
+export class DocumentRepos {
+  constructor(connection) {
+    this.connection = connection;
+  }
   async createDocument(docDto) {
     try {
-      const result = await pool.query(
+      const result = await this.connection.query(
         'INSERT INTO Documents (application_id, document_name, document_type) VALUES ($1, $2, $3) RETURNING document_id',
         [docDto.application_id, docDto.document_name, docDto.document_type]
       );
@@ -15,7 +18,7 @@ class DocumentRepos {
   }
   async findAllDocumentsByApplicationId(applicationId) {
     try {
-      const result = await pool.query(
+      const result = await this.connection.query(
         'SELECT * FROM documents WHERE application_id = $1;',
         [applicationId]
       );
@@ -38,7 +41,7 @@ class DocumentRepos {
   }
   async checkDocumentById(docId) {
     try {
-      const result = await pool.query(
+      const result = await this.connection.query(
         'SELECT document_id FROM documents WHERE document_id = $1',
         [docId]
       );
@@ -54,9 +57,10 @@ class DocumentRepos {
 
   async deleteDocument(documentId) {
     try {
-      await pool.query('DELETE FROM documents WHERE document_id = $1', [
-        documentId,
-      ]);
+      await this.connection.query(
+        'DELETE FROM documents WHERE document_id = $1',
+        [documentId]
+      );
 
       return;
     } catch (err) {
@@ -64,3 +68,5 @@ class DocumentRepos {
     }
   }
 }
+
+export const documentRepos = new DocumentRepos(pool);

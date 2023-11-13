@@ -1,10 +1,13 @@
 import { pool } from '../../db/postgress/dbPool.js';
 import { ApplicationDTO } from '../dto/applicationDTO.js';
 
-class LoanApplicationRepos {
+export class LoanApplicationRepos {
+  constructor(connection) {
+    this.connection = connection;
+  }
   async createLoanApplication(id, applicationDto) {
     try {
-      const result = await pool.query(
+      const result = await this.connection.query(
         'INSERT INTO LoanApplications (id, desired_loan_amount, application_date, is_approved) VALUES ($1, $2, CURRENT_DATE, $3) RETURNING application_id',
         [id, applicationDto.desired_loan_amount, applicationDto.is_approved]
       );
@@ -16,7 +19,7 @@ class LoanApplicationRepos {
   }
   async findApplicationById(applicationId) {
     try {
-      const result = await pool.query(
+      const result = await this.connection.query(
         'SELECT * FROM loanapplications WHERE application_id = $1;',
         [applicationId]
       );
@@ -41,7 +44,7 @@ class LoanApplicationRepos {
   }
   async changeApprovement(applicationId) {
     try {
-      const updateResult = await pool.query(
+      const updateResult = await this.connection.query(
         'UPDATE loanapplications SET is_approved = true WHERE application_id = $1 RETURNING application_id;',
         [applicationId]
       );
@@ -57,7 +60,7 @@ class LoanApplicationRepos {
   }
   async checkApprovement(applicationId) {
     try {
-      const result = await pool.query(
+      const result = await this.connection.query(
         'SELECT is_approved FROM loanapplications WHERE application_id = $1;',
         [applicationId]
       );
@@ -73,7 +76,7 @@ class LoanApplicationRepos {
   }
   async deleteLoanApplication(applicationId) {
     try {
-      await pool.query(
+      await this.connection.query(
         'DELETE FROM loanapplications WHERE application_id = $1',
         [applicationId]
       );
@@ -83,4 +86,4 @@ class LoanApplicationRepos {
     }
   }
 }
-export const loanApplicationRepos = new LoanApplicationRepos();
+export const loanApplicationRepos = new LoanApplicationRepos(pool);
