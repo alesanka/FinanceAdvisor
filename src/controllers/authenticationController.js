@@ -20,7 +20,7 @@ export const checkAllRequiredParamsForToken = (body) => {
   return true;
 };
 
-class AuthenticationController {
+export class AuthenticationController {
   constructor(userModel) {
     this.userModel = userModel;
   }

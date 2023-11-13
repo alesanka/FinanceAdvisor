@@ -1,6 +1,6 @@
 import { documentModel } from '../models/documentModel.js';
 
-class DocumentController {
+export class DocumentController {
   constructor(documentModel) {
     this.documentModel = documentModel;
   }

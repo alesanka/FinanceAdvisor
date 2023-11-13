@@ -17,7 +17,7 @@ export const checkAreAllRequaredParams = (param) => {
   }
 };
 
-class UserController {
+export class UserController {
   constructor(userModel) {
     this.userModel = userModel;
   }

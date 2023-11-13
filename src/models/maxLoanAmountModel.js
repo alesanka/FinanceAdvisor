@@ -43,7 +43,7 @@ export const calculateTotalInterest = (
   return totalInterest;
 };
 
-class MaxLoanAmountModel {
+export class MaxLoanAmountModel {
   constructor(
     maxLoanAmountRepos,
     userRepos,

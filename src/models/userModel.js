@@ -44,7 +44,7 @@ export const phoneCheck = (phone) => {
   }
 };
 
-class UserModel {
+export class UserModel {
   constructor(userRepos) {
     this.userRepos = userRepos;
   }

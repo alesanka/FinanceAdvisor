@@ -1,6 +1,6 @@
 import { loanApplicationModel } from '../models/loanApplicationModel.js';
 
-class LoanApplicationController {
+export class LoanApplicationController {
   constructor(loanApplicationModel) {
     this.loanApplicationModel = loanApplicationModel;
   }

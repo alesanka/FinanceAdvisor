@@ -1,6 +1,6 @@
 import { notesModel } from '../models/notesModel.js';
 
-class NotesController {
+export class NotesController {
   constructor(notesModel) {
     this.notesModel = notesModel;
   }

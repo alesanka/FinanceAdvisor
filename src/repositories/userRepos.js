@@ -2,7 +2,7 @@ import { pool } from '../../db/postgress/dbPool.js';
 import { UserDTO } from '../dto/userDTO.js';
 import { ClientDTO } from '../dto/clientDTO.js';
 
-class UserRepos {
+export class UserRepos {
   async createUser(userDto, password) {
     try {
       const result = await pool.query(
@@ -303,4 +303,5 @@ class UserRepos {
     }
   }
 }
+
 export const userRepos = new UserRepos();

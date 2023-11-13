@@ -21,7 +21,7 @@ export const checkIsRightTerm = (paymentDate, applicationDate, endTermDate) => {
   }
 };
 
-class NotesModel {
+export class NotesModel {
   constructor(
     repaymentScheduleRepos,
     loanTypeMaxLoanAmountRepos,

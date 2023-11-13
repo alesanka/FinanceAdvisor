@@ -1,7 +1,7 @@
 import { documentRepos } from '../repositories/documentRepos.js';
 import { DocDTO } from '../dto/docDTO.js';
 
-class DocumentModel {
+export class DocumentModel {
   constructor(documentRepos) {
     this.documentRepos = documentRepos;
   }

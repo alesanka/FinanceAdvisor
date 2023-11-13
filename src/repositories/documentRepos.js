@@ -64,4 +64,3 @@ class DocumentRepos {
     }
   }
 }
-export const documentRepos = new DocumentRepos();

@@ -1,6 +1,6 @@
 import { maxLoanAmountModel } from '../models/maxLoanAmountModel.js';
 
-class MaxLoanAmountController {
+export class MaxLoanAmountController {
   constructor(maxLoanAmountModel) {
     this.maxLoanAmountModel = maxLoanAmountModel;
   }

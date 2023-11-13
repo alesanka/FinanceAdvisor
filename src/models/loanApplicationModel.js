@@ -14,7 +14,7 @@ export const checkIfLoanAmountAvailable = (maxLoanAmount, desiredAmount) => {
   return true;
 };
 
-class LoanApplicationModel {
+export class LoanApplicationModel {
   constructor(
     loanApplicationRepos,
     documentRepos,

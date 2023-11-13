@@ -40,7 +40,7 @@ export const toMyISOFormat = (date) => {
   return newDate;
 };
 
-class RepaymentScheduleModel {
+export class RepaymentScheduleModel {
   constructor(
     loanApplicationRepos,
     loanTypeMaxLoanAmountRepos,

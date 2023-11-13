@@ -15,7 +15,7 @@ export const checkDocType = (doc) => {
   }
 };
 
-class LoanTypeModel {
+export class LoanTypeModel {
   constructor(loanTypeRepos) {
     this.loanTypeRepos = loanTypeRepos;
   }

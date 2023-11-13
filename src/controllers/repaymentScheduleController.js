@@ -11,7 +11,7 @@ export const checkIfAllRequiredParamsRepaymentSchedule = (params) => {
   return true;
 };
 
-class RepaymentScheduleController {
+export class RepaymentScheduleController {
   constructor(repaymentScheduleModel) {
     this.repaymentScheduleModel = repaymentScheduleModel;
   }

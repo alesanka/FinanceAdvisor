@@ -1,7 +1,7 @@
 import { pool } from '../../db/postgress/dbPool.js';
 import { RepaymentScheduleDTO } from '../dto/repaymentScheduleDTO.js';
 
-class RepaymentScheduleRepos {
+export class RepaymentScheduleRepos {
   async createRepaymentSchedule(repaymentScheduleDto) {
     try {
       const insertResult = await pool.query(
