@@ -30,5 +30,10 @@ router.post(
   checkUserRole(['worker']),
   repaymentScheduleController.createRepaymentSchedule
 ); // protected
+router.get(
+  '/',
+  token.getAuthorization,
+  loanApplicationController.getAllApplications
+); // protected
 
 export default router;

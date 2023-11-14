@@ -819,6 +819,50 @@ Content-Type: application/json
 
 ---
 
+**Retrieve all loans applications information.**
+
+\*protected request (available only for admin and worker with access_token)
+
+Request:
+
+```
+GET /applications HTTP/1.1
+```
+
+Response:
+
+```
+[
+  {
+    "application_id": 1,
+    "desired_loan_amount": 50000,
+    "application_date": "2023-10-13",
+    "is_approved": true
+  },
+  {
+    "application_id": 2,
+    "desired_loan_amount": 10000,
+    "application_date": "2023-11-02",
+    "is_approved": false
+  }
+  // ... more applications
+]
+```
+
+In case of error response:
+
+```
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+
+{
+    message: 'Something went wrong while getting all loan applications.',
+    error: err.message,
+}
+```
+
+---
+
 **Delete a loan application.**
 
 \*protected request (available only for admin and worker with access_token)

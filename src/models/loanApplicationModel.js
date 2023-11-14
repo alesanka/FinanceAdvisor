@@ -136,7 +136,26 @@ export class LoanApplicationModel {
       throw new Error(`Unable to delete loan application: ${err}`);
     }
   }
+  async getAllApplications() {
+    try {
+      const applications = await this.loanApplicationRepos.getAllApplications();
+      const applicationDTOs = applications.map((application) => {
+        const dto = new ApplicationDTO(
+          application.application_id,
+          application.desired_loan_amount,
+          application.application_date,
+          application.is_approved
+        );
+
+        return dto;
+      });
+      return applicationDTOs;
+    } catch (err) {
+      throw new Error(`Unable to get all loan applications: ${err}`);
+    }
+  }
 }
+
 export const loanApplicationModel = new LoanApplicationModel(
   loanApplicationRepos,
   documentRepos,

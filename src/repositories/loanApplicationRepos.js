@@ -85,5 +85,23 @@ export class LoanApplicationRepos {
       throw new Error(`${err}`);
     }
   }
+  async getAllApplications() {
+    try {
+      const result = await this.connection.query(
+        'SELECT * FROM loanapplications'
+      );
+      return result.rows.map(
+        (row) =>
+          new ApplicationDTO(
+            row.application_id,
+            row.desired_loan_amount,
+            row.application_date,
+            row.is_approved
+          )
+      );
+    } catch (err) {
+      throw new Error(`${err}`);
+    }
+  }
 }
 export const loanApplicationRepos = new LoanApplicationRepos(pool);
