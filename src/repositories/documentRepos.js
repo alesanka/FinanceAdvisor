@@ -39,6 +39,17 @@ export class DocumentRepos {
       throw new Error(`${err}.`);
     }
   }
+  async changeDocumentNameById(docName, docId) {
+    try {
+      await this.connection.query(
+        `UPDATE documents SET document_name = $1 WHERE document_id = $2`,
+        [docName, docId]
+      );
+      return;
+    } catch (err) {
+      throw new Error(`${err}`);
+    }
+  }
   async checkDocumentById(docId) {
     try {
       const result = await this.connection.query(

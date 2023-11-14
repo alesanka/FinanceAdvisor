@@ -11,6 +11,12 @@ router.post(
   checkUserRole(['worker']),
   documentController.createDocument
 ); // protected
+router.put(
+  '/:documentId',
+  token.getAuthorization,
+  checkUserRole(['worker']),
+  documentController.changeDocumentNameById
+); // protected
 router.get(
   '/:application_id',
   token.getAuthorization,

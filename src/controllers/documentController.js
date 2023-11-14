@@ -38,6 +38,27 @@ export class DocumentController {
       });
     }
   };
+  changeDocumentNameById = async (req, res) => {
+    try {
+      await this.documentModel.changeDocumentNameById(
+        req.body.user_id,
+        req.body.document_name,
+        req.params.documentId
+      );
+
+      res
+        .status(200)
+        .send(
+          `Document name in document with id ${req.params.documentId} was updated.`
+        );
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({
+        message: 'Something went wrong while updating document name.',
+        error: err.message,
+      });
+    }
+  };
   deleteDocument = async (req, res) => {
     try {
       await this.documentModel.deleteDocument(req.params.documentId);

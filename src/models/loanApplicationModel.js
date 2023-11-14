@@ -5,6 +5,12 @@ import { loanTypeRepos } from '../repositories/loanTypeRepos.js';
 import { loanTypeMaxLoanAmountRepos } from '../repositories/loanType_MaxLoanAmountRepos.js';
 import { ApplicationDTO } from '../dto/applicationDTO.js';
 
+export const assertValueExists = (value, error) => {
+  if (!value) {
+    throw new Error(error);
+  }
+};
+
 export const checkIfLoanAmountAvailable = (maxLoanAmount, desiredAmount) => {
   if (maxLoanAmount < desiredAmount) {
     throw new Error(
@@ -46,9 +52,12 @@ export class LoanApplicationModel {
         await this.maxLoanAmountRepos.getMaxLoanAmountByMaxAmountId(
           maxLoanAmountId
         );
-      if (!maxLoanAmountInfo) {
-        throw new Error('No max loan amount found with the given id.');
-      }
+
+      assertValueExists(
+        maxLoanAmountInfo,
+        'No max loan amount found with the given id.'
+      );
+
       const maxLoanAmount = maxLoanAmountInfo.max_loan_amount;
 
       checkIfLoanAmountAvailable(
@@ -58,9 +67,11 @@ export class LoanApplicationModel {
 
       const loanTypeId = loanTypeMaxAmount.loan_type_id;
       const loanTypeDetails = await this.loanTypeRepos.findLoanById(loanTypeId);
-      if (!loanTypeDetails) {
-        throw new Error('No loan type found with the given id.');
-      }
+
+      assertValueExists(
+        loanTypeDetails,
+        'No loan type found with the given id.'
+      );
 
       const requiredDoc = loanTypeDetails.required_doc;
 
@@ -79,9 +90,11 @@ export class LoanApplicationModel {
       const application = await this.loanApplicationRepos.findApplicationById(
         applicationId
       );
-      if (!application) {
-        throw new Error(`Application with id ${applicationId} does not exist.`);
-      }
+
+      assertValueExists(
+        application,
+        `Application with id ${applicationId} does not exist.`
+      );
 
       const loanTypeMaxAmount =
         await this.loanTypeMaxLoanAmountRepos.getLoanTypeMaxLoanId(
@@ -89,16 +102,19 @@ export class LoanApplicationModel {
         );
       const loanTypeId = loanTypeMaxAmount.loan_type_id;
       const loanTypeDetails = await this.loanTypeRepos.findLoanById(loanTypeId);
-      if (!loanTypeDetails) {
-        throw new Error('No loan type found with the given id.');
-      }
+      assertValueExists(
+        loanTypeDetails,
+        'No loan type found with the given id.'
+      );
       const requiredDoc = loanTypeDetails.required_doc;
 
       const attachedDocs =
         await this.documentRepos.findAllDocumentsByApplicationId(applicationId);
-      if (!attachedDocs) {
-        throw new Error('No documents are atteched to application.');
-      }
+
+      assertValueExists(
+        attachedDocs,
+        'No documents are atteched to application.'
+      );
 
       const documentTypes = attachedDocs.map((doc) => doc.document_type);
 
@@ -126,9 +142,11 @@ export class LoanApplicationModel {
       const application = await this.loanApplicationRepos.findApplicationById(
         applicationId
       );
-      if (!application) {
-        throw new Error(`Application with id ${applicationId} does not exist.`);
-      }
+
+      assertValueExists(
+        application,
+        `Application with id ${applicationId} does not exist.`
+      );
 
       await this.loanApplicationRepos.deleteLoanApplication(applicationId);
       return;

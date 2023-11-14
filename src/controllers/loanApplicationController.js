@@ -58,7 +58,7 @@ export class LoanApplicationController {
   getAllApplications = async (req, res) => {
     try {
       const applications = await this.loanApplicationModel.getAllApplications();
-      res.status(204).json(applications);
+      res.status(200).json(applications);
     } catch (err) {
       console.error(err);
       res.status(500).json({
