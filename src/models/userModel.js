@@ -24,6 +24,8 @@ export const passwordCheck = (pswrd) => {
   }
 };
 
+
+
 export const passwordHash = async (pswrd) => {
   const password = await bcrypt.hash(pswrd, SALTY);
   return password;

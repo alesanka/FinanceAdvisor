@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">5.26% </span>
+                <span class="strong">4.16% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>1/19</span>
+                <span class='fraction'>1/24</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">5.26% </span>
+                <span class="strong">4.16% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>1/19</span>
+                <span class='fraction'>1/24</span>
             </div>
         
             
@@ -130,8 +130,27 @@
 <a name='L65'></a><a href='#L65'>65</a>
 <a name='L66'></a><a href='#L66'>66</a>
 <a name='L67'></a><a href='#L67'>67</a>
-<a name='L68'></a><a href='#L68'>68</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a>
+<a name='L81'></a><a href='#L81'>81</a>
+<a name='L82'></a><a href='#L82'>82</a>
+<a name='L83'></a><a href='#L83'>83</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -190,6 +209,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -200,10 +230,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { pool } from '../../db/postgress/dbPool.js';
 import { MaxLoanDTO } from '../dto/maxLoanDTO.js';
 &nbsp;
-class MaxLoanAmountRepos {
+export class MaxLoanAmountRepos {
+<span class="fstat-no" title="function not covered" >  co</span>nnection(connection) {
+<span class="cstat-no" title="statement not covered" >    this.connection = connection;</span>
+  }
+&nbsp;
 <span class="fstat-no" title="function not covered" >  as</span>ync saveMaxLoan(maxLoanDto) {
 <span class="cstat-no" title="statement not covered" >    try {</span>
-      const result = <span class="cstat-no" title="statement not covered" >await pool.query(</span>
+      const result = <span class="cstat-no" title="statement not covered" >await this.connection.query(</span>
         'INSERT INTO MaximumLoanAmounts (client_id, max_loan_amount, total_interest_amount) VALUES ($1, $2, $3) RETURNING max_loan_amount_id',
         [
           maxLoanDto.client_id,
@@ -218,7 +252,7 @@ class MaxLoanAmountRepos {
   }
 <span class="fstat-no" title="function not covered" >  as</span>ync getMaxLoanAmountLoanType(maxLoanAmountId) {
 <span class="cstat-no" title="statement not covered" >    try {</span>
-      const result = <span class="cstat-no" title="statement not covered" >await pool.query(</span>
+      const result = <span class="cstat-no" title="statement not covered" >await this.connection.query(</span>
         `SELECT *
              FROM MaximumLoanAmounts AS m
              JOIN LoanTypes_MaximumLoanAmounts AS lm ON m.max_loan_amount_id = lm.max_loan_amount_id
@@ -239,7 +273,7 @@ class MaxLoanAmountRepos {
 &nbsp;
 <span class="fstat-no" title="function not covered" >  as</span>ync getMaxLoanAmountByMaxAmountId(max_loan_amount_id) {
 <span class="cstat-no" title="statement not covered" >    try {</span>
-      const result = <span class="cstat-no" title="statement not covered" >await pool.query(</span>
+      const result = <span class="cstat-no" title="statement not covered" >await this.connection.query(</span>
         `SELECT * FROM MaximumLoanAmounts WHERE max_loan_amount_id = $1;`,
         [max_loan_amount_id]
       );
@@ -261,9 +295,20 @@ class MaxLoanAmountRepos {
 <span class="cstat-no" title="statement not covered" >      throw new Error(`${err}`);</span>
     }
   }
+<span class="fstat-no" title="function not covered" >  as</span>ync deleteMaxLoanApplication(max_loan_amount_id) {
+<span class="cstat-no" title="statement not covered" >    try {</span>
+<span class="cstat-no" title="statement not covered" >      await this.connection.query(</span>
+        'DELETE FROM MaximumLoanAmounts WHERE max_loan_amount_id = $1',
+        [max_loan_amount_id]
+      );
+<span class="cstat-no" title="statement not covered" >      return;</span>
+    } catch (err) {
+<span class="cstat-no" title="statement not covered" >      throw new Error(`${err}`);</span>
+    }
+  }
 }
 &nbsp;
-export const maxLoanAmountRepos = new MaxLoanAmountRepos();
+export const maxLoanAmountRepos = new MaxLoanAmountRepos(pool);
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -271,7 +316,7 @@ export const maxLoanAmountRepos = new MaxLoanAmountRepos();
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-13T00:34:31.984Z
+                at 2023-11-14T15:04:01.805Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

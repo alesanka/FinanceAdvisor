@@ -1,5 +1,6 @@
 import { LoanTypeDTO } from '../dto/loanTypesDTO.js';
 import { loanTypeRepos } from '../repositories/loanTypeRepos.js';
+import { z } from 'zod';
 
 export const checkDocType = (doc) => {
   const DocSchema = z.enum([
@@ -10,8 +11,9 @@ export const checkDocType = (doc) => {
   ]);
   try {
     DocSchema.parse(doc);
+    return true;
   } catch (e) {
-    throw new Error('Invalid document type');
+    return false;
   }
 };
 
@@ -140,7 +142,7 @@ export class LoanTypeModel {
         throw new Error('Invalid loan id');
       }
       if (data.required_doc) {
-        checkDocType(data.required_doc);
+        assertValueExists(checkDocType(data.required_doc), 'Invalid type id.');
       }
 
       await this.loanTypeRepos.updateLoanTypeData(loanTypeId, data);

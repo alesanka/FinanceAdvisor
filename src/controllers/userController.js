@@ -28,8 +28,8 @@ export class UserController {
       const id = await this.userModel.registerUser(
         req.body.username,
         req.body.password,
-        req.body.first_Name,
-        req.body.last_Name,
+        req.body.first_name,
+        req.body.last_name,
         req.body.email,
         req.body.phone_number,
         req.body.role,

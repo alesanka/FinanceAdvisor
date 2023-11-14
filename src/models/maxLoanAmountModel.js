@@ -5,6 +5,12 @@ import { loanTypeMaxLoanAmountRepos } from '../repositories/loanType_MaxLoanAmou
 import { MaxLoanDTO } from '../dto/maxLoanDTO.js';
 import { LoanTypeDTO } from '../dto/loanTypesDTO.js';
 
+export const assertValueExists = (value, error) => {
+  if (!value) {
+    throw new Error(error);
+  }
+};
+
 export const calculateMaxMonthlyPayment = (salary) => {
   const payment = salary * 0.5;
   return payment;
@@ -21,6 +27,11 @@ export const decreeseMaxLoanAmount = (max_loan_amount) => {
 };
 
 export const calculateMaxLoanAmount = (maxMonthlyPayment, interest, term) => {
+  if (maxMonthlyPayment === 0 || interest === 0 || term === 0) {
+    throw new Error(
+      'Can not calculate max loan amount, one of the arguments = 0.'
+    );
+  }
   const maxLoan =
     maxMonthlyPayment *
     ((Math.pow(1 + interest, term) - 1) /
@@ -60,15 +71,14 @@ export class MaxLoanAmountModel {
       const loanTypeDetails = await this.loanTypeRepos.findLoanById(
         loan_type_id
       );
-      if (!loanTypeDetails) {
-        throw new Error('Invalid loan type id.');
-      }
+
+      assertValueExists(loanTypeDetails, 'Invalid loan type id.');
+
       const rate = loanTypeDetails.interest_rate;
       const term = loanTypeDetails.loan_term;
       const clientDetails = await this.userRepos.findClientById(client_id);
-      if (!clientDetails) {
-        throw new Error('Invalid client id.');
-      }
+
+      assertValueExists(clientDetails, 'Invalid client id.');
       const credit_story = clientDetails.credit_story;
       const salary = clientDetails.salary;
 
@@ -117,9 +127,8 @@ export class MaxLoanAmountModel {
     try {
       const maxAmountLoanType =
         await this.maxLoanAmountRepos.getMaxLoanAmountLoanType(maxLoanAmountId);
-      if (!maxAmountLoanType) {
-        throw new Error('Invalid max_loan_amount_id');
-      }
+
+      assertValueExists(maxAmountLoanType, 'Invalid max_loan_amount_id');
 
       const maxLoanDTO = new MaxLoanDTO(
         maxAmountLoanType.max_loan_amount_id,
@@ -151,9 +160,10 @@ export class MaxLoanAmountModel {
   }
   async deleteMaxLoanApplication(max_loan_amount_id) {
     try {
-      const maxLoanAmount = await this.maxLoanAmountRepos.getMaxLoanAmountByMaxAmountId(
-        max_loan_amount_id
-      );
+      const maxLoanAmount =
+        await this.maxLoanAmountRepos.getMaxLoanAmountByMaxAmountId(
+          max_loan_amount_id
+        );
       assertValueExists(
         maxLoanAmount,
         `No max loan application found with id ${max_loan_amount_id}`
