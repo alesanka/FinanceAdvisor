@@ -16,23 +16,38 @@ export const createDate = (date) => {
 };
 
 export const calculateMonthlyRate = (rate) => {
+  if (rate === 0) {
+    throw new Error('Rate can not be 0.');
+  }
   const monthlyRate = rate / 12 / 100;
   return monthlyRate;
 };
 
-export const calculateMonthlyPayment = (loanAmount, monthlyRate, loanTerm) => {
+export const calculateMonthlyPayment = (
+  loanAmount,
+  annualInterestRate,
+  loanTerm
+) => {
+  const monthlyRate = annualInterestRate / 12;
+  const numPayments = loanTerm * 12;
   const monthlyPayment =
-    (loanAmount * (monthlyRate * Math.pow(1 + monthlyRate, loanTerm))) /
-    (Math.pow(1 + monthlyRate, loanTerm) - 1);
+    (loanAmount * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -numPayments));
   return monthlyPayment;
 };
 
 export const calculateFirstPaymentDate = (date) => {
-  const firstPaymentDate = new Date(
-    date.getFullYear(),
-    date.getMonth() + 1,
-    date.getDate()
-  );
+  const year = date.getFullYear();
+  const month = date.getMonth();
+
+  let newYear = year;
+  let newMonth = month + 1;
+
+  if (newMonth > 11) {
+    newYear++;
+    newMonth = 0;
+  }
+
+  const firstPaymentDate = new Date(newYear, newMonth, 1);
   return firstPaymentDate;
 };
 
