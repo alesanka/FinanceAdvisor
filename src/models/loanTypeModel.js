@@ -147,9 +147,7 @@ export class LoanTypeModel {
   }
   async deleteLoanType(loanTypeId) {
     try {
-      const loanType = await this.loanTypeRepos.findLoanByIdloanTypeId(
-        loanTypeId
-      );
+      const loanType = await this.loanTypeRepos.findLoanById(loanTypeId);
       assertValueExists(loanType, `No loan type found with id ${loanTypeId}`);
 
       await this.loanTypeRepos.deleteLoanType(loanTypeId);

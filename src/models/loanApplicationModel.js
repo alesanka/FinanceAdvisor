@@ -18,16 +18,16 @@ export const checkIfLoanAmountAvailable = (maxLoanAmount, desiredAmount) => {
 export class LoanApplicationModel {
   constructor(
     loanApplicationRepos,
-    documentRepos,
     maxLoanAmountRepos,
+    loanTypeMaxLoanAmountRepos,
     loanTypeRepos,
-    loanTypeMaxLoanAmountRepos
+    documentRepos
   ) {
     (this.loanApplicationRepos = loanApplicationRepos),
-      (this.documentRepos = documentRepos),
       (this.maxLoanAmountRepos = maxLoanAmountRepos),
+      (this.loanTypeMaxLoanAmountRepos = loanTypeMaxLoanAmountRepos),
       (this.loanTypeRepos = loanTypeRepos),
-      (this.loanTypeMaxLoanAmountRepos = loanTypeMaxLoanAmountRepos);
+      (this.documentRepos = documentRepos);
   }
 
   async createLoanApplication(id, desiredLoanAmount, isApproved) {
@@ -70,11 +70,11 @@ export class LoanApplicationModel {
 
       const requiredDoc = loanTypeDetails.required_doc;
 
-      const loanId = await this.loanApplicationRepos.createLoanApplication(
+      const appId = await this.loanApplicationRepos.createLoanApplication(
         id,
         applicationDTO
       );
-      return { loanId, requiredDoc };
+      return { appId, requiredDoc };
     } catch (err) {
       throw new Error(`Unable to create loan application: ${err}.`);
     }
@@ -171,8 +171,8 @@ export class LoanApplicationModel {
 
 export const loanApplicationModel = new LoanApplicationModel(
   loanApplicationRepos,
-  documentRepos,
   maxLoanAmountRepos,
+  loanTypeMaxLoanAmountRepos,
   loanTypeRepos,
-  loanTypeMaxLoanAmountRepos
+  documentRepos
 );

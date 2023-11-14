@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">55.55% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>15/27</span>
+                <span class='fraction'>27/27</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">66.66% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>4/6</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">55.55% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>15/27</span>
+                <span class='fraction'>27/27</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -200,33 +200,33 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -283,34 +283,34 @@ export class DocumentModel {
       throw new Error(`Unable to get documents by application_id: ${err}`);
     }
   }
-<span class="fstat-no" title="function not covered" >  as</span>ync changeDocumentNameById(docName, documentId) {
-<span class="cstat-no" title="statement not covered" >    try {</span>
-      const doc = <span class="cstat-no" title="statement not covered" >await this.documentRepos.checkDocumentById(documentId);</span>
+  async changeDocumentNameById(docName, documentId) {
+    try {
+      const doc = await this.documentRepos.checkDocumentById(documentId);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      assertValueExists(</span>
+      assertValueExists(
         doc,
         `No document found with document id ${documentId}`
       );
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      await this.documentRepos.changeDocumentNameByIdasync(docName, documentId);</span>
-<span class="cstat-no" title="statement not covered" >      return;</span>
+      await this.documentRepos.changeDocumentNameById(docName, documentId);
+      return;
     } catch (err) {
-<span class="cstat-no" title="statement not covered" >      throw new Error(`Unable to update document ${documentId}: ${err}.`);</span>
+      throw new Error(`Unable to update document ${documentId}: ${err}.`);
     }
   }
-<span class="fstat-no" title="function not covered" >  as</span>ync deleteDocument(documentId) {
-<span class="cstat-no" title="statement not covered" >    try {</span>
-      const doc = <span class="cstat-no" title="statement not covered" >await this.documentRepos.checkDocumentById(documentId);</span>
+  async deleteDocument(documentId) {
+    try {
+      const doc = await this.documentRepos.checkDocumentById(documentId);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      assertValueExists(</span>
+      assertValueExists(
         doc,
         `No document found with document id ${documentId}`
       );
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      await this.documentRepos.deleteDocument(documentId);</span>
-<span class="cstat-no" title="statement not covered" >      return;</span>
+      await this.documentRepos.deleteDocument(documentId);
+      return;
     } catch (err) {
-<span class="cstat-no" title="statement not covered" >      throw new Error(`Unable to delete document ${documentId}: ${err}.`);</span>
+      throw new Error(`Unable to delete document ${documentId}: ${err}.`);
     }
   }
 }
@@ -322,7 +322,7 @@ export const documentModel = new DocumentModel(documentRepos);
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-14T19:24:10.892Z
+                at 2023-11-14T22:10:05.065Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

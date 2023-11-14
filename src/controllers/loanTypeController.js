@@ -17,7 +17,6 @@ export class LoanTypeController {
         .status(201)
         .send(`Loan type was created successfully. Loan type id - ${loanId}`);
     } catch (err) {
-      console.error(err);
       res.status(500).json({
         message: `Something went wrong while creating new type loan.`,
         error: err.message,
@@ -41,13 +40,12 @@ export class LoanTypeController {
       const loanType = req.params.loan_type;
 
       if (!loanType) {
-        return res.status(400).send(`No valid loan_type is provided`);
+        return res.status(500).send(`No valid loan_type is provided`);
       }
 
       const loanData = await this.loanTypeModel.findLoanByType(loanType);
       res.status(200).json(loanData);
     } catch (err) {
-      console.error(err);
       res.status(500).json({
         message: `Something went wrong while getting loan type.`,
         error: err.message,

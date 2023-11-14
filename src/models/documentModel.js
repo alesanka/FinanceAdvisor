@@ -59,7 +59,7 @@ export class DocumentModel {
         `No document found with document id ${documentId}`
       );
 
-      await this.documentRepos.changeDocumentNameByIdasync(docName, documentId);
+      await this.documentRepos.changeDocumentNameById(docName, documentId);
       return;
     } catch (err) {
       throw new Error(`Unable to update document ${documentId}: ${err}.`);

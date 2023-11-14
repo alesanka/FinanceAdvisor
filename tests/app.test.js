@@ -17,8 +17,10 @@ beforeAll((done) => {
   server = app.listen(5000, done);
 });
 
-afterAll((done) => {
-  server.close(done);
+afterAll(() => {
+  return new Promise((resolve) => {
+    server.close(resolve);
+  });
 });
 
 describe('Tests for checking correct statuses and responces ', () => {

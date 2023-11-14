@@ -5,6 +5,7 @@ class DocumentReposMock {
   async createDocument() {
     return { doc_id: 1 };
   }
+
   async findAllDocumentsByApplicationId(id) {
     if (id) {
       const dto = new DocDTO(1, 1, 'passport', 'passport');
@@ -13,6 +14,33 @@ class DocumentReposMock {
       return arrDTO;
     } else {
       return false;
+    }
+  }
+
+  async checkDocumentById(documentId) {
+    if (documentId === 1) {
+      return {
+        document_id: 1,
+        application_id: 1,
+        document_name: 'passport',
+        document_type: 'passport',
+      };
+    } else {
+      return null;
+    }
+  }
+  async changeDocumentNameById(documentName, documentId) {
+    if (documentId === 1) {
+      return;
+    } else {
+      throw new Error(`No document found with document id ${documentId}`);
+    }
+  }
+  async deleteDocument(documentId) {
+    if (documentId === 1) {
+      return;
+    } else {
+      throw new Error(`No document found with document id ${documentId}`);
     }
   }
 }
@@ -71,5 +99,42 @@ describe('Document model', () => {
         documentModel.createDocument(applicationId, 'DocName', type)
       ).resolves.toBeDefined();
     }
+  });
+  test('should change document name by id', async () => {
+    const documentId = 1;
+    const newDocumentName = 'New Name';
+
+    await expect(
+      documentModel.changeDocumentNameById(newDocumentName, documentId)
+    ).resolves.toBeUndefined();
+  });
+
+  test('should throw an error when changing document name with invalid document id', async () => {
+    const invalidDocumentId = 999;
+    const newDocumentName = 'New Name';
+
+    await expect(
+      documentModel.changeDocumentNameById(newDocumentName, invalidDocumentId)
+    ).rejects.toThrow(
+      `No document found with document id ${invalidDocumentId}`
+    );
+  });
+
+  test('should delete document by id', async () => {
+    const documentId = 1;
+
+    await expect(
+      documentModel.deleteDocument(documentId)
+    ).resolves.toBeUndefined();
+  });
+
+  test('should throw an error when deleting document with invalid document id', async () => {
+    const invalidDocumentId = 999;
+
+    await expect(
+      documentModel.deleteDocument(invalidDocumentId)
+    ).rejects.toThrow(
+      `No document found with document id ${invalidDocumentId}`
+    );
   });
 });
