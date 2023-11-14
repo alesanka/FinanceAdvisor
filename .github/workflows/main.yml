@@ -1,0 +1,54 @@
+name: Build CI/CD
+
+on:
+  push:
+    branches:
+      - main
+      - tests2
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: postgres:16
+        ports:
+          - '5432:5432'
+        env:
+          POSTGRES_DB: finansialSystemDB
+          POSTGRES_USER: user_user
+          POSTGRES_PASSWORD: pgpwd4habr
+
+      AuthDB:
+        image: redis:7.2.1
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Docker image
+        run: docker build -t financeadvisor-app .
+
+      - name: Start Docker Compose
+        run: docker-compose up -d
+
+      - name: Wait for services to start
+        run: sleep 15
+
+      - name: Run tests
+        run: npm test
+
+      - name: Stop Docker Compose
+        run: docker-compose down
