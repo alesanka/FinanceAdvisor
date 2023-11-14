@@ -27,7 +27,7 @@ services:
     networks:
       - my-network
     env_file:
-      - .env
+      - .env.example
     volumes:
       - postgres_db:/var/lib/postgresql/data
 
