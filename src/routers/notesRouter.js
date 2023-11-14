@@ -12,4 +12,16 @@ router.post(
   notesController.createNotes
 ); // protected
 
+router.get(
+  '/:repayment_schedule_id',
+  notesController.getAllNotesForRepaymentSchedule
+); // public
+
+router.put(
+  '/:note_id ',
+  token.getAuthorization,
+  checkUserRole(['worker']),
+  notesController.updatePaymentStatus
+); // protected
+
 export default router;

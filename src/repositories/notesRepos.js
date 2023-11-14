@@ -1,4 +1,5 @@
 import { pool } from '../../db/postgress/dbPool.js';
+import { NotesDTO } from '../dto/notesDTO.js';
 
 export class NotesRepos {
   constructor(connection) {
@@ -42,6 +43,62 @@ export class NotesRepos {
       } else {
         return null;
       }
+    } catch (err) {
+      throw new Error(`${err}`);
+    }
+  }
+  async getAllNotesForRepaymentSchedule(repayment_schedule_id) {
+    try {
+      const result = await this.connection.query(
+        `SELECT * FROM PaymentNotes WHERE repayment_schedule_id = $1`,
+        [repayment_schedule_id]
+      );
+      if (result.rows.length > 0) {
+        const noteDTOs = result.rows.map(
+          (note) =>
+            new NotesDTO(
+              note.repayment_schedule_id,
+              note.payment_date,
+              note.payment_amount,
+              note.payment_received
+            )
+        );
+        return noteDTOs;
+      }
+    } catch (err) {
+      throw new Error(`${err}`);
+    }
+  }
+  async getNoteById(noteId) {
+    try {
+      const result = await this.connection.query(
+        `SELECT * FROM PaymentNotes WHERE note_id = $1`,
+        [noteId]
+      );
+      if (result.rows.length > 0) {
+        const noteDTO = new NotesDTO(
+          result.rows[0].repayment_schedule_id,
+          result.rows[0].payment_date,
+          result.rows[0].payment_amount,
+          result.rows[0].payment_received
+        );
+
+        return noteDTO;
+      } else {
+        return null;
+      }
+    } catch (err) {
+      throw new Error(`${err}`);
+    }
+  }
+  async updatePaymentStatus(note_id) {
+    try {
+      await this.connection.query(
+        `UPDATE PaymentNotes SET payment_received = true WHERE note_id  = $1`,
+        [note_id]
+      );
+
+      return;
     } catch (err) {
       throw new Error(`${err}`);
     }
