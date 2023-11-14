@@ -1,18 +1,334 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1699978143022" clover="3.2.0">
-  <project timestamp="1699978143023" name="All files">
-    <metrics statements="749" coveredstatements="114" conditionals="145" coveredconditionals="7" methods="132" coveredmethods="30" elements="1026" coveredelements="151" complexity="0" loc="749" ncloc="749" packages="5" files="24" classes="24"/>
+<coverage generated="1699980795707" clover="3.2.0">
+  <project timestamp="1699980795708" name="All files">
+    <metrics statements="1211" coveredstatements="249" conditionals="194" coveredconditionals="11" methods="208" coveredmethods="45" elements="1613" coveredelements="305" complexity="0" loc="1211" ncloc="1211" packages="10" files="49" classes="49"/>
     <package name="db.postgress">
       <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <file name="dbPool.js" path="E:\JavaScript\FinanceAdvisor\db\postgress\dbPool.js">
         <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="4" count="5" type="stmt"/>
-        <line num="6" count="5" type="stmt"/>
-        <line num="8" count="5" type="stmt"/>
+        <line num="4" count="6" type="stmt"/>
+        <line num="6" count="6" type="stmt"/>
+        <line num="8" count="6" type="stmt"/>
+      </file>
+    </package>
+    <package name="db.redis">
+      <metrics statements="36" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="8" coveredmethods="1"/>
+      <file name="redisConfig.js" path="E:\JavaScript\FinanceAdvisor\db\redis\redisConfig.js">
+        <metrics statements="7" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="1"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+      </file>
+      <file name="redisRepository.js" path="E:\JavaScript\FinanceAdvisor\db\redis\redisRepository.js">
+        <metrics statements="29" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="6" coveredmethods="0"/>
+        <line num="5" count="0" type="stmt"/>
+        <line num="6" count="0" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="10" count="0" type="stmt"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="32" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="41" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="57" count="0" type="stmt"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="61" count="0" type="stmt"/>
+        <line num="66" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="src">
+      <metrics statements="10" coveredstatements="10" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="routers.js" path="E:\JavaScript\FinanceAdvisor\src\routers.js">
+        <metrics statements="10" coveredstatements="10" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.controllers">
+      <metrics statements="228" coveredstatements="50" conditionals="17" coveredconditionals="0" methods="42" coveredmethods="8"/>
+      <file name="authenticationController.js" path="E:\JavaScript\FinanceAdvisor\src\controllers\authenticationController.js">
+        <metrics statements="18" coveredstatements="4" conditionals="6" coveredconditionals="0" methods="3" coveredmethods="1"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="4" count="0" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="14" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="25" count="1" type="stmt"/>
+        <line num="27" count="1" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="34" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="41" count="0" type="stmt"/>
+        <line num="49" count="1" type="stmt"/>
+      </file>
+      <file name="documentController.js" path="E:\JavaScript\FinanceAdvisor\src\controllers\documentController.js">
+        <metrics statements="26" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="1"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="32" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="41" count="1" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="55" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="62" count="1" type="stmt"/>
+        <line num="63" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
+        <line num="65" count="0" type="stmt"/>
+        <line num="67" count="0" type="stmt"/>
+        <line num="68" count="0" type="stmt"/>
+        <line num="76" count="1" type="stmt"/>
+      </file>
+      <file name="loanApplicationController.js" path="E:\JavaScript\FinanceAdvisor\src\controllers\loanApplicationController.js">
+        <metrics statements="26" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="1"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="10" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="28" count="1" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="43" count="1" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="58" count="1" type="stmt"/>
+        <line num="59" count="0" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="61" count="0" type="stmt"/>
+        <line num="63" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
+        <line num="72" count="1" type="stmt"/>
+      </file>
+      <file name="loanTypeController.js" path="E:\JavaScript\FinanceAdvisor\src\controllers\loanTypeController.js">
+        <metrics statements="35" coveredstatements="7" conditionals="2" coveredconditionals="0" methods="6" coveredmethods="1"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="10" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="27" count="1" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="32" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="39" count="1" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="41" count="0" type="stmt"/>
+        <line num="43" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="57" count="1" type="stmt"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="59" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
+        <line num="70" count="0" type="stmt"/>
+        <line num="71" count="0" type="stmt"/>
+        <line num="77" count="1" type="stmt"/>
+        <line num="78" count="0" type="stmt"/>
+        <line num="79" count="0" type="stmt"/>
+        <line num="80" count="0" type="stmt"/>
+        <line num="82" count="0" type="stmt"/>
+        <line num="83" count="0" type="stmt"/>
+        <line num="91" count="1" type="stmt"/>
+      </file>
+      <file name="maxLoanAmountController.js" path="E:\JavaScript\FinanceAdvisor\src\controllers\maxLoanAmountController.js">
+        <metrics statements="20" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="1"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="28" count="1" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="43" count="1" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="59" count="1" type="stmt"/>
+      </file>
+      <file name="notesController.js" path="E:\JavaScript\FinanceAdvisor\src\controllers\notesController.js">
+        <metrics statements="26" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="1"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="36" count="1" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="53" count="1" type="stmt"/>
+        <line num="54" count="0" type="stmt"/>
+        <line num="55" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="59" count="0" type="stmt"/>
+        <line num="67" count="1" type="stmt"/>
+      </file>
+      <file name="repaymentScheduleController.js" path="E:\JavaScript\FinanceAdvisor\src\controllers\repaymentScheduleController.js">
+        <metrics statements="31" coveredstatements="7" conditionals="5" coveredconditionals="0" methods="6" coveredmethods="1"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="4" count="0" type="cond" truecount="0" falsecount="5"/>
+        <line num="5" count="0" type="stmt"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="37" count="1" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="41" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="56" count="1" type="stmt"/>
+        <line num="57" count="0" type="stmt"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="63" count="0" type="stmt"/>
+        <line num="69" count="0" type="stmt"/>
+        <line num="70" count="0" type="stmt"/>
+        <line num="77" count="1" type="stmt"/>
+        <line num="78" count="0" type="stmt"/>
+        <line num="79" count="0" type="stmt"/>
+        <line num="82" count="0" type="stmt"/>
+        <line num="84" count="0" type="stmt"/>
+        <line num="85" count="0" type="stmt"/>
+        <line num="93" count="1" type="stmt"/>
+      </file>
+      <file name="userController.js" path="E:\JavaScript\FinanceAdvisor\src\controllers\userController.js">
+        <metrics statements="46" coveredstatements="9" conditionals="4" coveredconditionals="0" methods="8" coveredmethods="1"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="4" count="0" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="14" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="41" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="49" count="1" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="55" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="63" count="1" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
+        <line num="65" count="0" type="stmt"/>
+        <line num="66" count="0" type="stmt"/>
+        <line num="68" count="0" type="stmt"/>
+        <line num="69" count="0" type="stmt"/>
+        <line num="75" count="1" type="stmt"/>
+        <line num="76" count="0" type="stmt"/>
+        <line num="77" count="0" type="stmt"/>
+        <line num="78" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="79" count="0" type="stmt"/>
+        <line num="81" count="0" type="stmt"/>
+        <line num="83" count="0" type="stmt"/>
+        <line num="84" count="0" type="stmt"/>
+        <line num="91" count="1" type="stmt"/>
+        <line num="92" count="0" type="stmt"/>
+        <line num="93" count="0" type="stmt"/>
+        <line num="94" count="0" type="stmt"/>
+        <line num="100" count="0" type="stmt"/>
+        <line num="101" count="0" type="stmt"/>
+        <line num="107" count="1" type="stmt"/>
+        <line num="108" count="0" type="stmt"/>
+        <line num="109" count="0" type="stmt"/>
+        <line num="110" count="0" type="stmt"/>
+        <line num="112" count="0" type="stmt"/>
+        <line num="113" count="0" type="stmt"/>
+        <line num="121" count="1" type="stmt"/>
       </file>
     </package>
     <package name="src.dto">
-      <metrics statements="64" coveredstatements="11" conditionals="8" coveredconditionals="0" methods="15" coveredmethods="2"/>
+      <metrics statements="67" coveredstatements="15" conditionals="8" coveredconditionals="0" methods="17" coveredmethods="3"/>
       <file name="applicationDTO.js" path="E:\JavaScript\FinanceAdvisor\src\dto\applicationDTO.js">
         <metrics statements="4" coveredstatements="0" conditionals="1" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="8" count="0" type="stmt"/>
@@ -29,19 +345,19 @@
       </file>
       <file name="docDTO.js" path="E:\JavaScript\FinanceAdvisor\src\dto\docDTO.js">
         <metrics statements="8" coveredstatements="8" conditionals="1" coveredconditionals="0" methods="2" coveredmethods="2"/>
-        <line num="3" count="1" type="stmt"/>
-        <line num="17" count="4" type="stmt"/>
-        <line num="18" count="4" type="stmt"/>
-        <line num="19" count="4" type="stmt"/>
-        <line num="20" count="4" type="stmt"/>
-        <line num="24" count="4" type="stmt"/>
-        <line num="25" count="4" type="stmt"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="17" count="8" type="stmt"/>
+        <line num="18" count="8" type="stmt"/>
+        <line num="19" count="8" type="stmt"/>
+        <line num="20" count="8" type="stmt"/>
+        <line num="24" count="8" type="stmt"/>
+        <line num="25" count="8" type="stmt"/>
         <line num="27" count="1" type="stmt"/>
       </file>
       <file name="loanTypesDTO.js" path="E:\JavaScript\FinanceAdvisor\src\dto\loanTypesDTO.js">
         <metrics statements="17" coveredstatements="2" conditionals="1" coveredconditionals="0" methods="4" coveredmethods="0"/>
-        <line num="3" count="3" type="stmt"/>
-        <line num="10" count="3" type="stmt"/>
+        <line num="3" count="4" type="stmt"/>
+        <line num="10" count="4" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
         <line num="26" count="0" type="stmt"/>
         <line num="27" count="0" type="stmt"/>
@@ -66,11 +382,11 @@
         <line num="11" count="0" type="stmt"/>
       </file>
       <file name="notesDTO.js" path="E:\JavaScript\FinanceAdvisor\src\dto\notesDTO.js">
-        <metrics statements="4" coveredstatements="0" conditionals="1" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="8" count="0" type="stmt"/>
-        <line num="9" count="0" type="stmt"/>
-        <line num="10" count="0" type="stmt"/>
-        <line num="11" count="0" type="stmt"/>
+        <metrics statements="4" coveredstatements="4" conditionals="1" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="8" count="2" type="stmt"/>
+        <line num="9" count="2" type="stmt"/>
+        <line num="10" count="2" type="stmt"/>
+        <line num="11" count="2" type="stmt"/>
       </file>
       <file name="repaymentScheduleDTO.js" path="E:\JavaScript\FinanceAdvisor\src\dto\repaymentScheduleDTO.js">
         <metrics statements="4" coveredstatements="0" conditionals="1" coveredconditionals="0" methods="1" coveredmethods="0"/>
@@ -79,9 +395,15 @@
         <line num="10" count="0" type="stmt"/>
         <line num="11" count="0" type="stmt"/>
       </file>
+      <file name="tokenDTO.js" path="E:\JavaScript\FinanceAdvisor\src\dto\tokenDTO.js">
+        <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="3" count="0" type="stmt"/>
+        <line num="4" count="0" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
+      </file>
       <file name="userDTO.js" path="E:\JavaScript\FinanceAdvisor\src\dto\userDTO.js">
         <metrics statements="19" coveredstatements="1" conditionals="1" coveredconditionals="0" methods="4" coveredmethods="0"/>
-        <line num="3" count="3" type="stmt"/>
+        <line num="3" count="4" type="stmt"/>
         <line num="15" count="0" type="stmt"/>
         <line num="16" count="0" type="stmt"/>
         <line num="17" count="0" type="stmt"/>
@@ -102,15 +424,31 @@
         <line num="46" count="0" type="stmt"/>
       </file>
     </package>
+    <package name="src.middlewere">
+      <metrics statements="10" coveredstatements="1" conditionals="4" coveredconditionals="0" methods="2" coveredmethods="1"/>
+      <file name="checkRole.js" path="E:\JavaScript\FinanceAdvisor\src\middlewere\checkRole.js">
+        <metrics statements="10" coveredstatements="1" conditionals="4" coveredconditionals="0" methods="2" coveredmethods="1"/>
+        <line num="3" count="13" type="stmt"/>
+        <line num="4" count="0" type="stmt"/>
+        <line num="5" count="0" type="stmt"/>
+        <line num="6" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="7" count="0" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="11" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="12" count="0" type="stmt"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+      </file>
+    </package>
     <package name="src.models">
-      <metrics statements="340" coveredstatements="82" conditionals="43" coveredconditionals="5" methods="58" coveredmethods="20"/>
+      <metrics statements="392" coveredstatements="95" conditionals="49" coveredconditionals="9" methods="66" coveredmethods="24"/>
       <file name="documentModel.js" path="E:\JavaScript\FinanceAdvisor\src\models\documentModel.js">
         <metrics statements="27" coveredstatements="15" conditionals="0" coveredconditionals="0" methods="6" coveredmethods="4"/>
-        <line num="7" count="2" type="stmt"/>
-        <line num="11" count="2" type="stmt"/>
-        <line num="12" count="2" type="stmt"/>
-        <line num="19" count="1" type="stmt"/>
-        <line num="21" count="1" type="stmt"/>
+        <line num="7" count="3" type="stmt"/>
+        <line num="11" count="6" type="stmt"/>
+        <line num="12" count="6" type="stmt"/>
+        <line num="19" count="5" type="stmt"/>
+        <line num="21" count="5" type="stmt"/>
         <line num="23" count="1" type="stmt"/>
         <line num="27" count="2" type="stmt"/>
         <line num="28" count="2" type="stmt"/>
@@ -132,17 +470,72 @@
         <line num="77" count="0" type="stmt"/>
         <line num="78" count="0" type="stmt"/>
         <line num="80" count="0" type="stmt"/>
-        <line num="84" count="1" type="stmt"/>
+        <line num="84" count="2" type="stmt"/>
+      </file>
+      <file name="loanApplicationModel.js" path="E:\JavaScript\FinanceAdvisor\src\models\loanApplicationModel.js">
+        <metrics statements="52" coveredstatements="3" conditionals="6" coveredconditionals="0" methods="8" coveredmethods="1"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="10" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="63" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
+        <line num="66" count="0" type="stmt"/>
+        <line num="71" count="0" type="stmt"/>
+        <line num="73" count="0" type="stmt"/>
+        <line num="77" count="0" type="stmt"/>
+        <line num="79" count="0" type="stmt"/>
+        <line num="84" count="0" type="stmt"/>
+        <line num="85" count="0" type="stmt"/>
+        <line num="89" count="0" type="stmt"/>
+        <line num="95" count="0" type="stmt"/>
+        <line num="98" count="0" type="stmt"/>
+        <line num="99" count="0" type="stmt"/>
+        <line num="100" count="0" type="stmt"/>
+        <line num="104" count="0" type="stmt"/>
+        <line num="107" count="0" type="stmt"/>
+        <line num="109" count="0" type="stmt"/>
+        <line num="114" count="0" type="stmt"/>
+        <line num="116" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="117" count="0" type="stmt"/>
+        <line num="123" count="0" type="stmt"/>
+        <line num="125" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="126" count="0" type="stmt"/>
+        <line num="128" count="0" type="stmt"/>
+        <line num="131" count="0" type="stmt"/>
+        <line num="136" count="0" type="stmt"/>
+        <line num="137" count="0" type="stmt"/>
+        <line num="141" count="0" type="stmt"/>
+        <line num="146" count="0" type="stmt"/>
+        <line num="147" count="0" type="stmt"/>
+        <line num="149" count="0" type="stmt"/>
+        <line num="153" count="0" type="stmt"/>
+        <line num="154" count="0" type="stmt"/>
+        <line num="155" count="0" type="stmt"/>
+        <line num="156" count="0" type="stmt"/>
+        <line num="163" count="0" type="stmt"/>
+        <line num="165" count="0" type="stmt"/>
+        <line num="167" count="0" type="stmt"/>
+        <line num="172" count="1" type="stmt"/>
       </file>
       <file name="loanTypeModel.js" path="E:\JavaScript\FinanceAdvisor\src\models\loanTypeModel.js">
         <metrics statements="53" coveredstatements="8" conditionals="10" coveredconditionals="0" methods="9" coveredmethods="2"/>
-        <line num="6" count="1" type="stmt"/>
+        <line num="6" count="2" type="stmt"/>
         <line num="7" count="7" type="stmt"/>
         <line num="13" count="7" type="stmt"/>
         <line num="14" count="7" type="stmt"/>
         <line num="15" count="4" type="stmt"/>
         <line num="17" count="3" type="stmt"/>
-        <line num="23" count="1" type="stmt"/>
+        <line num="23" count="2" type="stmt"/>
         <line num="26" count="0" type="stmt"/>
         <line num="27" count="0" type="stmt"/>
         <line num="35" count="0" type="stmt"/>
@@ -188,32 +581,32 @@
         <line num="155" count="0" type="stmt"/>
         <line num="156" count="0" type="stmt"/>
         <line num="158" count="0" type="stmt"/>
-        <line num="164" count="1" type="stmt"/>
+        <line num="164" count="2" type="stmt"/>
       </file>
       <file name="maxLoanAmountModel.js" path="E:\JavaScript\FinanceAdvisor\src\models\maxLoanAmountModel.js">
         <metrics statements="57" coveredstatements="17" conditionals="7" coveredconditionals="5" methods="9" coveredmethods="5"/>
-        <line num="9" count="1" type="stmt"/>
+        <line num="9" count="2" type="stmt"/>
         <line num="10" count="2" type="stmt"/>
         <line num="11" count="2" type="stmt"/>
-        <line num="14" count="1" type="stmt"/>
+        <line num="14" count="2" type="stmt"/>
         <line num="15" count="2" type="stmt"/>
         <line num="16" count="2" type="stmt"/>
-        <line num="19" count="1" type="stmt"/>
+        <line num="19" count="2" type="stmt"/>
         <line num="20" count="1" type="stmt"/>
         <line num="21" count="1" type="stmt"/>
-        <line num="24" count="1" type="stmt"/>
+        <line num="24" count="2" type="stmt"/>
         <line num="25" count="4" type="cond" truecount="5" falsecount="0"/>
         <line num="26" count="3" type="stmt"/>
         <line num="31" count="1" type="stmt"/>
         <line num="34" count="1" type="stmt"/>
-        <line num="37" count="1" type="stmt"/>
+        <line num="37" count="2" type="stmt"/>
         <line num="42" count="0" type="stmt"/>
         <line num="44" count="0" type="stmt"/>
         <line num="46" count="0" type="stmt"/>
         <line num="47" count="0" type="stmt"/>
         <line num="48" count="0" type="stmt"/>
         <line num="49" count="0" type="stmt"/>
-        <line num="59" count="1" type="stmt"/>
+        <line num="59" count="2" type="stmt"/>
         <line num="65" count="0" type="stmt"/>
         <line num="66" count="0" type="stmt"/>
         <line num="70" count="0" type="stmt"/>
@@ -248,18 +641,18 @@
         <line num="167" count="0" type="stmt"/>
         <line num="170" count="0" type="stmt"/>
         <line num="172" count="0" type="stmt"/>
-        <line num="179" count="1" type="stmt"/>
+        <line num="179" count="2" type="stmt"/>
       </file>
       <file name="notesModel.js" path="E:\JavaScript\FinanceAdvisor\src\models\notesModel.js">
-        <metrics statements="47" coveredstatements="7" conditionals="4" coveredconditionals="0" methods="8" coveredmethods="2"/>
-        <line num="11" count="1" type="stmt"/>
+        <metrics statements="47" coveredstatements="17" conditionals="4" coveredconditionals="4" methods="8" coveredmethods="5"/>
+        <line num="11" count="2" type="stmt"/>
         <line num="12" count="2" type="stmt"/>
         <line num="15" count="2" type="stmt"/>
-        <line num="18" count="1" type="stmt"/>
-        <line num="19" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="23" count="0" type="stmt"/>
-        <line num="36" count="1" type="stmt"/>
-        <line num="41" count="1" type="stmt"/>
+        <line num="18" count="2" type="stmt"/>
+        <line num="19" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="23" count="2" type="stmt"/>
+        <line num="36" count="3" type="stmt"/>
+        <line num="38" count="3" type="stmt"/>
         <line num="45" count="0" type="stmt"/>
         <line num="47" count="0" type="stmt"/>
         <line num="50" count="0" type="stmt"/>
@@ -278,14 +671,14 @@
         <line num="88" count="0" type="stmt"/>
         <line num="90" count="0" type="stmt"/>
         <line num="92" count="0" type="stmt"/>
-        <line num="96" count="0" type="stmt"/>
-        <line num="98" count="0" type="stmt"/>
-        <line num="102" count="0" type="stmt"/>
-        <line num="107" count="0" type="stmt"/>
-        <line num="110" count="0" type="stmt"/>
-        <line num="112" count="0" type="stmt"/>
-        <line num="120" count="0" type="stmt"/>
-        <line num="122" count="0" type="stmt"/>
+        <line num="96" count="2" type="stmt"/>
+        <line num="98" count="2" type="stmt"/>
+        <line num="102" count="2" type="stmt"/>
+        <line num="107" count="1" type="stmt"/>
+        <line num="110" count="1" type="stmt"/>
+        <line num="112" count="1" type="stmt"/>
+        <line num="120" count="1" type="stmt"/>
+        <line num="122" count="1" type="stmt"/>
         <line num="127" count="0" type="stmt"/>
         <line num="128" count="0" type="stmt"/>
         <line num="130" count="0" type="stmt"/>
@@ -298,28 +691,28 @@
         <line num="144" count="0" type="stmt"/>
         <line num="145" count="0" type="stmt"/>
         <line num="147" count="0" type="stmt"/>
-        <line num="152" count="1" type="stmt"/>
+        <line num="152" count="2" type="stmt"/>
       </file>
       <file name="repaymentScheduleModel.js" path="E:\JavaScript\FinanceAdvisor\src\models\repaymentScheduleModel.js">
         <metrics statements="56" coveredstatements="7" conditionals="4" coveredconditionals="0" methods="10" coveredmethods="1"/>
-        <line num="10" count="1" type="stmt"/>
+        <line num="10" count="2" type="stmt"/>
         <line num="11" count="0" type="stmt"/>
         <line num="12" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="13" count="0" type="stmt"/>
         <line num="15" count="0" type="stmt"/>
-        <line num="18" count="1" type="stmt"/>
+        <line num="18" count="2" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
         <line num="20" count="0" type="stmt"/>
-        <line num="23" count="1" type="stmt"/>
+        <line num="23" count="2" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
         <line num="27" count="0" type="stmt"/>
-        <line num="30" count="1" type="stmt"/>
+        <line num="30" count="2" type="stmt"/>
         <line num="31" count="0" type="stmt"/>
         <line num="36" count="0" type="stmt"/>
-        <line num="39" count="1" type="stmt"/>
+        <line num="39" count="2" type="stmt"/>
         <line num="40" count="0" type="stmt"/>
         <line num="41" count="0" type="stmt"/>
-        <line num="52" count="1" type="stmt"/>
+        <line num="52" count="2" type="stmt"/>
         <line num="60" count="0" type="stmt"/>
         <line num="61" count="0" type="stmt"/>
         <line num="65" count="0" type="stmt"/>
@@ -357,37 +750,37 @@
         <line num="173" count="0" type="stmt"/>
         <line num="174" count="0" type="stmt"/>
         <line num="176" count="0" type="stmt"/>
-        <line num="183" count="1" type="stmt"/>
+        <line num="183" count="2" type="stmt"/>
       </file>
       <file name="userModel.js" path="E:\JavaScript\FinanceAdvisor\src\models\userModel.js">
         <metrics statements="100" coveredstatements="28" conditionals="18" coveredconditionals="0" methods="16" coveredmethods="6"/>
-        <line num="9" count="1" type="stmt"/>
-        <line num="10" count="1" type="stmt"/>
-        <line num="12" count="1" type="stmt"/>
+        <line num="9" count="2" type="stmt"/>
+        <line num="10" count="2" type="stmt"/>
+        <line num="12" count="2" type="stmt"/>
         <line num="13" count="4" type="stmt"/>
         <line num="14" count="4" type="stmt"/>
         <line num="15" count="4" type="stmt"/>
         <line num="16" count="2" type="stmt"/>
         <line num="18" count="2" type="stmt"/>
-        <line num="22" count="1" type="stmt"/>
+        <line num="22" count="2" type="stmt"/>
         <line num="23" count="2" type="stmt"/>
         <line num="24" count="2" type="stmt"/>
-        <line num="27" count="1" type="stmt"/>
+        <line num="27" count="2" type="stmt"/>
         <line num="28" count="1" type="stmt"/>
         <line num="29" count="1" type="stmt"/>
-        <line num="32" count="1" type="stmt"/>
+        <line num="32" count="2" type="stmt"/>
         <line num="33" count="4" type="stmt"/>
         <line num="34" count="4" type="stmt"/>
         <line num="35" count="4" type="stmt"/>
         <line num="36" count="1" type="stmt"/>
         <line num="38" count="3" type="stmt"/>
-        <line num="42" count="1" type="stmt"/>
+        <line num="42" count="2" type="stmt"/>
         <line num="43" count="4" type="stmt"/>
         <line num="45" count="4" type="stmt"/>
         <line num="46" count="4" type="stmt"/>
         <line num="47" count="1" type="stmt"/>
         <line num="49" count="3" type="stmt"/>
-        <line num="55" count="1" type="stmt"/>
+        <line num="55" count="2" type="stmt"/>
         <line num="69" count="0" type="stmt"/>
         <line num="79" count="0" type="stmt"/>
         <line num="83" count="0" type="stmt"/>
@@ -460,14 +853,14 @@
         <line num="283" count="0" type="stmt"/>
         <line num="284" count="0" type="stmt"/>
         <line num="286" count="0" type="stmt"/>
-        <line num="291" count="1" type="stmt"/>
+        <line num="291" count="2" type="stmt"/>
       </file>
     </package>
     <package name="src.repositories">
       <metrics statements="339" coveredstatements="15" conditionals="92" coveredconditionals="0" methods="58" coveredmethods="7"/>
       <file name="documentRepos.js" path="E:\JavaScript\FinanceAdvisor\src\repositories\documentRepos.js">
         <metrics statements="28" coveredstatements="2" conditionals="4" coveredconditionals="0" methods="7" coveredmethods="1"/>
-        <line num="5" count="1" type="stmt"/>
+        <line num="5" count="2" type="stmt"/>
         <line num="8" count="0" type="stmt"/>
         <line num="9" count="0" type="stmt"/>
         <line num="14" count="0" type="stmt"/>
@@ -494,11 +887,11 @@
         <line num="71" count="0" type="stmt"/>
         <line num="76" count="0" type="stmt"/>
         <line num="78" count="0" type="stmt"/>
-        <line num="83" count="1" type="stmt"/>
+        <line num="83" count="2" type="stmt"/>
       </file>
       <file name="loanApplicationRepos.js" path="E:\JavaScript\FinanceAdvisor\src\repositories\loanApplicationRepos.js">
         <metrics statements="35" coveredstatements="2" conditionals="6" coveredconditionals="0" methods="8" coveredmethods="1"/>
-        <line num="6" count="1" type="stmt"/>
+        <line num="6" count="2" type="stmt"/>
         <line num="9" count="0" type="stmt"/>
         <line num="10" count="0" type="stmt"/>
         <line num="15" count="0" type="stmt"/>
@@ -532,11 +925,11 @@
         <line num="93" count="0" type="stmt"/>
         <line num="95" count="0" type="stmt"/>
         <line num="103" count="0" type="stmt"/>
-        <line num="107" count="1" type="stmt"/>
+        <line num="107" count="2" type="stmt"/>
       </file>
       <file name="loanTypeRepos.js" path="E:\JavaScript\FinanceAdvisor\src\repositories\loanTypeRepos.js">
         <metrics statements="49" coveredstatements="2" conditionals="12" coveredconditionals="0" methods="8" coveredmethods="1"/>
-        <line num="6" count="3" type="stmt"/>
+        <line num="6" count="4" type="stmt"/>
         <line num="9" count="0" type="stmt"/>
         <line num="10" count="0" type="stmt"/>
         <line num="20" count="0" type="stmt"/>
@@ -584,11 +977,11 @@
         <line num="128" count="0" type="stmt"/>
         <line num="132" count="0" type="stmt"/>
         <line num="134" count="0" type="stmt"/>
-        <line num="138" count="3" type="stmt"/>
+        <line num="138" count="4" type="stmt"/>
       </file>
       <file name="loanType_MaxLoanAmountRepos.js" path="E:\JavaScript\FinanceAdvisor\src\repositories\loanType_MaxLoanAmountRepos.js">
         <metrics statements="12" coveredstatements="2" conditionals="2" coveredconditionals="0" methods="3" coveredmethods="1"/>
-        <line num="5" count="2" type="stmt"/>
+        <line num="5" count="3" type="stmt"/>
         <line num="8" count="0" type="stmt"/>
         <line num="9" count="0" type="stmt"/>
         <line num="13" count="0" type="stmt"/>
@@ -599,7 +992,7 @@
         <line num="26" count="0" type="stmt"/>
         <line num="28" count="0" type="stmt"/>
         <line num="31" count="0" type="stmt"/>
-        <line num="36" count="2" type="stmt"/>
+        <line num="36" count="3" type="stmt"/>
       </file>
       <file name="maxLoanAmountRepos.js" path="E:\JavaScript\FinanceAdvisor\src\repositories\maxLoanAmountRepos.js">
         <metrics statements="24" coveredstatements="1" conditionals="4" coveredconditionals="0" methods="5" coveredmethods="0"/>
@@ -626,11 +1019,11 @@
         <line num="71" count="0" type="stmt"/>
         <line num="75" count="0" type="stmt"/>
         <line num="77" count="0" type="stmt"/>
-        <line num="82" count="1" type="stmt"/>
+        <line num="82" count="2" type="stmt"/>
       </file>
       <file name="notesRepos.js" path="E:\JavaScript\FinanceAdvisor\src\repositories\notesRepos.js">
         <metrics statements="36" coveredstatements="2" conditionals="6" coveredconditionals="0" methods="8" coveredmethods="1"/>
-        <line num="6" count="1" type="stmt"/>
+        <line num="6" count="2" type="stmt"/>
         <line num="9" count="0" type="stmt"/>
         <line num="10" count="0" type="stmt"/>
         <line num="20" count="0" type="stmt"/>
@@ -665,11 +1058,11 @@
         <line num="108" count="0" type="stmt"/>
         <line num="112" count="0" type="stmt"/>
         <line num="114" count="0" type="stmt"/>
-        <line num="119" count="1" type="stmt"/>
+        <line num="119" count="2" type="stmt"/>
       </file>
       <file name="repaymentScheduleRepos.js" path="E:\JavaScript\FinanceAdvisor\src\repositories\repaymentScheduleRepos.js">
         <metrics statements="28" coveredstatements="2" conditionals="2" coveredconditionals="0" methods="6" coveredmethods="1"/>
-        <line num="6" count="1" type="stmt"/>
+        <line num="6" count="2" type="stmt"/>
         <line num="9" count="0" type="stmt"/>
         <line num="10" count="0" type="stmt"/>
         <line num="20" count="0" type="stmt"/>
@@ -696,11 +1089,11 @@
         <line num="84" count="0" type="stmt"/>
         <line num="89" count="0" type="stmt"/>
         <line num="91" count="0" type="stmt"/>
-        <line num="96" count="1" type="stmt"/>
+        <line num="96" count="2" type="stmt"/>
       </file>
       <file name="userRepos.js" path="E:\JavaScript\FinanceAdvisor\src\repositories\userRepos.js">
         <metrics statements="127" coveredstatements="2" conditionals="56" coveredconditionals="0" methods="13" coveredmethods="1"/>
-        <line num="7" count="3" type="stmt"/>
+        <line num="7" count="4" type="stmt"/>
         <line num="10" count="0" type="stmt"/>
         <line num="11" count="0" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
@@ -826,16 +1219,175 @@
         <line num="297" count="0" type="stmt"/>
         <line num="304" count="0" type="stmt"/>
         <line num="307" count="0" type="stmt"/>
-        <line num="312" count="3" type="stmt"/>
+        <line num="312" count="4" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.routers">
+      <metrics statements="42" coveredstatements="42" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="authRouter.js" path="E:\JavaScript\FinanceAdvisor\src\routers\authRouter.js">
+        <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+      </file>
+      <file name="documentRouter.js" path="E:\JavaScript\FinanceAdvisor\src\routers\documentRouter.js">
+        <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="25" count="1" type="stmt"/>
+      </file>
+      <file name="loanApplicationRouter.js" path="E:\JavaScript\FinanceAdvisor\src\routers\loanApplicationRouter.js">
+        <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="27" count="1" type="stmt"/>
+        <line num="33" count="1" type="stmt"/>
+      </file>
+      <file name="loanTypeRouter.js" path="E:\JavaScript\FinanceAdvisor\src\routers\loanTypeRouter.js">
+        <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+      </file>
+      <file name="maxLoanRouter.js" path="E:\JavaScript\FinanceAdvisor\src\routers\maxLoanRouter.js">
+        <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+      </file>
+      <file name="notesRouter.js" path="E:\JavaScript\FinanceAdvisor\src\routers\notesRouter.js">
+        <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="27" count="1" type="stmt"/>
+      </file>
+      <file name="registrationRouter.js" path="E:\JavaScript\FinanceAdvisor\src\routers\registrationRouter.js">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+      </file>
+      <file name="repaymentScheduleRouter.js" path="E:\JavaScript\FinanceAdvisor\src\routers\repaymentScheduleRouter.js">
+        <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+      </file>
+      <file name="userRouter.js" path="E:\JavaScript\FinanceAdvisor\src\routers\userRouter.js">
+        <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
       </file>
     </package>
     <package name="utils">
-      <metrics statements="3" coveredstatements="3" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
+      <metrics statements="84" coveredstatements="11" conditionals="24" coveredconditionals="2" methods="15" coveredmethods="1"/>
       <file name="helper.js" path="E:\JavaScript\FinanceAdvisor\utils\helper.js">
         <metrics statements="3" coveredstatements="3" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
-        <line num="1" count="6" type="stmt"/>
-        <line num="2" count="10" type="cond" truecount="2" falsecount="0"/>
-        <line num="3" count="6" type="stmt"/>
+        <line num="1" count="7" type="stmt"/>
+        <line num="2" count="12" type="cond" truecount="2" falsecount="0"/>
+        <line num="3" count="7" type="stmt"/>
+      </file>
+      <file name="tokenController.js" path="E:\JavaScript\FinanceAdvisor\utils\tokenController.js">
+        <metrics statements="23" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="6" coveredmethods="0"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="32" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="41" count="1" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="54" count="0" type="stmt"/>
+        <line num="55" count="0" type="stmt"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="59" count="0" type="stmt"/>
+        <line num="64" count="1" type="stmt"/>
+      </file>
+      <file name="tokenModel.js" path="E:\JavaScript\FinanceAdvisor\utils\tokenModel.js">
+        <metrics statements="58" coveredstatements="1" conditionals="22" coveredconditionals="0" methods="8" coveredmethods="0"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="7" count="0" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="10" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="29" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="32" count="0" type="stmt"/>
+        <line num="33" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="47" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="59" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
+        <line num="65" count="0" type="stmt"/>
+        <line num="66" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="67" count="0" type="stmt"/>
+        <line num="70" count="0" type="stmt"/>
+        <line num="79" count="0" type="stmt"/>
+        <line num="80" count="0" type="stmt"/>
+        <line num="85" count="0" type="stmt"/>
+        <line num="86" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="87" count="0" type="stmt"/>
+        <line num="90" count="0" type="stmt"/>
+        <line num="98" count="0" type="stmt"/>
+        <line num="99" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="100" count="0" type="stmt"/>
+        <line num="103" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="104" count="0" type="stmt"/>
+        <line num="107" count="0" type="stmt"/>
+        <line num="108" count="0" type="stmt"/>
+        <line num="110" count="0" type="stmt"/>
+        <line num="112" count="0" type="stmt"/>
+        <line num="113" count="0" type="stmt"/>
+        <line num="118" count="0" type="stmt"/>
+        <line num="119" count="0" type="stmt"/>
+        <line num="120" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="121" count="0" type="stmt"/>
+        <line num="124" count="0" type="stmt"/>
+        <line num="129" count="0" type="stmt"/>
+        <line num="130" count="0" type="stmt"/>
+        <line num="135" count="0" type="stmt"/>
+        <line num="136" count="0" type="stmt"/>
+        <line num="137" count="0" type="stmt"/>
+        <line num="139" count="0" type="stmt"/>
+        <line num="140" count="0" type="stmt"/>
       </file>
     </package>
   </project>

@@ -27,18 +27,18 @@ export const checkIsRightTerm = (paymentDate, applicationDate, endTermDate) => {
 export class NotesModel {
   constructor(
     repaymentScheduleRepos,
+    notesRepos,
     loanTypeMaxLoanAmountRepos,
     loanApplicationRepos,
     loanTypeRepos,
-    notesRepos,
     userRepos
   ) {
     (this.repaymentScheduleRepos = repaymentScheduleRepos),
-      (this.loanTypeMaxLoanAmountRepos = loanTypeMaxLoanAmountRepos),
+      (this.notesRepos = notesRepos);
+    (this.loanTypeMaxLoanAmountRepos = loanTypeMaxLoanAmountRepos),
       (this.loanApplicationRepos = loanApplicationRepos),
       (this.loanTypeRepos = loanTypeRepos),
-      (this.notesRepos = notesRepos);
-    this.userRepos = userRepos;
+      (this.userRepos = userRepos);
   }
 
   async createNotes(repaymentScheduleId, paymentDate) {
@@ -151,9 +151,9 @@ export class NotesModel {
 
 export const notesModel = new NotesModel(
   repaymentScheduleRepos,
+  notesRepos,
   loanTypeMaxLoanAmountRepos,
   loanApplicationRepos,
   loanTypeRepos,
-  notesRepos,
   userRepos
 );

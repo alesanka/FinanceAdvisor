@@ -57,10 +57,19 @@ describe('Document model', () => {
       documentModel.findAllDocumentsByApplicationId(wrongAppId)
     ).rejects.toThrow('Invalid application id.');
   });
-});
+  test('should handle different document types correctly', async () => {
+    const applicationId = 1;
+    const documentTypes = [
+      'passport',
+      'student_verification',
+      'business_plan',
+      'purchase_agreement',
+    ];
 
-// return {
-//   document_id: dto.document_id,
-//   document_name: dto.document_name,
-//   document_type: dto.document_type,
-// };
+    for (const type of documentTypes) {
+      await expect(
+        documentModel.createDocument(applicationId, 'DocName', type)
+      ).resolves.toBeDefined();
+    }
+  });
+});
