@@ -40,6 +40,20 @@ export class MaxLoanAmountController {
       });
     }
   };
+  deleteMaxLoanApplication = async (req, res) => {
+    try {
+      await this.maxLoanAmountModel.deleteMaxLoanApplication(
+        req.params.max_loan_amount_id
+      );
+      res.status(204).end();
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({
+        message: `Something went wrong while deleting max loan application.`,
+        error: err.message,
+      });
+    }
+  };
 }
 
 export const maxLoanAmountController = new MaxLoanAmountController(

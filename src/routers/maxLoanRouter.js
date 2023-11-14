@@ -5,11 +5,15 @@ import checkUserRole from '../middlewere/checkRole.js';
 
 const router = Router();
 
+router.get('/:max_loan_amount_id', maxLoanAmountController.getMaxLoanAmount); // public
 router.post(
   '/',
   token.getAuthorization,
   checkUserRole(['worker']),
   maxLoanAmountController.saveMaxLoan
 ); // protected
-router.get('/:max_loan_amount_id', maxLoanAmountController.getMaxLoanAmount); // public
+router.delete(
+  '/:max_loan_amount_id',
+  maxLoanAmountController.deleteMaxLoanApplication
+); // protected
 export default router;

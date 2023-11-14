@@ -149,6 +149,26 @@ export class MaxLoanAmountModel {
       throw new Error(`Unable to get max loan amount by id: ${err}`);
     }
   }
+  async deleteMaxLoanApplication(max_loan_amount_id) {
+    try {
+      const maxLoanAmount = await this.maxLoanAmountRepos.getMaxLoanAmountByMaxAmountId(
+        max_loan_amount_id
+      );
+      assertValueExists(
+        maxLoanAmount,
+        `No max loan application found with id ${max_loan_amount_id}`
+      );
+
+      await this.maxLoanAmountRepos.deleteMaxLoanApplication(
+        max_loan_amount_id
+      );
+      return;
+    } catch (err) {
+      throw new Error(
+        `Unable to delete max loan application ${max_loan_amount_id}: ${err}.`
+      );
+    }
+  }
 }
 
 export const maxLoanAmountModel = new MaxLoanAmountModel(

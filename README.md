@@ -765,6 +765,39 @@ Content-Type: application/json
 }
 ```
 
+---
+
+**Delete client's max loan amount.**
+
+\*protected request (available only for admin and worker with access_token)
+
+Request:
+
+```
+DELETE /max_available_amount/:max_loan_amount_id/
+Authorization: Bearer {access_token}
+```
+
+In case of successful response:
+
+```
+HTTP/1.1 204 No Content
+
+```
+
+In case of error response:
+
+```
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+
+{
+  message: `Something went wrong while deleting max loan application.`,
+  error: err.message,
+}
+
+```
+
 ## Endpoint /applications <a name="endpoints-applications"></a> [(Back to content)](#content)
 
 **Create a new loan application.**

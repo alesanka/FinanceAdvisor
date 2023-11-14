@@ -66,6 +66,17 @@ export class MaxLoanAmountRepos {
       throw new Error(`${err}`);
     }
   }
+  async deleteMaxLoanApplication(max_loan_amount_id) {
+    try {
+      await this.connection.query(
+        'DELETE FROM MaximumLoanAmounts WHERE max_loan_amount_id = $1',
+        [max_loan_amount_id]
+      );
+      return;
+    } catch (err) {
+      throw new Error(`${err}`);
+    }
+  }
 }
 
 export const maxLoanAmountRepos = new MaxLoanAmountRepos(pool);
