@@ -4,15 +4,10 @@ import { userRepos } from '../repositories/userRepos.js';
 import bcrypt from 'bcrypt';
 import { z } from 'zod';
 import * as dotenv from 'dotenv';
+import { assertValueExists } from '../../utils/helper.js';
 
 dotenv.config();
 const SALTY = parseInt(process.env.SALT);
-
-export const assertValueExists = (value, error) => {
-  if (!value) {
-    throw new Error(error);
-  }
-};
 
 export const passwordCheck = (pswrd) => {
   const passwordSchema = z.string().min(8);
@@ -23,8 +18,6 @@ export const passwordCheck = (pswrd) => {
     return false;
   }
 };
-
-
 
 export const passwordHash = async (pswrd) => {
   const password = await bcrypt.hash(pswrd, SALTY);

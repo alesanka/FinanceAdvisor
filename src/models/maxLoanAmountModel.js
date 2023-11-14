@@ -4,12 +4,7 @@ import { loanTypeRepos } from '../repositories/loanTypeRepos.js';
 import { loanTypeMaxLoanAmountRepos } from '../repositories/loanType_MaxLoanAmountRepos.js';
 import { MaxLoanDTO } from '../dto/maxLoanDTO.js';
 import { LoanTypeDTO } from '../dto/loanTypesDTO.js';
-
-export const assertValueExists = (value, error) => {
-  if (!value) {
-    throw new Error(error);
-  }
-};
+import { assertValueExists } from '../../utils/helper.js';
 
 export const calculateMaxMonthlyPayment = (salary) => {
   const payment = salary * 0.5;

@@ -6,10 +6,12 @@ import { notesRepos } from '../repositories/notesRepos.js';
 import { userRepos } from '../repositories/userRepos.js';
 import { NotesDTO } from '../dto/notesDTO.js';
 export { createDate, toMyISOFormat } from '../models/repaymentScheduleModel.js';
+import { assertValueExists } from '../../utils/helper.js';
 
 export const calculateEndTermDate = (date, loanTerm) => {
-  let endTermDate = new Date(date);
-  endTermDate.setMonth(endTermDate.getMonth() + loanTerm);
+  let endTermDate = new Date(
+    Date.UTC(date.getFullYear(), date.getMonth() + loanTerm, date.getDate())
+  );
   return endTermDate;
 };
 
@@ -19,12 +21,6 @@ export const checkIsRightTerm = (paymentDate, applicationDate, endTermDate) => {
     new Date(paymentDate) > endTermDate
   ) {
     throw new Error(`Payment date is out of range.`);
-  }
-};
-
-export const assertValueExists = (value, error) => {
-  if (!value) {
-    throw new Error(error);
   }
 };
 

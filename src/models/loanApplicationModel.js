@@ -4,12 +4,7 @@ import { maxLoanAmountRepos } from '../repositories/maxLoanAmountRepos.js';
 import { loanTypeRepos } from '../repositories/loanTypeRepos.js';
 import { loanTypeMaxLoanAmountRepos } from '../repositories/loanType_MaxLoanAmountRepos.js';
 import { ApplicationDTO } from '../dto/applicationDTO.js';
-
-export const assertValueExists = (value, error) => {
-  if (!value) {
-    throw new Error(error);
-  }
-};
+import { assertValueExists } from '../../utils/helper.js';
 
 export const checkIfLoanAmountAvailable = (maxLoanAmount, desiredAmount) => {
   if (maxLoanAmount < desiredAmount) {

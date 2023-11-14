@@ -1,5 +1,6 @@
 import { LoanTypeDTO } from '../dto/loanTypesDTO.js';
 import { loanTypeRepos } from '../repositories/loanTypeRepos.js';
+import { assertValueExists } from '../../utils/helper.js';
 import { z } from 'zod';
 
 export const checkDocType = (doc) => {
@@ -14,12 +15,6 @@ export const checkDocType = (doc) => {
     return true;
   } catch (e) {
     return false;
-  }
-};
-
-export const assertValueExists = (value, error) => {
-  if (!value) {
-    throw new Error(error);
   }
 };
 

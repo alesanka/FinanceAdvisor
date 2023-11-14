@@ -1,11 +1,6 @@
 import { documentRepos } from '../repositories/documentRepos.js';
 import { DocDTO } from '../dto/docDTO.js';
-
-export const assertValueExists = (value, error) => {
-  if (!value) {
-    throw new Error(error);
-  }
-};
+import { assertValueExists } from '../../utils/helper.js';
 
 export class DocumentModel {
   constructor(documentRepos) {

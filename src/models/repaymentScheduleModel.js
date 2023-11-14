@@ -5,12 +5,7 @@ import { repaymentScheduleRepos } from '../repositories/repaymentScheduleRepos.j
 import { notesRepos } from '../repositories/notesRepos.js';
 import { RepaymentScheduleDTO } from '../dto/repaymentScheduleDTO.js';
 import { NotesDTO } from '../dto/notesDTO.js';
-
-export const assertValueExists = (value, error) => {
-  if (!value) {
-    throw new Error(error);
-  }
-};
+import { assertValueExists } from '../../utils/helper.js';
 
 export const createDate = (date) => {
   const createdDate = new Date(date);
