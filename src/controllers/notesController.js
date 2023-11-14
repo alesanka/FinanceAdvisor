@@ -50,6 +50,18 @@ export class NotesController {
       });
     }
   };
+  deleteNote = async (req, res) => {
+    try {
+      await this.notesModel.deleteNote(req.params.note_id);
+      res.status(204).end();
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({
+        message: `Something went wrong while deleting payment note.`,
+        error: err.message,
+      });
+    }
+  };
 }
 
 export const notesController = new NotesController(notesModel);

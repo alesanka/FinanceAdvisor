@@ -69,7 +69,7 @@ In case of successful response:
 HTTP/1.1 201 Created
 Content-Type: text/html; charset=utf-8
 
-User was registered successfully. Id - 1
+'User was registered successfully. Id - 1'
 
 ```
 
@@ -1361,7 +1361,7 @@ Content-Type: application/json
 Request:
 
 ```
-PUT /repayment_notes/:note_id /
+PUT /repayment_notes/:note_id/
 Content-Type: application/json
 Authorization: Bearer {access_token}
 
@@ -1401,5 +1401,36 @@ Content-Type: application/json
 ```
 
 ---
+
+**Delete a payment by id.**
+
+\*protected request (available only for admin and worker with access_token)
+
+Request:
+
+```
+DELETE /repayment_notes/:note_id/
+Authorization: Bearer {access_token}
+```
+
+In case of successful response:
+
+```
+HTTP/1.1 204 No Content
+
+```
+
+In case of error response:
+
+```
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+
+{
+    message: `Something went wrong while deleting payment note.`,
+    error: err.message,
+}
+
+```
 
 [⬆ Go Up ⬆](#content)

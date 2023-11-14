@@ -24,4 +24,6 @@ router.put(
   notesController.updatePaymentStatus
 ); // protected
 
+router.delete('/:note_id ', token.getAuthorization, notesController.deleteNote); // protected
+
 export default router;

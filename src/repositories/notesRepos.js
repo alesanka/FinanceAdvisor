@@ -103,6 +103,17 @@ export class NotesRepos {
       throw new Error(`${err}`);
     }
   }
+  async deleteNote(noteId) {
+    try {
+      await this.connection.query(
+        'DELETE FROM PaymentNotes WHERE note_id  = $1',
+        [noteId]
+      );
+      return;
+    } catch (err) {
+      throw new Error(`${err}`);
+    }
+  }
 }
 
 export const notesRepos = new NotesRepos(pool);

@@ -139,6 +139,18 @@ export class NotesModel {
       throw new Error(`Unable to change note status ${note_id}: ${err}.`);
     }
   }
+
+  async deleteNote(noteId) {
+    try {
+      const note = await this.notesRepos.getNoteById(noteId);
+      assertValueExists(note, `No note found with id ${noteId}`);
+
+      await this.notesRepos.deleteNote(noteId);
+      return;
+    } catch (err) {
+      throw new Error(`Unable to delete note ${noteId}: ${err}.`);
+    }
+  }
 }
 
 export const notesModel = new NotesModel(
