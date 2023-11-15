@@ -8,7 +8,7 @@
     "test": "set NODE_OPTIONS=--experimental-vm-modules && jest --detectOpenHandles --coverage",
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
-    "lint": "eslint ."
+    "lint": "eslint . --fix"
   },
   "repository": {
     "type": "git",
