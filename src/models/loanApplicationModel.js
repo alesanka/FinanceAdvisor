@@ -23,11 +23,11 @@ export class LoanApplicationModel {
     loanTypeRepos,
     documentRepos
   ) {
-    (this.loanApplicationRepos = loanApplicationRepos),
-      (this.maxLoanAmountRepos = maxLoanAmountRepos),
-      (this.loanTypeMaxLoanAmountRepos = loanTypeMaxLoanAmountRepos),
-      (this.loanTypeRepos = loanTypeRepos),
-      (this.documentRepos = documentRepos);
+    this.loanApplicationRepos = loanApplicationRepos;
+    this.maxLoanAmountRepos = maxLoanAmountRepos;
+    this.loanTypeMaxLoanAmountRepos = loanTypeMaxLoanAmountRepos;
+    this.loanTypeRepos = loanTypeRepos;
+    this.documentRepos = documentRepos;
   }
 
   async createLoanApplication(id, desiredLoanAmount, isApproved) {
@@ -52,7 +52,6 @@ export class LoanApplicationModel {
         maxLoanAmountInfo,
         'No max loan amount found with the given id.'
       );
-
       const maxLoanAmount = maxLoanAmountInfo.max_loan_amount;
 
       checkIfLoanAmountAvailable(
@@ -122,11 +121,8 @@ export class LoanApplicationModel {
       const updateApplication =
         await this.loanApplicationRepos.changeApprovement(applicationId);
 
-      if (updateApplication) {
-        return;
-      } else {
-        throw new Error(`Something went wrong.`);
-      }
+      assertValueExists(updateApplication, `Something went wrong.`);
+      return;
     } catch (err) {
       throw new Error(`Unable to change approvement status: ${err}`);
     }

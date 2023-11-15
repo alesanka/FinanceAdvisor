@@ -64,11 +64,11 @@ export class RepaymentScheduleModel {
     loanTypeRepos,
     notesRepos
   ) {
-    (this.repaymentScheduleRepos = repaymentScheduleRepos),
-      (this.loanApplicationRepos = loanApplicationRepos),
-      (this.loanTypeMaxLoanAmountRepos = loanTypeMaxLoanAmountRepos),
-      (this.loanTypeRepos = loanTypeRepos),
-      (this.notesRepos = notesRepos);
+    this.repaymentScheduleRepos = repaymentScheduleRepos;
+    this.loanApplicationRepos = loanApplicationRepos;
+    this.loanTypeMaxLoanAmountRepos = loanTypeMaxLoanAmountRepos;
+    this.loanTypeRepos = loanTypeRepos;
+    this.notesRepos = notesRepos;
   }
 
   async createRepaymentSchedule(applicationId) {

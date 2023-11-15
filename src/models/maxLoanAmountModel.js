@@ -56,17 +56,16 @@ export class MaxLoanAmountModel {
     loanTypeRepos,
     loanTypeMaxLoanAmountRepos
   ) {
-    (this.maxLoanAmountRepos = maxLoanAmountRepos),
-      (this.userRepos = userRepos),
-      (this.loanTypeRepos = loanTypeRepos),
-      (this.loanTypeMaxLoanAmountRepos = loanTypeMaxLoanAmountRepos);
+    this.maxLoanAmountRepos = maxLoanAmountRepos;
+    this.userRepos = userRepos;
+    this.loanTypeRepos = loanTypeRepos;
+    this.loanTypeMaxLoanAmountRepos = loanTypeMaxLoanAmountRepos;
   }
   async saveMaxLoan(client_id, loan_type_id) {
     try {
       const loanTypeDetails = await this.loanTypeRepos.findLoanById(
         loan_type_id
       );
-      
 
       assertValueExists(loanTypeDetails, 'Invalid loan type id.');
 

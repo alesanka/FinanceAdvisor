@@ -119,10 +119,10 @@ export class UserRepos {
 
       if (resultClient.rows.length > 0) {
         return new ClientDTO(
-          row.client_id,
-          row.user_id,
-          row.salary,
-          row.credit_story
+          resultClient.rows[0].client_id,
+          resultClient.rows[0].user_id,
+          resultClient.rows[0].salary,
+          resultClient.rows[0].credit_story
         );
       } else {
         return null;
@@ -295,10 +295,10 @@ export class UserRepos {
       );
       if (result.rows.length > 0) {
         return new ClientDTO(
-          row.client_id,
-          row.user_id,
-          row.salary,
-          row.credit_story
+          result.rows[0].client_id,
+          result.rows[0].user_id,
+          result.rows[0].salary,
+          result.rows[0].credit_story
         );
       } else {
         return null;

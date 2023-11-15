@@ -1,4 +1,5 @@
 import { pool } from '../../db/postgress/dbPool.js';
+import { DocDTO } from '../dto/docDTO.js';
 
 export class DocumentRepos {
   constructor(connection) {

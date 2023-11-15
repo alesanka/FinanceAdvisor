@@ -33,12 +33,12 @@ export class NotesModel {
     loanTypeRepos,
     userRepos
   ) {
-    (this.repaymentScheduleRepos = repaymentScheduleRepos),
-      (this.notesRepos = notesRepos);
-    (this.loanTypeMaxLoanAmountRepos = loanTypeMaxLoanAmountRepos),
-      (this.loanApplicationRepos = loanApplicationRepos),
-      (this.loanTypeRepos = loanTypeRepos),
-      (this.userRepos = userRepos);
+    this.repaymentScheduleRepos = repaymentScheduleRepos;
+    this.notesRepos = notesRepos;
+    this.loanTypeMaxLoanAmountRepos = loanTypeMaxLoanAmountRepos;
+    this.loanApplicationRepos = loanApplicationRepos;
+    this.loanTypeRepos = loanTypeRepos;
+    this.userRepos = userRepos;
   }
 
   async createNotes(repaymentScheduleId, paymentDate) {
@@ -59,7 +59,7 @@ export class NotesModel {
         applicationId
       );
 
-      const applicationDate = createDate(application.dto.application_date);
+      const applicationDate = createDate(application.application_date);
 
       const loanTypeMaxAmount =
         await this.loanTypeMaxLoanAmountRepos.getLoanTypeMaxLoanId(
