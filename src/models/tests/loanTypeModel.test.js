@@ -3,10 +3,9 @@ import { LoanTypeDTO } from '../../dto/loanTypesDTO.js';
 import { LoanTypeModel, checkDocType } from '../loanTypeModel.js';
 
 class LoanTypeReposMock {
-  async createLoanType(loanTypeDTO) {
+  async createLoanType() {
     return 1;
   }
-
   async getAllLoanTypes() {
     return [
       {
@@ -25,7 +24,6 @@ class LoanTypeReposMock {
       },
     ];
   }
-
   async findLoanByType(loanType) {
     return {
       loan_type_id: 1,
@@ -35,7 +33,6 @@ class LoanTypeReposMock {
       required_doc: 'passport',
     };
   }
-
   async findLoanById(loanTypeId) {
     return {
       loan_type_id: loanTypeId,
@@ -46,11 +43,11 @@ class LoanTypeReposMock {
     };
   }
 
-  async updateLoanTypeData(loanTypeId, data) {
+  async updateLoanTypeData() {
     return true;
   }
 
-  async deleteLoanType(loanTypeId) {
+  async deleteLoanType() {
     return true;
   }
 }
@@ -103,12 +100,11 @@ describe('checkDocType', () => {
     const loanTypes = await loanTypeModel.getAllLoanTypes();
 
     expect(loanTypes).toBeDefined();
-    expect(Array.isArray(loanTypes)).toBe(true);
+    expect(Array.isArray(loanTypes)).toBeTruthy();
   });
 
   test('should find a loan type by type', async () => {
     const loanType = 'personal_loan';
-
     const foundLoanType = await loanTypeModel.findLoanByType(loanType);
 
     expect(foundLoanType).toBeDefined();
@@ -117,7 +113,6 @@ describe('checkDocType', () => {
 
   test('should find a loan type by id', async () => {
     const loanType = 'personal_loan';
-
     const loanTypeById = await loanTypeModel.findLoanByType(loanType);
     const foundLoanType = await loanTypeModel.findLoanById(
       loanTypeById.loan_type_id
@@ -133,7 +128,6 @@ describe('checkDocType', () => {
       interest_rate: 5,
       loan_term: 12,
     };
-
     const loanTypeById = await loanTypeModel.findLoanByType(loanType);
     await loanTypeModel.updateLoanTypeData(
       loanTypeById.loan_type_id,
@@ -149,7 +143,6 @@ describe('checkDocType', () => {
 
   test('should delete a loan type', async () => {
     const loanType = 'personal_loan';
-
     const loanTypeById = await loanTypeModel.findLoanByType(loanType);
     await loanTypeModel.deleteLoanType(loanTypeById.loan_type_id);
     const deletedLoanType = await loanTypeModel.deleteLoanType(

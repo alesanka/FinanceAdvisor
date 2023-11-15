@@ -80,7 +80,6 @@ describe('Max loan amount model', () => {
     const interest = 0.05;
     const term = 12;
     const expectedLoanAmount = 8863;
-
     const loanAmount = calculateMaxLoanAmount(
       maxMonthlyPayment,
       interest,
@@ -99,6 +98,7 @@ describe('Max loan amount model', () => {
       calculateMaxLoanAmount(maxMonthlyPayment, interest, term);
     }).toThrow();
   });
+
   test('calculateMaxLoanAmount handles zero interest rate', () => {
     const maxMonthlyPayment = 1000;
     const interest = 0;
@@ -108,6 +108,7 @@ describe('Max loan amount model', () => {
       calculateMaxLoanAmount(maxMonthlyPayment, interest, term);
     }).toThrow();
   });
+
   test('calculateMaxLoanAmount handles zero interest rate', () => {
     const maxMonthlyPayment = 0;
     const interest = 0.05;
@@ -144,7 +145,6 @@ describe('Max loan amount model', () => {
 
   test('should delete max loan application by id', async () => {
     const maxLoanAmountId = 1;
-
     await expect(() =>
       maxLoanAmountModel.deleteMaxLoanApplication(maxLoanAmountId)
     ).not.toThrow();

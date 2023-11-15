@@ -74,7 +74,7 @@ class UserReposMock {
     }
   }
 
-  async deleteUser(userId) {
+  async deleteUser() {
     return false;
   }
 
@@ -117,7 +117,6 @@ describe('User model', () => {
 
     expect(passwordCheck(passwordRight)).toBeTruthy();
     expect(passwordCheck(passwordWrong)).not.toBeTruthy();
-
     expect(passwordCheck(passwordRight)).toStrictEqual(true);
     expect(passwordCheck(passwordWrong)).toStrictEqual(false);
   });
@@ -125,6 +124,7 @@ describe('User model', () => {
   test('should hash password', async () => {
     const passwordRaw = '123456789';
     const hashedPassword = await passwordHash(passwordRaw);
+
     expect(passwordHash(passwordRaw)).toBeTruthy();
     expect(hashedPassword).not.toBe(passwordRaw);
   });
@@ -132,8 +132,8 @@ describe('User model', () => {
   test('should return true for matching passwords', async () => {
     const plainPassword = 'TestPassword123';
     const hashedPassword = await bcrypt.hash(plainPassword, SALTY);
-
     const isValid = await passwordValidation(plainPassword, hashedPassword);
+
     expect(isValid).toBeTruthy();
   });
 
@@ -208,10 +208,13 @@ describe('User model', () => {
       dtoClient.salary2,
       dtoClient.isCreditStory2
     );
+
     expect(userId1).toBeTruthy();
     expect(userId2).toBeTruthy();
+
     const user1 = await userReposMock.findUserById(1);
     const user2 = await userReposMock.findUserById(2);
+
     expect(user1).toBeTruthy();
     expect(user2).toBeTruthy();
   });
@@ -259,6 +262,7 @@ describe('User model', () => {
     const filteredUsers1 = await userModel.filterByParameter({
       role: 'admin',
     });
+
     expect(filteredUsers1.length).toBe(1);
   });
 
@@ -269,8 +273,8 @@ describe('User model', () => {
     };
 
     await userModel.updateData(1, newData);
-
     const updatedUser = await userReposMock.findUserById(1);
+
     expect(updatedUser).toBeTruthy();
   });
 

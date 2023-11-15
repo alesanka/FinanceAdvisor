@@ -4,14 +4,14 @@ import {
   calculateEndTermDate,
   checkIsRightTerm,
 } from '../notesModel.js';
-import { NotesDTO } from '../../dto/notesDTO.js';
+
 
 class NotesReposMock {
-  async createNotes(notesDTO) {
+  async createNotes() {
     return 1;
   }
 
-  async getAllNotesForRepaymentSchedule(repayment_schedule_id) {
+  async getAllNotesForRepaymentSchedule() {
     return [
       {
         repayment_schedule_id: 1,
@@ -22,7 +22,7 @@ class NotesReposMock {
     ];
   }
 
-  async updatePaymentStatus(note_id) {
+  async updatePaymentStatus() {
     return;
   }
 
@@ -77,7 +77,6 @@ describe('Note model', () => {
   test('calculateEndTermDate should handle leap years correctly', () => {
     const startDate = new Date('2024-01-01');
     const loanTerm = 2;
-
     const expectedEndDate = new Date('2024-03-01');
     const actualEndDate = calculateEndTermDate(startDate, loanTerm);
 
@@ -90,6 +89,7 @@ describe('Note model', () => {
 
     test('should not throw an error for a valid payment date within the term', () => {
       const paymentDate = new Date('2023-06-15');
+
       expect(() =>
         checkIsRightTerm(paymentDate, applicationDate, endTermDate)
       ).not.toThrow();
@@ -97,6 +97,7 @@ describe('Note model', () => {
 
     test('should throw an error if the payment date is before the application date', () => {
       const paymentDate = new Date('2022-12-31');
+
       expect(() =>
         checkIsRightTerm(paymentDate, applicationDate, endTermDate)
       ).toThrow('Payment date is out of range.');
@@ -104,6 +105,7 @@ describe('Note model', () => {
 
     test('should throw an error if the payment date is after the end term date', () => {
       const paymentDate = new Date('2024-01-01');
+
       expect(() =>
         checkIsRightTerm(paymentDate, applicationDate, endTermDate)
       ).toThrow('Payment date is out of range.');
@@ -111,6 +113,7 @@ describe('Note model', () => {
 
     test('should not throw an error for a payment date exactly on the application date', () => {
       const paymentDate = new Date('2023-01-01');
+
       expect(() =>
         checkIsRightTerm(paymentDate, applicationDate, endTermDate)
       ).not.toThrow();
@@ -118,6 +121,7 @@ describe('Note model', () => {
 
     test('should not throw an error for a payment date exactly on the end term date', () => {
       const paymentDate = new Date('2023-12-31');
+
       expect(() =>
         checkIsRightTerm(paymentDate, applicationDate, endTermDate)
       ).not.toThrow();
@@ -126,6 +130,7 @@ describe('Note model', () => {
 
   test('should return notes if valid note id', async () => {
     const validNoteId = 1;
+
     expect(
       await notesModel.getAllNotesForRepaymentSchedule(validNoteId)
     ).toEqual([
@@ -140,6 +145,7 @@ describe('Note model', () => {
 
   test('should not return notes if invalid note id', async () => {
     const inValidNoteId = null;
+
     await expect(() =>
       notesModel.getAllNotesForRepaymentSchedule(inValidNoteId)
     ).rejects.toThrow();
@@ -147,7 +153,7 @@ describe('Note model', () => {
 
   test('should update payment status for a note', async () => {
     const noteId = 1;
-
+    
     await expect(() => notesModel.updatePaymentStatus(noteId)).not.toThrow();
   });
 

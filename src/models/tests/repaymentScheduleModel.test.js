@@ -39,12 +39,14 @@ describe('Repayment schedule model', () => {
   test(' should create a valid date object from a valid date string', () => {
     const dateStr = '2023-01-01';
     const result = createDate(dateStr);
+
     expect(result).toBeInstanceOf(Date);
     expect(result.toISOString().startsWith(dateStr)).toBeTruthy();
   });
 
   test('should throw an error for an invalid date string', () => {
     const invalidDateStr = 'date';
+
     expect(() => createDate(invalidDateStr)).toThrow(
       'Invalid application date'
     );
@@ -53,6 +55,7 @@ describe('Repayment schedule model', () => {
   test('calculate monthly rate', () => {
     const rate = 6;
     const result = calculateMonthlyRate(rate);
+
     expect(result).toBeLessThan(rate);
     expect(result).toBeCloseTo(0.005);
     expect(result).toBeTruthy();
@@ -60,6 +63,7 @@ describe('Repayment schedule model', () => {
 
   test('throws an error for an invalid rate', () => {
     const rate = 0;
+
     expect(() => calculateMonthlyRate(rate)).toThrow();
   });
 
@@ -67,13 +71,13 @@ describe('Repayment schedule model', () => {
     const loanAmount = 10000;
     const annualInterestRate = 0.06;
     const loanTerm = 5;
-
     const expectedMonthlyPayment = 193.33;
     const result = calculateMonthlyPayment(
       loanAmount,
       annualInterestRate,
       loanTerm
     );
+
     expect(result).toBeTruthy();
     expect(result).toBeCloseTo(expectedMonthlyPayment, 0);
   });
@@ -88,6 +92,7 @@ describe('Repayment schedule model', () => {
       annualInterestRate,
       loanTerm
     );
+
     expect(result).toBeTruthy();
     expect(result).toBeCloseTo(expectedMonthlyPayment, 0);
   });
@@ -96,6 +101,7 @@ describe('Repayment schedule model', () => {
     const date = new Date('2023-11-14');
     const expectedDate = new Date('2023-12-01');
     const result = calculateFirstPaymentDate(date);
+
     expect(result.toDateString()).toEqual(expectedDate.toDateString());
   });
 
@@ -103,6 +109,7 @@ describe('Repayment schedule model', () => {
     const date = new Date('2023-11-30');
     const expectedDate = new Date('2023-12-01');
     const result = calculateFirstPaymentDate(date);
+
     expect(result.toDateString()).toEqual(expectedDate.toDateString());
   });
 
@@ -110,6 +117,7 @@ describe('Repayment schedule model', () => {
     const date = new Date('2023-11-14T10:30:00');
     const expectedFormat = '2023-11-14';
     const result = toMyISOFormat(date);
+
     expect(result).toEqual(expectedFormat);
   });
 
@@ -117,6 +125,7 @@ describe('Repayment schedule model', () => {
     const date = new Date('2023-02-05T10:30:00');
     const expectedFormat = '2023-02-05';
     const result = toMyISOFormat(date);
+
     expect(result).toEqual(expectedFormat);
   });
 
@@ -124,6 +133,7 @@ describe('Repayment schedule model', () => {
     const date = new Date('2023-11-14T10:30:00-05:00');
     const expectedFormat = '2023-11-14';
     const result = toMyISOFormat(date);
+
     expect(result).toEqual(expectedFormat);
   });
 
@@ -132,19 +142,18 @@ describe('Repayment schedule model', () => {
     const year = 2023;
     const month = 11;
     const expectedPayment = 1000;
-
     const dto = new RepaymentScheduleDTO(
       repaymentScheduleId,
       null,
       null,
       expectedPayment
     );
-
     const monthPayment = await repaymentScheduleModel.getByIdYearMonth(
       dto.repayment_schedule_id,
       year,
       month
     );
+
     expect(monthPayment).toBeTruthy();
     expect(monthPayment).toBe(expectedPayment);
   });
@@ -162,8 +171,8 @@ describe('Repayment schedule model', () => {
 
   test('should delete schedule', async () => {
     const repaymentScheduleId = 1;
-
     await repaymentScheduleModel.deleteSchedule(repaymentScheduleId);
+
     expect(async () => {
       await repaymentScheduleModel
         .deleteSchedule(repaymentScheduleId)
