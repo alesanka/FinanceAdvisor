@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { DocumentModel } from '../documentModel.js';
 import { DocDTO } from '../../dto/docDTO.js';
 

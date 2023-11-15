@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { assertValueExists } from '../helper.js';
 
 describe('assertValueExists', () => {

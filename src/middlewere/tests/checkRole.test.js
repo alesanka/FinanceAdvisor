@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { CheckUserRole } from '../checkRole.js';
 import { jest } from '@jest/globals';
 

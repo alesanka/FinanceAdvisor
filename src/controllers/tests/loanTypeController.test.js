@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { LoanTypeController } from '../loanTypeController.js';
 
 const reqMock1 = {

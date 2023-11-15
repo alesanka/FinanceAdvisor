@@ -1,6 +1,6 @@
+/* eslint-disable no-undef */
 import { LoanTypeDTO } from '../../dto/loanTypesDTO.js';
 import { LoanTypeModel, checkDocType } from '../loanTypeModel.js';
-
 
 class LoanTypeReposMock {
   async createLoanType(loanTypeDTO) {
