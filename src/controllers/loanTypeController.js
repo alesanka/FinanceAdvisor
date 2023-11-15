@@ -28,7 +28,6 @@ export class LoanTypeController {
       const loanTypes = await this.loanTypeModel.getAllLoanTypes();
       res.status(200).json(loanTypes);
     } catch (err) {
-      console.error(err);
       res.status(500).json({
         message: `Something went wrong while getting loan types.`,
         error: err.message,
@@ -65,7 +64,6 @@ export class LoanTypeController {
           `Loan type's data with id - ${req.params.loan_type_id} was updated successfully.`
         );
     } catch (err) {
-      console.error(err);
       res.status(500).json({
         message: `Something went wrong while updating loan type.`,
         error: err.message,
@@ -77,7 +75,6 @@ export class LoanTypeController {
       await this.loanTypeModel.deleteLoanType(req.params.loan_type_id);
       res.status(204).end();
     } catch (err) {
-      console.error(err);
       res.status(500).json({
         message: `Something went wrong while deleting loan type.`,
         error: err.message,
