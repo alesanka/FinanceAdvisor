@@ -6,7 +6,7 @@ import {
 import { ApplicationDTO } from '../../dto/applicationDTO.js';
 
 class LoanApplicationReposMock {
-  async createLoanApplication(id, applicationDTO) {
+  async createLoanApplication() {
     return 1;
   }
 
@@ -49,19 +49,19 @@ class LoanApplicationReposMock {
 }
 
 class MaxLoanAmountReposMock {
-  async getMaxLoanAmountByMaxAmountId(id) {
+  async getMaxLoanAmountByMaxAmountId() {
     return true;
   }
 }
 
 class LoanTypeMaxLoanAmountReposMock {
-  async getLoanTypeMaxLoanId(id) {
+  async getLoanTypeMaxLoanId() {
     return true;
   }
 }
 
 class LoanTypeReposMock {
-  async findLoanById(id) {
+  async findLoanById() {
     const requiredDoc = { required_doc: 'passport' };
     return requiredDoc;
   }
@@ -83,7 +83,7 @@ describe('checkIfLoanAmountAvailable', () => {
     const maxLoanAmount = 10000;
     const desiredAmount = 5000;
     const result = checkIfLoanAmountAvailable(maxLoanAmount, desiredAmount);
-    expect(result).toBe(true);
+    expect(result).toBeTruthy();
   });
 
   test('should throw an error if desired amount exceeds max loan amount', () => {
