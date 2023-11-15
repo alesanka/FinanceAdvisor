@@ -28,15 +28,7 @@ class DocumentReposMock {
       return null;
     }
   }
-  async changeDocumentNameById(documentName, documentId) {
-    if (documentId === 1) {
-      // empty block
-      return;
-    } else {
-      throw new Error(`No document found with document id ${documentId}`);
-    }
-  }
-  async deleteDocument(documentId) {
+   async deleteDocument(documentId) {
     if (documentId === 1) {
       // empty block
       return;
@@ -100,26 +92,7 @@ describe('Document model', () => {
       ).resolves.toBeDefined();
     }
   });
-  test('should change document name by id', async () => {
-    const documentId = 1;
-    const newDocumentName = 'New Name';
-
-    await expect(
-      documentModel.changeDocumentNameById(newDocumentName, documentId)
-    ).resolves.toBeUndefined();
-  });
-
-  test('should throw an error when changing document name with invalid document id', async () => {
-    const invalidDocumentId = 999;
-    const newDocumentName = 'New Name';
-
-    await expect(
-      documentModel.changeDocumentNameById(newDocumentName, invalidDocumentId)
-    ).rejects.toThrow(
-      `No document found with document id ${invalidDocumentId}`
-    );
-  });
-
+  
   test('should delete document by id', async () => {
     const documentId = 1;
 

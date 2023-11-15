@@ -62,11 +62,9 @@ describe('CheckUserRole class', () => {
         return res;
       },
     };
-
     const nextMock = async () => {
       return;
     };
-
     const result = await checkWorker.validateUserRole(req, res, nextMock);
 
     expect(result).toBeUndefined();
@@ -91,7 +89,6 @@ describe('CheckUserRole class', () => {
     };
 
     const next = jest.fn();
-
     await checkAdmin.validateUserRole(req, res, next);
 
     expect(res.statusCode).toBe(403);
@@ -138,7 +135,6 @@ describe('CheckUserRole class', () => {
     };
 
     const next = jest.fn();
-
     await checkAdmin.validateUserRole(req, res, next);
 
     expect(next).not.toHaveBeenCalled();
