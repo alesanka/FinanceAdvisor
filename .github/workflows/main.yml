@@ -22,6 +22,9 @@ jobs:
         with:
           node-version: 18
 
+      - name: Install dependencies
+        run: npm install
+
       - name: Wait for services to start
         run: sleep 15
 
