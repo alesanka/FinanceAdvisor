@@ -71,7 +71,6 @@
       "/node_modules/",
       "/src/repositories/"
     ],
-    "coverageDirectory": "coverage",
     "collectCoverage": false
   }
 }
