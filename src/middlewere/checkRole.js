@@ -1,6 +1,6 @@
 import { userModel } from '../models/userModel.js';
 
-class CheckUserRole {
+export class CheckUserRole {
   constructor(model, roles) {
     (this.model = model), (this.roles = roles);
   }

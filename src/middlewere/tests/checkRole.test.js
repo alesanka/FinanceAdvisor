@@ -1,21 +1,24 @@
-import { checkUserRole } from '../checkRole.js';
+import { CheckUserRole } from '../checkRole.js';
+import { jest } from '@jest/globals';
 
 class MockUserModel {
   async checkUserRoleById(userId) {
     if (userId === 1) {
       return 'admin';
     } else if (userId === 2) {
-      return 'user';
+      return 'worker';
     } else {
       throw new Error(`User with id ${userId} not found`);
     }
   }
 }
+
 const mockUserModel = new MockUserModel();
+const checkAdmin = new CheckUserRole(mockUserModel, 'admin');
+const checkWorker = new CheckUserRole(mockUserModel, 'worker');
 
-
-describe('checkUserRole middleware', () => {
-  it('should allow access for valid user role', async () => {
+describe('CheckUserRole class', () => {
+  it('should allow access for valid user role (admin)', async () => {
     const req = {
       body: {
         user_id: 1,
@@ -29,7 +32,28 @@ describe('checkUserRole middleware', () => {
 
     const next = jest.fn();
 
-    await checkUserRole(['admin'])(req, res, next);
+    await checkAdmin.validateUserRole(req, res, next);
+
+    expect(next).toHaveBeenCalled();
+    expect(res.status).not.toHaveBeenCalled();
+    expect(res.send).not.toHaveBeenCalled();
+  });
+
+  it('should allow access for valid user role (worker)', async () => {
+    const req = {
+      body: {
+        user_id: 2,
+      },
+    };
+
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn(),
+    };
+
+    const next = jest.fn();
+
+    checkWorker.validateUserRole(req, res, next);
 
     expect(next).toHaveBeenCalled();
     expect(res.status).not.toHaveBeenCalled();
@@ -50,7 +74,7 @@ describe('checkUserRole middleware', () => {
 
     const next = jest.fn();
 
-    await checkUserRole(['admin'])(req, res, next);
+    checkAdmin.validateUserRole(req, res, next);
 
     expect(next).not.toHaveBeenCalled();
     expect(res.status).toHaveBeenCalledWith(403);
@@ -69,7 +93,7 @@ describe('checkUserRole middleware', () => {
 
     const next = jest.fn();
 
-    await checkUserRole(['admin'])(req, res, next);
+    checkAdmin.validateUserRole(req, res, next);
 
     expect(next).not.toHaveBeenCalled();
     expect(res.status).toHaveBeenCalledWith(500);
@@ -92,7 +116,7 @@ describe('checkUserRole middleware', () => {
 
     const next = jest.fn();
 
-    await checkUserRole(['admin'])(req, res, next);
+    checkAdmin.validateUserRole(req, res, next);
 
     expect(next).not.toHaveBeenCalled();
     expect(res.status).toHaveBeenCalledWith(500);
