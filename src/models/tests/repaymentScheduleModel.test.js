@@ -1,10 +1,38 @@
 import {
+  RepaymentScheduleModel,
   createDate,
   calculateMonthlyRate,
   calculateMonthlyPayment,
   calculateFirstPaymentDate,
   toMyISOFormat,
 } from '../repaymentScheduleModel.js';
+import { RepaymentScheduleDTO } from '../../dto/repaymentScheduleDTO.js';
+
+class RepaymentScheduleReposMock {
+  async getPaymentAmountByScheduleIdAndMonthYear(
+    repaymentScheduleId,
+    year,
+    month
+  ) {
+    return 1000;
+  }
+  async getRepaymentScheduleById(id) {
+    return true;
+  }
+
+  async updateRemainBalance(sum, id) {
+    return true;
+  }
+
+  async deleteSchedule(id) {
+    return true;
+  }
+}
+
+const repaymentScheduleReposMock = new RepaymentScheduleReposMock();
+const repaymentScheduleModel = new RepaymentScheduleModel(
+  repaymentScheduleReposMock
+);
 
 describe('Repayment schedule model', () => {
   test(' should create a valid date object from a valid date string', () => {
@@ -96,5 +124,49 @@ describe('Repayment schedule model', () => {
     const expectedFormat = '2023-11-14';
     const result = toMyISOFormat(date);
     expect(result).toEqual(expectedFormat);
+  });
+
+  test('should get repayment schedule by id, year, and month', async () => {
+    const repaymentScheduleId = 1;
+    const year = 2023;
+    const month = 11;
+    const expectedPayment = 1000;
+
+    const dto = new RepaymentScheduleDTO(
+      repaymentScheduleId,
+      null,
+      null,
+      expectedPayment
+    );
+
+    const monthPayment = await repaymentScheduleModel.getByIdYearMonth(
+      dto.repayment_schedule_id,
+      year,
+      month
+    );
+    expect(monthPayment).toBeTruthy();
+    expect(monthPayment).toBe(expectedPayment);
+  });
+
+  test('should update remain balance', async () => {
+    const sum = 500;
+    const repaymentScheduleId = 1;
+
+    expect(async () => {
+      await repaymentScheduleModel
+        .updateRemainBalance(sum, repaymentScheduleId)
+        .not.toThrow();
+    });
+  });
+
+  test('should delete schedule', async () => {
+    const repaymentScheduleId = 1;
+
+    await repaymentScheduleModel.deleteSchedule(repaymentScheduleId);
+    expect(async () => {
+      await repaymentScheduleModel
+        .deleteSchedule(repaymentScheduleId)
+        .not.toThrow();
+    });
   });
 });

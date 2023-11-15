@@ -58,16 +58,16 @@ export const toMyISOFormat = (date) => {
 
 export class RepaymentScheduleModel {
   constructor(
+    repaymentScheduleRepos,
     loanApplicationRepos,
     loanTypeMaxLoanAmountRepos,
     loanTypeRepos,
-    repaymentScheduleRepos,
     notesRepos
   ) {
-    (this.loanApplicationRepos = loanApplicationRepos),
+    (this.repaymentScheduleRepos = repaymentScheduleRepos),
+      (this.loanApplicationRepos = loanApplicationRepos),
       (this.loanTypeMaxLoanAmountRepos = loanTypeMaxLoanAmountRepos),
       (this.loanTypeRepos = loanTypeRepos),
-      (this.repaymentScheduleRepos = repaymentScheduleRepos),
       (this.notesRepos = notesRepos);
   }
 
@@ -196,9 +196,9 @@ export class RepaymentScheduleModel {
 }
 
 export const repaymentScheduleModel = new RepaymentScheduleModel(
+  repaymentScheduleRepos,
   loanApplicationRepos,
   loanTypeMaxLoanAmountRepos,
   loanTypeRepos,
-  repaymentScheduleRepos,
   notesRepos
 );
