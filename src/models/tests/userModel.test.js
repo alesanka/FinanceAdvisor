@@ -102,7 +102,8 @@ class UserReposMock {
     return filteredUsers;
   }
   clear() {
-    (this.clients = []), (this.users = []);
+    this.clients.splice(0, this.clients.length);
+    this.users.splice(0, this.users.length);
   }
 }
 

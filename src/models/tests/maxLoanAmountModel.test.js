@@ -41,6 +41,7 @@ class MockMaxLoanAmountRepos {
   }
   async deleteMaxLoanApplication(max_loan_amount_id) {
     if (max_loan_amount_id === 1) {
+      // empty block
       return;
     } else {
       throw new Error(

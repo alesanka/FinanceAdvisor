@@ -5,7 +5,7 @@ import { loanTypeRepos } from '../repositories/loanTypeRepos.js';
 import { notesRepos } from '../repositories/notesRepos.js';
 import { userRepos } from '../repositories/userRepos.js';
 import { NotesDTO } from '../dto/notesDTO.js';
-export { createDate, toMyISOFormat } from '../models/repaymentScheduleModel.js';
+export { createDate, toMyISOFormat } from './repaymentScheduleModel.js';
 import { assertValueExists } from '../../utils/helper.js';
 
 export const calculateEndTermDate = (date, loanTerm) => {

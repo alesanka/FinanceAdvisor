@@ -30,6 +30,7 @@ class DocumentReposMock {
   }
   async changeDocumentNameById(documentName, documentId) {
     if (documentId === 1) {
+      // empty block
       return;
     } else {
       throw new Error(`No document found with document id ${documentId}`);
@@ -37,6 +38,7 @@ class DocumentReposMock {
   }
   async deleteDocument(documentId) {
     if (documentId === 1) {
+      // empty block
       return;
     } else {
       throw new Error(`No document found with document id ${documentId}`);

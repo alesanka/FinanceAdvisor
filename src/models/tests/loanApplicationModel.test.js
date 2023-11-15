@@ -24,6 +24,7 @@ class LoanApplicationReposMock {
   }
   async deleteLoanApplication(applicationId) {
     if (applicationId === 1) {
+      // empty block
       return;
     } else {
       throw new Error(`Application with id ${applicationId} does not exist.`);

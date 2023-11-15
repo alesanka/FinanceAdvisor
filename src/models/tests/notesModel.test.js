@@ -42,6 +42,7 @@ class NotesReposMock {
 
   async deleteNote(noteId) {
     if (noteId === 1) {
+      // empty block
       return;
     } else {
       throw new Error(`Note with id ${noteId} does not exist.`);
