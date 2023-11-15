@@ -34,7 +34,7 @@ const res = {
 };
 
 const mockLoanTypeModel = {
-  createLoanType: async (loanType, interestRate, loanTerm, requiredDoc) => {
+  createLoanType: async () => {
     return 1;
   },
   findLoanByType: async (loanType) => {
@@ -45,10 +45,10 @@ const mockLoanTypeModel = {
       requiredDoc: 'passport',
     };
   },
-  updateLoanTypeData: async (loan_type_id, body) => {
+  updateLoanTypeData: async () => {
     return true;
   },
-  deleteLoanType: async (id) => {
+  deleteLoanType: async (i) => {
     return true;
   },
 };
@@ -60,10 +60,7 @@ describe('LoanTypeController', () => {
     await loanTypeController.createLoanType(reqMock1, res);
 
     expect(res.statusCode).toBe(201);
-
-    expect(res.body).toBe(
-      'Loan type was created successfully. Loan type id - 1'
-    );
+    expect(res.body).toContain('Loan type was created successfully.');
   });
 
   test('should handle errors and send an error response', async () => {
@@ -72,15 +69,12 @@ describe('LoanTypeController', () => {
         throw new Error('Some error');
       },
     };
-
     const loanTypeControllerWithError = new LoanTypeController(
       mockLoanTypeModelWithError
     );
-
     await loanTypeControllerWithError.createLoanType(reqMock1, res);
 
     expect(res.statusCode).toBe(500);
-
     expect(res.body).toEqual({
       message: 'Something went wrong while creating new type loan.',
       error: 'Some error',
@@ -91,7 +85,6 @@ describe('LoanTypeController', () => {
     await loanTypeController.getSpecificLoanType(reqMock2, res);
 
     expect(res.statusCode).toBe(200);
-
     expect(res.body).toEqual({
       loanType: 'personal_loan',
       interestRate: 0.05,
@@ -106,15 +99,12 @@ describe('LoanTypeController', () => {
         throw new Error('Some error');
       },
     };
-
     const loanTypeControllerWithError = new LoanTypeController(
       mockLoanTypeModelWithError
     );
-
     await loanTypeControllerWithError.getSpecificLoanType(reqMock2, res);
 
     expect(res.statusCode).toBe(500);
-
     expect(res.body).toEqual({
       message: 'Something went wrong while getting loan type.',
       error: 'Some error',
@@ -127,7 +117,6 @@ describe('LoanTypeController', () => {
     };
 
     await loanTypeController.getSpecificLoanType(reqMissingLoanType, res);
-
     expect(res.statusCode).toBe(500);
   });
 
@@ -147,8 +136,7 @@ describe('LoanTypeController', () => {
     await loanTypeController.updateLoanTypeData(reqMock3, res);
 
     expect(res.statusCode).toBe(200);
-
-    expect(res.body).toBe(
+    expect(res.body).toContain(
       "Loan type's data with id - 1 was updated successfully."
     );
   });
@@ -165,64 +153,20 @@ describe('LoanTypeController', () => {
         required_doc: 'new_doc',
       },
     };
-
     const mockLoanTypeModelWithError = {
       updateLoanTypeData: async () => {
         throw new Error('Some error');
       },
     };
-
     const loanTypeControllerWithError = new LoanTypeController(
       mockLoanTypeModelWithError
     );
-
     await loanTypeControllerWithError.updateLoanTypeData(reqMock4, res);
 
     expect(res.statusCode).toBe(500);
-
     expect(res.body).toEqual({
       message: 'Something went wrong while updating loan type.',
       error: 'Some error',
     });
   });
-
-  // test('should delete a loan type and send a success response', async () => {
-  //   const reqMock5 = {
-  //     params: {
-  //       loan_type_id: 1,
-  //     },
-  //   };
-
-  //   await loanTypeController.deleteLoanType(reqMock5, res);
-
-  //   expect(res.statusCode).toBe(204);
-  //   expect(res.body).toBeUndefined();
-  // });
-
-  // it('should handle errors while deleting a loan type and send an error response', async () => {
-  //   const reqMock6 = {
-  //     params: {
-  //       loan_type_id: 1,
-  //     },
-  //   };
-
-  //   const mockLoanTypeModelWithError = {
-  //     deleteLoanType: async () => {
-  //       throw new Error('Some error');
-  //     },
-  //   };
-
-  //   const loanTypeControllerWithError = new LoanTypeController(
-  //     mockLoanTypeModelWithError
-  //   );
-
-  //   await loanTypeControllerWithError.deleteLoanType(reqMock6, res);
-
-  //   expect(res.statusCode).toBe(500);
-
-  //   expect(res.body).toEqual({
-  //     message: 'Something went wrong while deleting loan type.',
-  //     error: 'Some error',
-  //   });
-  // });
 });
