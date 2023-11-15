@@ -6,3 +6,4 @@ export class ClientDTO {
     this.credit_story = credit_story;
   }
 }
+

@@ -3,22 +3,26 @@ import { redisRepository } from '../db/redis/redisRepository.js';
 
 const enabledScopes = ['admin', 'worker'];
 
+export function validateClient(clientData, clientSecret) {
+  if (!clientData || clientData.clientSecret !== clientSecret) {
+    return null;
+  }
+
+  clientData.grants = JSON.parse(clientData.grants);
+  const client = {
+    clientId: clientData.clientId,
+    clientSecret: clientData.clientSecret,
+    grants: clientData.grants,
+  };
+
+  return client;
+}
+
 export async function getClient(clientId, clientSecret) {
   try {
     const clientData = await redisRepository.getClient(clientId);
 
-    if (!clientData || clientData.clientSecret !== clientSecret) {
-      return null;
-    }
-
-    clientData.grants = JSON.parse(clientData.grants);
-    const client = {
-      clientId: clientData.clientId,
-      clientSecret: clientData.clientSecret,
-      grants: clientData.grants,
-    };
-
-    return client;
+    return validateClient(clientData, clientSecret);
   } catch (error) {
     console.error('Error fetching client:', error);
     throw new Error('Error retrieving client data');

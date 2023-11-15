@@ -2,7 +2,8 @@ import { userModel } from '../models/userModel.js';
 
 export class CheckUserRole {
   constructor(model, roles) {
-    (this.model = model), (this.roles = roles);
+    this.model = model;
+    this.roles = roles;
   }
   async validateUserRole(req, res, next) {
     try {
@@ -10,9 +11,9 @@ export class CheckUserRole {
       if (!user_id) {
         throw new Error('User id is required for checking role.');
       }
-      const userRole = await model.checkUserRoleById(user_id);
+      const userRole = await this.model.checkUserRoleById(user_id);
 
-      if (roles.includes(userRole)) {
+      if (this.roles.includes(userRole)) {
         next();
       } else {
         res.status(403).send('Access denied. Invalid user role.');

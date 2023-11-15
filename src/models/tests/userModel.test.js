@@ -10,6 +10,7 @@ import {
 import bcrypt from 'bcrypt';
 import * as dotenv from 'dotenv';
 import { UserDTO } from '../../dto/userDTO.js';
+import { ClientDTO } from '../../dto/clientDTO.js';
 
 dotenv.config();
 const SALTY = parseInt(process.env.SALT);
@@ -155,26 +156,36 @@ describe('User model', () => {
   });
 
   test('should register a new user', async () => {
-    const username = 'testuser';
-    const password = 'password123';
-    const firstName = 'John';
-    const lastName = 'Doe';
-    const email = 'appp@mail.com';
-    const phoneNumber = '1234567890';
-    const role = 'admin';
+    const username1 = 'testuser';
+    const password1 = 'password123';
+    const firstName1 = 'John';
+    const lastName1 = 'Doe';
+    const email1 = 'appp@mail.com';
+    const phoneNumber1 = '1234567890';
+    const role1 = 'admin';
+
+    const username2 = 'testuser2';
+    const password2 = 'password123';
+    const firstName2 = 'Johnny';
+    const lastName2 = 'Diego';
+    const email2 = 'diego@mail.com';
+    const phoneNumber2 = '1234567890';
+    const role2 = 'client';
+    const salary2 = 50000;
+    const isCreditStory2 = false;
 
     const dto = new UserDTO(
       null,
-      username,
-      firstName,
-      lastName,
-      email,
-      phoneNumber,
-      role
+      username1,
+      firstName1,
+      lastName1,
+      email1,
+      phoneNumber1,
+      role1
     );
-    const userId = await userModel.registerUser(
+    const userId1 = await userModel.registerUser(
       dto.username,
-      password,
+      password1,
       dto.first_name,
       dto.last_name,
       dto.email,
@@ -182,15 +193,31 @@ describe('User model', () => {
       dto.role
     );
 
-    expect(userId).toBeTruthy();
-    const user = await userReposMock.findUserById(1);
-    expect(user).toBeTruthy();
+    const dtoClient = new ClientDTO(null, null, salary2, isCreditStory2);
+
+    const userId2 = await userModel.registerUser(
+      username2,
+      password2,
+      firstName2,
+      lastName2,
+      email2,
+      phoneNumber2,
+      role2,
+      dtoClient.salary2,
+      dtoClient.isCreditStory2
+    );
+    expect(userId1).toBeTruthy();
+    expect(userId2).toBeTruthy();
+    const user1 = await userReposMock.findUserById(1);
+    const user2 = await userReposMock.findUserById(2);
+    expect(user1).toBeTruthy();
+    expect(user2).toBeTruthy();
   });
 
   test('should get all users', async () => {
     const users = await userModel.getAllUsers();
 
-    expect(users.length).toBe(1);
+    expect(users.length).toBe(2);
     expect(users).toEqual([
       {
         email: 'appp@mail.com',
@@ -200,6 +227,15 @@ describe('User model', () => {
         phone_number: '1234567890',
         role: 'admin',
         username: 'testuser',
+      },
+      {
+        email: 'diego@mail.com',
+        first_name: 'Johnny',
+        id_user: 2,
+        last_name: 'Diego',
+        phone_number: '1234567890',
+        role: 'client',
+        username: 'testuser2',
       },
     ]);
   });

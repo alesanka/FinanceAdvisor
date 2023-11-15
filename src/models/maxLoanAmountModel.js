@@ -66,6 +66,7 @@ export class MaxLoanAmountModel {
       const loanTypeDetails = await this.loanTypeRepos.findLoanById(
         loan_type_id
       );
+      
 
       assertValueExists(loanTypeDetails, 'Invalid loan type id.');
 

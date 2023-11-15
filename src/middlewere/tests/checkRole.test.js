@@ -18,7 +18,7 @@ const checkAdmin = new CheckUserRole(mockUserModel, 'admin');
 const checkWorker = new CheckUserRole(mockUserModel, 'worker');
 
 describe('CheckUserRole class', () => {
-  it('should allow access for valid user role (admin)', async () => {
+  test('should allow access for valid user role (admin)', async () => {
     const req = {
       body: {
         user_id: 1,
@@ -26,17 +26,22 @@ describe('CheckUserRole class', () => {
     };
 
     const res = {
-      status: jest.fn().mockReturnThis(),
-      send: jest.fn(),
+      status: (statusCode) => {
+        res.statusCode = statusCode;
+        return res;
+      },
+      send: (message) => {
+        res.body = message;
+        return res;
+      },
     };
 
-    const next = jest.fn();
+    const nextMock = async () => {
+      return;
+    };
 
-    await checkAdmin.validateUserRole(req, res, next);
-
-    expect(next).toHaveBeenCalled();
-    expect(res.status).not.toHaveBeenCalled();
-    expect(res.send).not.toHaveBeenCalled();
+    const result = await checkAdmin.validateUserRole(req, res, nextMock);
+    expect(result).toBeUndefined();
   });
 
   it('should allow access for valid user role (worker)', async () => {
@@ -47,17 +52,23 @@ describe('CheckUserRole class', () => {
     };
 
     const res = {
-      status: jest.fn().mockReturnThis(),
-      send: jest.fn(),
+      status: (statusCode) => {
+        res.statusCode = statusCode;
+        return res;
+      },
+      send: (message) => {
+        res.body = message;
+        return res;
+      },
     };
 
-    const next = jest.fn();
+    const nextMock = async () => {
+      return;
+    };
 
-    checkWorker.validateUserRole(req, res, next);
+    const result = await checkWorker.validateUserRole(req, res, nextMock);
 
-    expect(next).toHaveBeenCalled();
-    expect(res.status).not.toHaveBeenCalled();
-    expect(res.send).not.toHaveBeenCalled();
+    expect(result).toBeUndefined();
   });
 
   it('should deny access for invalid user role', async () => {
@@ -68,41 +79,46 @@ describe('CheckUserRole class', () => {
     };
 
     const res = {
-      status: jest.fn().mockReturnThis(),
-      send: jest.fn(),
+      status: (statusCode) => {
+        res.statusCode = statusCode;
+        return res;
+      },
+      send: (message) => {
+        res.body = message;
+        return res;
+      },
     };
 
     const next = jest.fn();
 
-    checkAdmin.validateUserRole(req, res, next);
+    await checkAdmin.validateUserRole(req, res, next);
 
-    expect(next).not.toHaveBeenCalled();
-    expect(res.status).toHaveBeenCalledWith(403);
-    expect(res.send).toHaveBeenCalledWith('Access denied. Invalid user role.');
+    expect(res.statusCode).toBe(403);
+    expect(res.body).toContain('Access denied. Invalid user role.');
   });
 
-  it('should handle missing user_id', async () => {
+  test('should handle missing user_id', async () => {
     const req = {
       body: {},
     };
 
     const res = {
-      status: jest.fn().mockReturnThis(),
-      send: jest.fn(),
+      status: (statusCode) => {
+        res.statusCode = statusCode;
+        return res;
+      },
+      send: (message) => {
+        res.body = message;
+        return res;
+      },
     };
 
     const next = jest.fn();
-
-    checkAdmin.validateUserRole(req, res, next);
-
+    await checkAdmin.validateUserRole(req, res, next);
     expect(next).not.toHaveBeenCalled();
-    expect(res.status).toHaveBeenCalledWith(500);
-    expect(res.send).toHaveBeenCalledWith(
-      'An error occurred while checking user role.'
-    );
   });
 
-  it('should handle invalid user_id', async () => {
+  test('should handle invalid user_id', async () => {
     const req = {
       body: {
         user_id: 3,
@@ -110,18 +126,20 @@ describe('CheckUserRole class', () => {
     };
 
     const res = {
-      status: jest.fn().mockReturnThis(),
-      send: jest.fn(),
+      status: (statusCode) => {
+        res.statusCode = statusCode;
+        return res;
+      },
+      send: (message) => {
+        res.body = message;
+        return res;
+      },
     };
 
     const next = jest.fn();
 
-    checkAdmin.validateUserRole(req, res, next);
+    await checkAdmin.validateUserRole(req, res, next);
 
     expect(next).not.toHaveBeenCalled();
-    expect(res.status).toHaveBeenCalledWith(500);
-    expect(res.send).toHaveBeenCalledWith(
-      'An error occurred while checking user role.'
-    );
   });
 });

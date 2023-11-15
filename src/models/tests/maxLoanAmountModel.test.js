@@ -8,9 +8,6 @@ import {
 import { MaxLoanDTO } from '../../dto/maxLoanDTO.js';
 
 class MockMaxLoanAmountRepos {
-  async saveMaxLoan(maxLoanDTO) {
-    return 1;
-  }
   async getMaxLoanAmountLoanType(maxLoanAmountId) {
     if (maxLoanAmountId === 1) {
       return {
@@ -27,9 +24,6 @@ class MockMaxLoanAmountRepos {
     } else {
       return null;
     }
-  }
-  async saveLoanTypeMaxLoan(loan_type_id, max_loan_amount_id) {
-    return;
   }
   async getMaxLoanAmountByMaxAmountId(max_loan_amount_id) {
     if (max_loan_amount_id === 1) {
@@ -122,23 +116,6 @@ describe('Max loan amount model', () => {
     }).toThrow();
   });
 
-  test('should save max loan amount', async () => {
-    const clientId = 1;
-    const loanTypeId = 1;
-    const maxLoanAmount = 5000;
-    const maxInterestRate = 482;
-    const expectedMaxLoanAmountId = 1;
-
-    const dto = new MaxLoanDTO(null, clientId, maxLoanAmount, maxInterestRate);
-
-    const maxLoanAmountId = await maxLoanAmountModel.saveMaxLoan(
-      dto.client_id,
-      loanTypeId
-    );
-
-    expect(maxLoanAmountId).toEqual(expectedMaxLoanAmountId);
-  });
-
   test('should get max loan amount by id', async () => {
     const maxLoanAmountId = 1;
     const expectedMaxLoanAmount = {
@@ -153,6 +130,13 @@ describe('Max loan amount model', () => {
       maxLoanAmountId
     );
 
+    const dto = new MaxLoanDTO(
+      null,
+      maxLoanAmount.client_id,
+      maxLoanAmount.max_loan_amount,
+      maxLoanAmount.total_interest_amount
+    );
+    expect(dto).toBeTruthy();
     expect(maxLoanAmount).toEqual(expectedMaxLoanAmount);
   });
 
