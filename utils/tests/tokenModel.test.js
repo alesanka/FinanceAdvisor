@@ -1,4 +1,4 @@
-import { validateClient, getClient } from '../tokenModel.js';
+import { validateClient } from '../tokenModel.js';
 
 describe('validateClient', () => {
   test('should return null for invalid client', () => {
