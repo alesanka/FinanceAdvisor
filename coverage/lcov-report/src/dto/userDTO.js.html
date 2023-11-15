@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">5.26% </span>
+                <span class="strong">80% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>1/19</span>
+                <span class='fraction'>16/20</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">5.26% </span>
+                <span class="strong">80% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>1/19</span>
+                <span class='fraction'>16/20</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -112,7 +112,8 @@
 <a name='L47'></a><a href='#L47'>47</a>
 <a name='L48'></a><a href='#L48'>48</a>
 <a name='L49'></a><a href='#L49'>49</a>
-<a name='L50'></a><a href='#L50'>50</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -126,36 +127,37 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -166,7 +168,7 @@
 const RoleSchema = z.enum(['client', 'worker', 'admin']);
 &nbsp;
 export class UserDTO {
-<span class="fstat-no" title="function not covered" >  co</span>nstructor(
+  constructor(
     id_user = <span class="branch-0 cbranch-no" title="branch not covered" >null,</span>
     username,
     first_name,
@@ -175,36 +177,37 @@ export class UserDTO {
     phone_number,
     role
   ) {
-<span class="cstat-no" title="statement not covered" >    this.id_user = id_user;</span>
-<span class="cstat-no" title="statement not covered" >    this.username = username;</span>
-<span class="cstat-no" title="statement not covered" >    this.first_name = first_name;</span>
-<span class="cstat-no" title="statement not covered" >    this.last_name = last_name;</span>
-<span class="cstat-no" title="statement not covered" >    this.email = UserDTO.validateEmail(email);</span>
-<span class="cstat-no" title="statement not covered" >    this.phone_number = UserDTO.validatePhone(phone_number);</span>
-<span class="cstat-no" title="statement not covered" >    this.role = UserDTO.validateRole(role);</span>
+    this.id_user = id_user;
+    this.username = username;
+    this.first_name = first_name;
+    this.last_name = last_name;
+    this.email = UserDTO.validateEmail(email);
+    this.phone_number = UserDTO.validatePhone(phone_number);
+    this.role = UserDTO.validateRole(role);
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  st</span>atic validateEmail(email) {
-    const emailSchema = <span class="cstat-no" title="statement not covered" >z.string().email();</span>
-<span class="cstat-no" title="statement not covered" >    try {</span>
-<span class="cstat-no" title="statement not covered" >      return emailSchema.parse(email);</span>
+  static validateEmail(email) {
+    const emailSchema = z.string().email();
+    try {
+      return emailSchema.parse(email);
     } catch (e) {
+<span class="cstat-no" title="statement not covered" >      console.error(e);</span>
 <span class="cstat-no" title="statement not covered" >      throw new Error('Invalid email format');</span>
     }
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  st</span>atic validatePhone(phone_number) {
-    const phoneSchema = <span class="cstat-no" title="statement not covered" >z.string().length(10);</span>
-<span class="cstat-no" title="statement not covered" >    try {</span>
-<span class="cstat-no" title="statement not covered" >      return phoneSchema.parse(phone_number);</span>
+  static validatePhone(phone_number) {
+    const phoneSchema = z.string().length(10);
+    try {
+      return phoneSchema.parse(phone_number);
     } catch (e) {
 <span class="cstat-no" title="statement not covered" >      throw new Error('Phone number must contain 10 digits');</span>
     }
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  st</span>atic validateRole(role) {
-<span class="cstat-no" title="statement not covered" >    try {</span>
-<span class="cstat-no" title="statement not covered" >      return RoleSchema.parse(role);</span>
+  static validateRole(role) {
+    try {
+      return RoleSchema.parse(role);
     } catch (e) {
 <span class="cstat-no" title="statement not covered" >      throw new Error('Invalid role');</span>
     }
@@ -217,7 +220,7 @@ export class UserDTO {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-14T22:10:05.065Z
+                at 2023-11-15T00:13:29.233Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

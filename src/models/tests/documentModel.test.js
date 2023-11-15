@@ -5,7 +5,6 @@ class DocumentReposMock {
   async createDocument() {
     return { doc_id: 1 };
   }
-
   async findAllDocumentsByApplicationId(id) {
     if (id) {
       const dto = new DocDTO(1, 1, 'passport', 'passport');
@@ -16,7 +15,6 @@ class DocumentReposMock {
       return false;
     }
   }
-
   async checkDocumentById(documentId) {
     if (documentId === 1) {
       return {
@@ -46,7 +44,6 @@ class DocumentReposMock {
 }
 
 const documentReposMock = new DocumentReposMock();
-
 const documentModel = new DocumentModel(documentReposMock);
 
 describe('Document model', () => {
