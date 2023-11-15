@@ -1,7 +1,9 @@
-import { calculateMaxMonthlyPayment } from '../maxLoanAmountModel.js';
-import { calculateInterestRate } from '../maxLoanAmountModel.js';
-import { decreeseMaxLoanAmount } from '../maxLoanAmountModel.js';
-import { calculateMaxLoanAmount } from '../maxLoanAmountModel.js';
+import {
+  calculateMaxMonthlyPayment,
+  calculateMaxLoanAmount,
+  decreeseMaxLoanAmount,
+  calculateInterestRate,
+} from '../maxLoanAmountModel.js';
 
 describe('Max loan amount model', () => {
   test('calculateMaxMonthlyPayment should return 50% of the salary', () => {

@@ -1,5 +1,7 @@
-import { checkIfLoanAmountAvailable } from '../loanApplicationModel.js';
-import { LoanApplicationModel } from '../loanApplicationModel.js';
+import {
+  LoanApplicationModel,
+  checkIfLoanAmountAvailable,
+} from '../loanApplicationModel.js';
 import { ApplicationDTO } from '../../dto/applicationDTO.js';
 
 class LoanApplicationReposMock {

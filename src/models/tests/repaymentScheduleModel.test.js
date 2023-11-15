@@ -1,8 +1,10 @@
-import { createDate } from '../repaymentScheduleModel.js';
-import { calculateMonthlyRate } from '../repaymentScheduleModel.js';
-import { calculateMonthlyPayment } from '../repaymentScheduleModel.js';
-import { calculateFirstPaymentDate } from '../repaymentScheduleModel.js';
-import { toMyISOFormat } from '../repaymentScheduleModel.js';
+import {
+  createDate,
+  calculateMonthlyRate,
+  calculateMonthlyPayment,
+  calculateFirstPaymentDate,
+  toMyISOFormat,
+} from '../repaymentScheduleModel.js';
 
 describe('Repayment schedule model', () => {
   test(' should create a valid date object from a valid date string', () => {

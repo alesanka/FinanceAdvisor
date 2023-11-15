@@ -1,15 +1,50 @@
-import { calculateEndTermDate } from '../notesModel.js';
-import { checkIsRightTerm } from '../notesModel.js';
+import {
+  NotesModel,
+  calculateEndTermDate,
+  checkIsRightTerm,
+} from '../notesModel.js';
 import { NotesDTO } from '../../dto/notesDTO.js';
-import { NotesModel } from '../notesModel.js';
 
 class NotesReposMock {
-  async getAllNotesForRepaymentSchedule(id) {
-    const dto = new NotesDTO(1, 'date', 5000, false);
+  async createNotes(notesDTO) {
+    return 1;
+  }
 
-    let arrDTO = [];
-    arrDTO.push(dto);
-    return arrDTO;
+  async getAllNotesForRepaymentSchedule(repayment_schedule_id) {
+    return [
+      {
+        repayment_schedule_id: 1,
+        payment_date: 'date',
+        payment_amount: 5000,
+        payment_received: false,
+      },
+    ];
+  }
+
+  async updatePaymentStatus(note_id) {
+    return;
+  }
+
+  async getNoteById(noteId) {
+    if (noteId === 1) {
+      return {
+        note_id: 1,
+        repayment_schedule_id: 1,
+        payment_date: 'date',
+        payment_amount: 5000,
+        payment_received: false,
+      };
+    } else {
+      return null;
+    }
+  }
+
+  async deleteNote(noteId) {
+    if (noteId === 1) {
+      return;
+    } else {
+      throw new Error(`Note with id ${noteId} does not exist.`);
+    }
   }
 }
 
@@ -101,10 +136,22 @@ describe('Note model', () => {
     ]);
   });
 
-  test('should return notes if invalid note id', async () => {
+  test('should not return notes if invalid note id', async () => {
     const inValidNoteId = null;
     await expect(() =>
       notesModel.getAllNotesForRepaymentSchedule(inValidNoteId)
     ).rejects.toThrow();
+  });
+
+  test('should update payment status for a note', async () => {
+    const noteId = 1;
+
+    await expect(() => notesModel.updatePaymentStatus(noteId)).not.toThrow();
+  });
+
+  test('should delete a note', async () => {
+    const noteId = 1;
+
+    await expect(() => notesModel.deleteNote(noteId)).not.toThrow();
   });
 });

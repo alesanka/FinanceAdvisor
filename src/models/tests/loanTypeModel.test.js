@@ -1,6 +1,6 @@
 import { LoanTypeDTO } from '../../dto/loanTypesDTO.js';
-import { checkDocType } from '../loanTypeModel.js';
-import { LoanTypeModel } from '../loanTypeModel.js';
+import { LoanTypeModel, checkDocType } from '../loanTypeModel.js';
+
 
 class LoanTypeReposMock {
   async createLoanType(loanTypeDTO) {
