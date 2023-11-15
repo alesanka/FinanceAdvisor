@@ -1,12 +1,23 @@
-import { userModel } from '../models/userModel.js';
 import { repaymentScheduleModel } from '../models/repaymentScheduleModel.js';
 
-class RepaymentScheduleController {
+export const checkIfAllRequiredParamsRepaymentSchedule = (params) => {
+  if (!params.repayment_schedule_id || !params.year || !params.month) {
+    throw new Error(
+      'Missing required parameters: repayment_schedule_id, year, and month'
+    );
+  }
+  return true;
+};
+
+export class RepaymentScheduleController {
+  constructor(repaymentScheduleModel) {
+    this.repaymentScheduleModel = repaymentScheduleModel;
+  }
+
   createRepaymentSchedule = async (req, res) => {
     try {
-
       const repaymentScheduleIdandDate =
-        await repaymentScheduleModel.createRepaymentSchedule(req.body);
+        await this.repaymentScheduleModel.createRepaymentSchedule(req.body);
 
       res
         .status(201)
@@ -23,20 +34,12 @@ class RepaymentScheduleController {
   };
   getPaymentAmountByScheduleIdAndMonthYear = async (req, res) => {
     try {
-      const { repayment_schedule_id, year, month } = req.query;
+      checkIfAllRequiredParamsRepaymentSchedule(req.query);
 
-      if (!repayment_schedule_id || !year || !month) {
-        return res
-          .status(400)
-          .send(
-            'Missing required parameters: repayment_schedule_id, year, and month'
-          );
-      }
-
-      const paymentAmount = await repaymentScheduleModel.getByIdYearMonth(
-        repayment_schedule_id,
-        year,
-        month
+      const paymentAmount = await this.repaymentScheduleModel.getByIdYearMonth(
+        req.query.repayment_schedule_id,
+        req.query.year,
+        req.query.month
       );
 
       res.status(200).send(`Month payment - ${paymentAmount}`);
@@ -48,6 +51,43 @@ class RepaymentScheduleController {
       });
     }
   };
+  updateRemainBalance = async (req, res) => {
+    try {
+      await this.repaymentScheduleModel.updateRemainBalance(
+        req.body.new_balance,
+        req.params.repayment_schedule_id
+      );
+
+      res
+        .status(200)
+        .send(
+          `Remaining balance in repayment shedule with id ${req.params.repayment_schedule_id} was updated.`
+        );
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({
+        message: 'Something went wrong while updating remaing balance.',
+        error: err.message,
+      });
+    }
+  };
+
+  deleteSchedule = async (req, res) => {
+    try {
+      await this.repaymentScheduleModel.deleteSchedule(
+        req.params.repayment_schedule_id
+      );
+      res.status(204).end();
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({
+        message: `Something went wrong while deleting repayment schedule.`,
+        error: err.message,
+      });
+    }
+  };
 }
 
-export const repaymentScheduleController = new RepaymentScheduleController();
+export const repaymentScheduleController = new RepaymentScheduleController(
+  repaymentScheduleModel
+);

@@ -1,0 +1,35 @@
+name: Build CI/CD
+
+on:
+  push:
+    branches:
+      - main
+      - tests2
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Wait for services to start
+        run: sleep 15
+
+      - name: Run lint
+        run: npm run lint
+
+      - name: Run tests
+        run: npm test

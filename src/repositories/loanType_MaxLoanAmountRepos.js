@@ -1,9 +1,12 @@
 import { pool } from '../../db/postgress/dbPool.js';
 
-class LoanTypeMaxLoanAmountRepos {
+export class LoanTypeMaxLoanAmountRepos {
+  constructor(connection) {
+    this.connection = connection;
+  }
   async saveLoanTypeMaxLoan(loan_type_id, max_loan_amount_id) {
     try {
-      const result = await pool.query(
+      const result = await this.connection.query(
         'INSERT INTO LoanTypes_MaximumLoanAmounts (loan_type_id, max_loan_amount_id) VALUES ($1, $2) RETURNING id',
         [loan_type_id, max_loan_amount_id]
       );
@@ -15,7 +18,7 @@ class LoanTypeMaxLoanAmountRepos {
 
   async getLoanTypeMaxLoanId(id) {
     try {
-      const result = await pool.query(
+      const result = await this.connection.query(
         'SELECT * FROM LoanTypes_MaximumLoanAmounts WHERE id = $1;',
         [id]
       );
@@ -30,4 +33,4 @@ class LoanTypeMaxLoanAmountRepos {
   }
 }
 
-export const loanTypeMaxLoanAmountRepos = new LoanTypeMaxLoanAmountRepos();
+export const loanTypeMaxLoanAmountRepos = new LoanTypeMaxLoanAmountRepos(pool);

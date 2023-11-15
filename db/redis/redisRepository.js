@@ -1,9 +1,12 @@
 import db from './redisConfig.js';
 
-class RedisRepository {
+export class RedisRepository {
+  constructor(connection) {
+    this.connection = connection;
+  }
   async getClient(clientId) {
     try {
-      const client = await db.hGetAll('clients:client', clientId);
+      const client = await this.connection.hGetAll('clients:client', clientId);
 
       return client;
     } catch (error) {
@@ -14,7 +17,10 @@ class RedisRepository {
 
   async getAccessToken(bearerToken) {
     try {
-      const token = await db.hGetAll('tokens:accessToken', bearerToken);
+      const token = await this.connection.hGetAll(
+        'tokens:accessToken',
+        bearerToken
+      );
 
       return token;
     } catch (error) {
@@ -25,7 +31,10 @@ class RedisRepository {
 
   async getRefreshToken(bearerToken) {
     try {
-      const token = await db.hGetAll('tokens:refreshToken', bearerToken);
+      const token = await this.connection.hGetAll(
+        'tokens:refreshToken',
+        bearerToken
+      );
 
       return token;
     } catch (error) {
@@ -36,7 +45,7 @@ class RedisRepository {
 
   async saveRefreshToken(data) {
     try {
-      await db.hSet('tokens:refreshToken', data);
+      await this.connection.hSet('tokens:refreshToken', data);
     } catch (error) {
       console.error(`Error saving refresh token: ${error.message}`);
       throw error;
@@ -45,7 +54,7 @@ class RedisRepository {
 
   async saveAccessToken(data) {
     try {
-      await db.hSet('tokens:accessToken', data);
+      await this.connection.hSet('tokens:accessToken', data);
     } catch (error) {
       console.error(`Error saving access token: ${error.message}`);
       throw error;
@@ -54,8 +63,8 @@ class RedisRepository {
 
   async deleteToken(token) {
     try {
-      await db.del('tokens:refreshToken', token.refreshToken);
-      await db.del('tokens:accessToken', token.accessToken);
+      await this.connection.del('tokens:refreshToken', token.refreshToken);
+      await this.connection.del('tokens:accessToken', token.accessToken);
     } catch (error) {
       console.error(`Error deleting tokens: ${error.message}`);
       throw error;
@@ -63,4 +72,4 @@ class RedisRepository {
   }
 }
 
-export const redisRepository = new RedisRepository();
+export const redisRepository = new RedisRepository(db);

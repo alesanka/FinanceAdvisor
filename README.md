@@ -69,7 +69,7 @@ In case of successful response:
 HTTP/1.1 201 Created
 Content-Type: text/html; charset=utf-8
 
-User was registered successfully. Id - 1
+'User was registered successfully. Id - 1'
 
 ```
 
@@ -458,7 +458,7 @@ Content-Type: application/json
 Request:
 
 ```
-POST /api/loan_types
+POST /loan_types
 Content-Type: application/json
 Authorization: Bearer {access_token}
 
@@ -596,7 +596,7 @@ Content-Type: application/json
 Request:
 
 ```
-PUT /api/loan_types/:loan_type_id
+PUT /loan_types/:loan_type_id
 Content-Type: application/json
 Authorization: Bearer {access_token}
 
@@ -634,6 +634,39 @@ Content-Type: application/json
    message: `Something went wrong while updating loan type.`,
   error: err.message,
 }
+```
+
+---
+
+**Delete loan type by loan type id.**
+
+\*protected request (available only for admin and worker with access_token)
+
+Request:
+
+```
+DELETE /loan_types/:loan_type_id
+Authorization: Bearer {access_token}
+```
+
+In case of successful response:
+
+```
+HTTP/1.1 204 No Content
+
+```
+
+In case of error response:
+
+```
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+
+{
+    message: `Something went wrong while deleting loan type.`,
+    error: err.message,
+}
+
 ```
 
 ## Endpoint /max_available_amount <a name="endpoints-max-available-amount"></a> [(Back to content)](#content)
@@ -732,6 +765,39 @@ Content-Type: application/json
 }
 ```
 
+---
+
+**Delete client's max loan amount.**
+
+\*protected request (available only for admin and worker with access_token)
+
+Request:
+
+```
+DELETE /max_available_amount/:max_loan_amount_id/
+Authorization: Bearer {access_token}
+```
+
+In case of successful response:
+
+```
+HTTP/1.1 204 No Content
+
+```
+
+In case of error response:
+
+```
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+
+{
+  message: `Something went wrong while deleting max loan application.`,
+  error: err.message,
+}
+
+```
+
 ## Endpoint /applications <a name="endpoints-applications"></a> [(Back to content)](#content)
 
 **Create a new loan application.**
@@ -780,6 +846,50 @@ Content-Type: application/json
 
 {
     message: `Something went wrong while creating new loan application.`,
+    error: err.message,
+}
+```
+
+---
+
+**Retrieve all loans applications information.**
+
+\*protected request (available only for admin and worker with access_token)
+
+Request:
+
+```
+GET /applications HTTP/1.1
+```
+
+Response:
+
+```
+[
+  {
+    "application_id": 1,
+    "desired_loan_amount": 50000,
+    "application_date": "2023-10-13",
+    "is_approved": true
+  },
+  {
+    "application_id": 2,
+    "desired_loan_amount": 10000,
+    "application_date": "2023-11-02",
+    "is_approved": false
+  }
+  // ... more applications
+]
+```
+
+In case of error response:
+
+```
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+
+{
+    message: 'Something went wrong while getting all loan applications.',
     error: err.message,
 }
 ```
@@ -1051,6 +1161,56 @@ Content-Type: application/json
 
 ---
 
+**Update repayment schedule remaining balance.**
+
+\*protected request (available only for admin and worker with access_token)
+\*(only workers can do this, user_id is required for checking user's role)
+
+Request:
+
+```
+PUT /repayment_schedule/:repayment_schedule_id/
+Content-Type: application/json
+Authorization: Bearer {access_token}
+
+{
+  "user_id": 2,
+  "new_balance": 5000
+}
+```
+
+In case of successful response:
+
+```
+HTTP/1.1 200 OK
+Content-Type: text/html; charset=utf-8
+
+`Remaining balance in repayment shedule with id ${repayment_schedule_id} was updated.`
+```
+
+In case of error response:
+
+```
+HTTP/1.1 403 Forbidden
+Content-Type: text/html; charset=utf-8
+
+'Access denied. Invalid user role.'
+```
+
+or
+
+```
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+
+{
+   message: 'Something went wrong while updating remaing balance.',
+  error: err.message,
+}
+```
+
+---
+
 **Get a month payment amount for specific date.**
 
 Client can get a month payment amount for requested date.
@@ -1101,6 +1261,39 @@ Content-Type: application/json
   message: 'Something went wrong during getting month payment.',
   error: err.message,
 }
+```
+
+---
+
+**Delete a repayment schedule by repayment schedule id.**
+
+\*protected request (available only for admin and worker with access_token)
+
+Request:
+
+```
+DELETE /repayment_schedule/:repayment_schedule_id/ HTTP/1.1
+Authorization: Bearer {access_token}
+```
+
+In case of successful response:
+
+```
+HTTP/1.1 204 No Content
+
+```
+
+In case of error response:
+
+```
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+
+{
+    message: `Something went wrong while deleting repayment schedule by id.`,
+    error: err.message,
+}
+
 ```
 
 ## Endpoint /repayment_notes <a name="endpoints-repayment-notes"></a> [(Back to content)](#content)
@@ -1157,5 +1350,87 @@ Content-Type: application/json
 ```
 
 ---
+
+---
+
+**Update payment note status to true in case the payment was recieved.**
+
+\*protected request (available only for admin and worker with access_token)
+\*(only workers can do this, user_id is required for checking user's role)
+
+Request:
+
+```
+PUT /repayment_notes/:note_id/
+Content-Type: application/json
+Authorization: Bearer {access_token}
+
+{
+  "user_id": 2,
+}
+```
+
+In case of successful response:
+
+```
+HTTP/1.1 200 OK
+Content-Type: text/html; charset=utf-8
+
+`Notes payment status with id - ${req.params.note_id} was updated successfully.`
+```
+
+In case of error response:
+
+```
+HTTP/1.1 403 Forbidden
+Content-Type: text/html; charset=utf-8
+
+'Access denied. Invalid user role.'
+```
+
+or
+
+```
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+
+{
+   message: 'Something went wrong while updating note status.',
+  error: err.message,
+}
+```
+
+---
+
+**Delete a payment by id.**
+
+\*protected request (available only for admin and worker with access_token)
+
+Request:
+
+```
+DELETE /repayment_notes/:note_id/
+Authorization: Bearer {access_token}
+```
+
+In case of successful response:
+
+```
+HTTP/1.1 204 No Content
+
+```
+
+In case of error response:
+
+```
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+
+{
+    message: `Something went wrong while deleting payment note.`,
+    error: err.message,
+}
+
+```
 
 [⬆ Go Up ⬆](#content)

@@ -1,10 +1,13 @@
 import { pool } from '../../db/postgress/dbPool.js';
 import { RepaymentScheduleDTO } from '../dto/repaymentScheduleDTO.js';
 
-class RepaymentScheduleRepos {
+export class RepaymentScheduleRepos {
+  constructor(connection) {
+    this.connection = connection;
+  }
   async createRepaymentSchedule(repaymentScheduleDto) {
     try {
-      const insertResult = await pool.query(
+      const insertResult = await this.connection.query(
         `INSERT INTO RepaymentSchedules (application_id, monthly_payment, remaining_balance)
          VALUES ($1, $2, $3) RETURNING repayment_schedule_id;`,
         [
@@ -21,7 +24,7 @@ class RepaymentScheduleRepos {
   }
   async getRepaymentScheduleById(repaymentScheduleId) {
     try {
-      const result = await pool.query(
+      const result = await this.connection.query(
         `SELECT * FROM RepaymentSchedules WHERE repayment_schedule_id = $1;`,
         [repaymentScheduleId]
       );
@@ -53,7 +56,7 @@ class RepaymentScheduleRepos {
         AND EXTRACT(MONTH FROM payment_date) = $3;
       `;
       const values = [repaymentScheduleId, year, month];
-      const result = await pool.query(query, values);
+      const result = await this.connection.query(query, values);
 
       if (result.rows.length > 0) {
         return result.rows[0].payment_amount;
@@ -64,6 +67,30 @@ class RepaymentScheduleRepos {
       throw new Error(`${err}`);
     }
   }
+  async updateRemainBalance(sum, repayment_schedule_id) {
+    try {
+      await this.connection.query(
+        `UPDATE RepaymentSchedules SET remaining_balance = $1 WHERE repayment_schedule_id = $2`,
+        [sum, repayment_schedule_id]
+      );
+
+      return;
+    } catch (err) {
+      throw new Error(`${err}`);
+    }
+  }
+  async deleteSchedule(repayment_schedule_id) {
+    try {
+      await this.connection.query(
+        'DELETE FROM RepaymentSchedules WHERE repayment_schedule_id = $1',
+        [repayment_schedule_id]
+      );
+
+      return;
+    } catch (err) {
+      throw new Error(`${err}`);
+    }
+  }
 }
 
-export const repaymentScheduleRepos = new RepaymentScheduleRepos();
+export const repaymentScheduleRepos = new RepaymentScheduleRepos(pool);

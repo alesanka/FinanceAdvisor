@@ -1,15 +1,19 @@
 import { Router } from 'express';
 import { maxLoanAmountController } from '../controllers/maxLoanAmountController.js';
 import { token } from '../../utils/tokenController.js';
-import checkUserRole from '../middlewere/checkRole.js';
+import { roleWorker } from '../middlewere/checkRole.js';
 
 const router = Router();
 
+router.get('/:max_loan_amount_id', maxLoanAmountController.getMaxLoanAmount); // public
 router.post(
   '/',
   token.getAuthorization,
-  checkUserRole(['worker']),
+  roleWorker.validateUserRole,
   maxLoanAmountController.saveMaxLoan
 ); // protected
-router.get('/:max_loan_amount_id', maxLoanAmountController.getMaxLoanAmount); // public
+router.delete(
+  '/:max_loan_amount_id',
+  maxLoanAmountController.deleteMaxLoanApplication
+); // protected
 export default router;

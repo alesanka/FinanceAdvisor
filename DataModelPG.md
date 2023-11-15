@@ -106,13 +106,13 @@ Schedule of repayments for loans.
 
 Notes related to payments made or missed.
 
-| Key | Column Name      | Data Type | Description                            |
-| --- | ---------------- | --------- | -------------------------------------- |
-| PK  | payment_note_id  | int       | Primary key for the paymentnotes table |
-| FK  | client_id        | int       | Foreign key from the clients table     |
-|     | payment_date     | data      | Data of required payment               |
-|     | payment_amount   | float     | Required payment amount                |
-|     | payment_received | boolean   | Info about recievement of payment      |
+| Key | Column Name           | Data Type | Description                                    |
+| --- | --------------------- | --------- | ---------------------------------------------- |
+| PK  | note_id               | int       | Primary key for the paymentnotes table         |
+| FK  | repayment_schedule_id | int       | Foreign key from the repayment schedules table |
+|     | payment_date          | data      | Data of required payment                       |
+|     | payment_amount        | float     | Required payment amount                        |
+|     | payment_received      | boolean   | Info about recievement of payment              |
 
 ### 8. MaximumLoanAmounts
 

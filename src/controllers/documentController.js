@@ -1,10 +1,16 @@
 import { documentModel } from '../models/documentModel.js';
-import { userModel } from '../models/userModel.js';
 
-class DocumentController {
+export class DocumentController {
+  constructor(documentModel) {
+    this.documentModel = documentModel;
+  }
   createDocument = async (req, res) => {
     try {
-      const docId = await documentModel.createDocument(req.body);
+      const docId = await this.documentModel.createDocument(
+        req.body.application_id,
+        req.body.document_name,
+        req.body.document_type
+      );
 
       res
         .status(201)
@@ -19,9 +25,10 @@ class DocumentController {
   };
   findAllDocumentsByApplicationId = async (req, res) => {
     try {
-      const documents = await documentModel.findAllDocumentsByApplicationId(
-        req.params.application_id
-      );
+      const documents =
+        await this.documentModel.findAllDocumentsByApplicationId(
+          req.params.application_id
+        );
       res.status(200).json(documents);
     } catch (err) {
       console.error(err);
@@ -31,9 +38,30 @@ class DocumentController {
       });
     }
   };
+  changeDocumentNameById = async (req, res) => {
+    try {
+      await this.documentModel.changeDocumentNameById(
+        req.body.user_id,
+        req.body.document_name,
+        req.params.documentId
+      );
+
+      res
+        .status(200)
+        .send(
+          `Document name in document with id ${req.params.documentId} was updated.`
+        );
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({
+        message: 'Something went wrong while updating document name.',
+        error: err.message,
+      });
+    }
+  };
   deleteDocument = async (req, res) => {
     try {
-      await documentModel.deleteDocument(req.params.documentId);
+      await this.documentModel.deleteDocument(req.params.documentId);
       res.status(204).end();
     } catch (err) {
       console.error(err);
@@ -45,4 +73,4 @@ class DocumentController {
   };
 }
 
-export const documentController = new DocumentController();
+export const documentController = new DocumentController(documentModel);

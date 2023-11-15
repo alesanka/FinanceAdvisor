@@ -2,10 +2,13 @@ import { pool } from '../../db/postgress/dbPool.js';
 import { UserDTO } from '../dto/userDTO.js';
 import { ClientDTO } from '../dto/clientDTO.js';
 
-class UserRepos {
+export class UserRepos {
+  constructor(connection) {
+    this.connection = connection;
+  }
   async createUser(userDto, password) {
     try {
-      const result = await pool.query(
+      const result = await this.connection.query(
         'INSERT INTO users (username, password, first_name, last_name, email, phone_number, role) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING user_id',
         [
           userDto.username,
@@ -25,7 +28,7 @@ class UserRepos {
   }
   async createClient(clientDto) {
     try {
-      const resultClient = await pool.query(
+      const resultClient = await this.connection.query(
         'INSERT INTO clients (user_id, salary, credit_story) VALUES ($1, $2, $3) RETURNING client_id',
         [clientDto.user_id, clientDto.salary, clientDto.is_credit_story]
       );
@@ -37,7 +40,7 @@ class UserRepos {
   }
   async findUserByUsername(username) {
     try {
-      const result = await pool.query(
+      const result = await this.connection.query(
         'SELECT user_id, username, password FROM users WHERE username = $1;',
         [username]
       );
@@ -64,7 +67,7 @@ class UserRepos {
 
   async findUserById(userId) {
     try {
-      const result = await pool.query(
+      const result = await this.connection.query(
         'SELECT * FROM users WHERE user_id = $1;',
         [userId]
       );
@@ -90,7 +93,7 @@ class UserRepos {
   }
   async getAllUsers() {
     try {
-      const result = await pool.query('SELECT * FROM users');
+      const result = await this.connection.query('SELECT * FROM users');
       return result.rows.map(
         (row) =>
           new UserDTO(
@@ -109,17 +112,17 @@ class UserRepos {
   }
   async findClientByUserId(userId) {
     try {
-      const resultClient = await pool.query(
+      const resultClient = await this.connection.query(
         `SELECT * FROM clients WHERE user_id = $1;`,
         [userId]
       );
 
       if (resultClient.rows.length > 0) {
         return new ClientDTO(
-          row.client_id,
-          row.user_id,
-          row.salary,
-          row.credit_story
+          resultClient.rows[0].client_id,
+          resultClient.rows[0].user_id,
+          resultClient.rows[0].salary,
+          resultClient.rows[0].credit_story
         );
       } else {
         return null;
@@ -185,7 +188,7 @@ class UserRepos {
         baseQuery += ' ORDER BY clients.salary';
       }
 
-      const result = await pool.query(baseQuery, values);
+      const result = await this.connection.query(baseQuery, values);
       return result.rows;
     } catch (err) {
       throw new Error(`${err}`);
@@ -230,7 +233,7 @@ class UserRepos {
         userQuery += ` WHERE user_id = $${userValues.length + 1}`;
 
         userValues.push(userId);
-        await pool.query(userQuery, userValues);
+        await this.connection.query(userQuery, userValues);
       }
       if ('credit_story' in data || data.salary) {
         let query = 'UPDATE clients SET ';
@@ -252,7 +255,7 @@ class UserRepos {
         query += ` WHERE user_id = $${values.length + 1}`;
         values.push(userId);
 
-        await pool.query(query, values);
+        await this.connection.query(query, values);
       }
       return;
     } catch (err) {
@@ -261,7 +264,9 @@ class UserRepos {
   }
   async deleteUser(userId) {
     try {
-      await pool.query('DELETE FROM users WHERE user_id = $1', [userId]);
+      await this.connection.query('DELETE FROM users WHERE user_id = $1', [
+        userId,
+      ]);
       return;
     } catch (err) {
       throw new Error(`${err}`);
@@ -269,7 +274,7 @@ class UserRepos {
   }
   async checkRoleByUserId(userId) {
     try {
-      const result = await pool.query(
+      const result = await this.connection.query(
         `SELECT role FROM users WHERE user_id = $1;`,
         [userId]
       );
@@ -284,16 +289,16 @@ class UserRepos {
   }
   async findClientById(clientId) {
     try {
-      const result = await pool.query(
+      const result = await this.connection.query(
         'SELECT * FROM clients WHERE client_id = $1;',
         [clientId]
       );
       if (result.rows.length > 0) {
         return new ClientDTO(
-          row.client_id,
-          row.user_id,
-          row.salary,
-          row.credit_story
+          result.rows[0].client_id,
+          result.rows[0].user_id,
+          result.rows[0].salary,
+          result.rows[0].credit_story
         );
       } else {
         return null;
@@ -304,4 +309,4 @@ class UserRepos {
   }
 }
 
-export const userRepos = new UserRepos();
+export const userRepos = new UserRepos(pool);

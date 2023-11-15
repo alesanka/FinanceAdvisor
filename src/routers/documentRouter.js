@@ -1,15 +1,21 @@
 import { Router } from 'express';
 import { documentController } from '../controllers/documentController.js';
 import { token } from '../../utils/tokenController.js';
-import checkUserRole from '../middlewere/checkRole.js';
+import { roleWorker } from '../middlewere/checkRole.js';
 
 const router = Router();
 
 router.post(
   '/',
   token.getAuthorization,
-  checkUserRole(['worker']),
+  roleWorker.validateUserRole,
   documentController.createDocument
+); // protected
+router.put(
+  '/:documentId',
+  token.getAuthorization,
+  roleWorker.validateUserRole,
+  documentController.changeDocumentNameById
 ); // protected
 router.get(
   '/:application_id',

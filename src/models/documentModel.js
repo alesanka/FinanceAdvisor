@@ -1,7 +1,12 @@
 import { documentRepos } from '../repositories/documentRepos.js';
 import { DocDTO } from '../dto/docDTO.js';
+import { assertValueExists } from '../../utils/helper.js';
 
-class DocumentModel {
+export class DocumentModel {
+  constructor(documentRepos) {
+    this.documentRepos = documentRepos;
+  }
+
   async createDocument(applicationId, documentName, documentType) {
     try {
       const docDTO = new DocDTO(
@@ -11,7 +16,7 @@ class DocumentModel {
         documentType
       );
 
-      const docId = await documentRepos.createDocument(docDTO);
+      const docId = await this.documentRepos.createDocument(docDTO);
 
       return docId;
     } catch (err) {
@@ -20,12 +25,11 @@ class DocumentModel {
   }
   async findAllDocumentsByApplicationId(applicationId) {
     try {
-      const docs = await documentRepos.findAllDocumentsByApplicationId(
+      const docs = await this.documentRepos.findAllDocumentsByApplicationId(
         applicationId
       );
-      if (!docs) {
-        throw new Error('Invalid application id.');
-      }
+
+      assertValueExists(docs, 'Invalid application id.');
 
       const docDTOs = docs.map((doc) => {
         const dto = new DocDTO(
@@ -46,19 +50,35 @@ class DocumentModel {
       throw new Error(`Unable to get documents by application_id: ${err}`);
     }
   }
+  async changeDocumentNameById(docName, documentId) {
+    try {
+      const doc = await this.documentRepos.checkDocumentById(documentId);
+
+      assertValueExists(
+        doc,
+        `No document found with document id ${documentId}`
+      );
+
+      await this.documentRepos.changeDocumentNameById(docName, documentId);
+      return;
+    } catch (err) {
+      throw new Error(`Unable to update document ${documentId}: ${err}.`);
+    }
+  }
   async deleteDocument(documentId) {
     try {
-      const isDocExists = await documentRepos.checkDocumentById(documentId);
+      const doc = await this.documentRepos.checkDocumentById(documentId);
 
-      if (!isDocExists) {
-        throw new Error(`No document found with document id ${documentId}`);
-      }
+      assertValueExists(
+        doc,
+        `No document found with document id ${documentId}`
+      );
 
-      await documentRepos.deleteDocument(documentId);
+      await this.documentRepos.deleteDocument(documentId);
       return;
     } catch (err) {
       throw new Error(`Unable to delete document ${documentId}: ${err}.`);
     }
   }
 }
-export const documentModel = new DocumentModel();
+export const documentModel = new DocumentModel(documentRepos);
