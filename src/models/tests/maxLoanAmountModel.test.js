@@ -1,9 +1,62 @@
 import {
+  MaxLoanAmountModel,
   calculateMaxMonthlyPayment,
   calculateMaxLoanAmount,
   decreeseMaxLoanAmount,
   calculateInterestRate,
 } from '../maxLoanAmountModel.js';
+import { MaxLoanDTO } from '../../dto/maxLoanDTO.js';
+
+class MockMaxLoanAmountRepos {
+  async saveMaxLoan(maxLoanDTO) {
+    return 1;
+  }
+  async getMaxLoanAmountLoanType(maxLoanAmountId) {
+    if (maxLoanAmountId === 1) {
+      return {
+        max_loan_amount_id: 1,
+        client_id: 1,
+        max_loan_amount: 5000,
+        total_interest_amount: 1000,
+        loan_type_id: 1,
+        loan_type: 'business_loan',
+        interest_rate: 5,
+        loan_term: 12,
+        required_doc: 'passport',
+      };
+    } else {
+      return null;
+    }
+  }
+  async saveLoanTypeMaxLoan(loan_type_id, max_loan_amount_id) {
+    return;
+  }
+  async getMaxLoanAmountByMaxAmountId(max_loan_amount_id) {
+    if (max_loan_amount_id === 1) {
+      return {
+        max_loan_amount_id: 1,
+        client_id: 1,
+        max_loan_amount: 5000,
+        total_interest_amount: 1000,
+        loan_type_id: 1,
+      };
+    } else {
+      return null;
+    }
+  }
+  async deleteMaxLoanApplication(max_loan_amount_id) {
+    if (max_loan_amount_id === 1) {
+      return;
+    } else {
+      throw new Error(
+        `Max loan application with id ${max_loan_amount_id} does not exist.`
+      );
+    }
+  }
+}
+
+const maxLoanAmountReposMock = new MockMaxLoanAmountRepos();
+const maxLoanAmountModel = new MaxLoanAmountModel(maxLoanAmountReposMock);
 
 describe('Max loan amount model', () => {
   test('calculateMaxMonthlyPayment should return 50% of the salary', () => {
@@ -67,5 +120,47 @@ describe('Max loan amount model', () => {
     expect(() => {
       calculateMaxLoanAmount(maxMonthlyPayment, interest, term);
     }).toThrow();
+  });
+
+  test('should save max loan amount', async () => {
+    const clientId = 1;
+    const loanTypeId = 1;
+    const maxLoanAmount = 5000;
+    const maxInterestRate = 482;
+    const expectedMaxLoanAmountId = 1;
+
+    const dto = new MaxLoanDTO(null, clientId, maxLoanAmount, maxInterestRate);
+
+    const maxLoanAmountId = await maxLoanAmountModel.saveMaxLoan(
+      dto.client_id,
+      loanTypeId
+    );
+
+    expect(maxLoanAmountId).toEqual(expectedMaxLoanAmountId);
+  });
+
+  test('should get max loan amount by id', async () => {
+    const maxLoanAmountId = 1;
+    const expectedMaxLoanAmount = {
+      max_loan_amount: 5000,
+      total_interest_amount: 1000,
+      loan_type: 'business_loan',
+      interest_rate: 5,
+      loan_term: 12,
+    };
+
+    const maxLoanAmount = await maxLoanAmountModel.getMaxLoanAmount(
+      maxLoanAmountId
+    );
+
+    expect(maxLoanAmount).toEqual(expectedMaxLoanAmount);
+  });
+
+  test('should delete max loan application by id', async () => {
+    const maxLoanAmountId = 1;
+
+    await expect(() =>
+      maxLoanAmountModel.deleteMaxLoanApplication(maxLoanAmountId)
+    ).not.toThrow();
   });
 });

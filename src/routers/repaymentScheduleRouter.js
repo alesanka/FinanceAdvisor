@@ -1,20 +1,20 @@
 import { Router } from 'express';
 import { token } from '../../utils/tokenController.js';
 import { repaymentScheduleController } from '../controllers/repaymentScheduleController.js';
-import checkUserRole from '../middlewere/checkRole.js';
+import { roleWorker } from '../middlewere/checkRole.js';
 
 const router = Router();
 
 router.post(
   '/',
   token.getAuthorization,
-  checkUserRole(['worker']),
+  roleWorker.validateUserRole,
   repaymentScheduleController.createRepaymentSchedule
 ); // protected
 router.put(
   '/:repayment_schedule_id',
   token.getAuthorization,
-  checkUserRole(['worker']),
+  roleWorker.validateUserRole,
   repaymentScheduleController.updateRemainBalance
 ); // protected
 router.get(
