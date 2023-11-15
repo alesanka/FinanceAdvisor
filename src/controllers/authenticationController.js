@@ -12,9 +12,7 @@ export const checkAllRequiredParamsForToken = (body) => {
 
   for (const field of requiredFields) {
     if (!body[field]) {
-      return res
-        .status(400)
-        .send(`Missing parameter: "${field}" in requst body`);
+      throw new Error(`Missing parameter: "${field}" in requst body`);
     }
   }
   return true;

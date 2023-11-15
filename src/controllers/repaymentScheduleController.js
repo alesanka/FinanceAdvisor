@@ -2,11 +2,9 @@ import { repaymentScheduleModel } from '../models/repaymentScheduleModel.js';
 
 export const checkIfAllRequiredParamsRepaymentSchedule = (params) => {
   if (!params.repayment_schedule_id || !params.year || !params.month) {
-    return res
-      .status(400)
-      .send(
-        'Missing required parameters: repayment_schedule_id, year, and month'
-      );
+    throw new Error(
+      'Missing required parameters: repayment_schedule_id, year, and month'
+    );
   }
   return true;
 };

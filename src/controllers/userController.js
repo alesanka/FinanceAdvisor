@@ -12,7 +12,7 @@ export const checkAreAllRequaredParams = (param) => {
   ];
   for (const field of requiredFields) {
     if (!param[field]) {
-      return res.status(400).send(`Missing required parameter: ${field}`);
+      throw new Error(`Missing required parameter: ${field}`);
     }
   }
 };
