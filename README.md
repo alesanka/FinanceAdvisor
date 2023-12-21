@@ -4,31 +4,52 @@
 
 The Personal Finance Advisor API is a web service that provides functionality for managing user financial data and loan applications. The API allows access to user's (which can be a client, a bank worker or an administrator) data, as well as the ability to create and manage loan applications. An administator can create different loan types for calculating loan details. The API also provides information on maximum loan amounts, repayment schedules, and payment notes.
 
-## Content: <a name="content"></a>
+## Content:
 
-- [Implementation details](#imp-details)
-- [Technical requirements](#tech-details)
+- [Setup and Installation](#setup-and-installation)
+- [Technical requirements](#technical-requirements)
 - [Endpoints](#endpoints)
-  - [Endpoint /register](#endpoints-register)
-  - [Endpoint /login](#endpoints-login)
-  - [Endpoint /user](#endpoints-users)
-  - [Endpoint /loan_types](#endpoints-loan-types)
-  - [Endpoint /max_available_amount](#endpoints-max-available-amount)
-  - [Endpoint /documents](#endpoints-documents)
-  - [Endpoint /applications](#endpoints-applications)
-  - [Endpoint /application/{application_id}/approved](#endpoints-applications-approved)
-  - [Endpoint /repayment_schedule](#endpoint-repayment_schedule)
-  - [Endpoint /repayment_notes](#endpoints-repayment-notes)
+  - [Endpoint /register](#endpoint-register-back-to-content)
+  - [Endpoint /login](#endpoint-login-back-to-content)
+  - [Endpoint /user](#endpoint-users-back-to-content)
+  - [Endpoint /loan_types](#endpoint-loan_types-back-to-content)
+  - [Endpoint /max_available_amount](#endpoint-max_available_amount-back-to-content)
+  - [Endpoint /documents](#endpoint-documents-back-to-content)
+  - [Endpoint /applications](#endpoint-applications-back-to-content)
+  - [Endpoint /application/{application_id}/approved](#endpoint-applicationapplication_idapproved-back-to-content)
+  - [Endpoint /repayment_schedule](#endpoint-repayment_schedule-back-to-content)
+  - [Endpoint /repayment_notes](#endpoint-repayment_notes-back-to-content)
+- [Testing](#testing)
 
-## Implementation details <a name="imp-details"></a>
+## Setup and Installation
 
-Base URL
+**Installation Steps:**
+
+Clone the repository using the following link:
+
+```
+git clone https://github.com/alesanka/FinanceAdvisor
+```
+
+Run the following command to install dependencies:
+
+```
+npm install
+```
+
+Launch Docker using the command:
+
+```
+docker-compose -f up -d
+```
+
+The application's base URL is:
 
 ```
 http://localhost:5000/api/v1/
 ```
 
-## Technical requirements <a name="tech-details"></a>
+## Technical requirements
 
 - Implementation language: JavaScript
 - Framework: Express
@@ -36,9 +57,9 @@ http://localhost:5000/api/v1/
 - Use 18.18.1 LTS version of Node.js
 - Docker container
 
-## Endpoints <a name="endpoints"></a>
+## Endpoints
 
-### Endpoint /register <a name="endpoints-register"></a> [(Back to content)](#content)
+### Endpoint /register [(Back to content)](#content)
 
 **Register a new user account.**
 
@@ -94,7 +115,7 @@ Content-Type: application/json
 }
 ```
 
-### Endpoint /login <a name="endpoints-login"></a> [(Back to content)](#content)
+### Endpoint /login [(Back to content)](#content)
 
 **Login an existing user.**
 When a user attempts to authenticate:
@@ -202,7 +223,7 @@ Content-Type: application/json
 { error: err.message }
 ```
 
-## Endpoint /users <a name="endpoints-users"></a> [(Back to content)](#content)
+## Endpoint /users [(Back to content)](#content)
 
 **Retrieve the users profile information.**
 
@@ -448,7 +469,7 @@ Content-Type: application/json
 
 ```
 
-## Endpoint /loan_types <a name="endpoints-loan-types"></a> [(Back to content)](#content)
+## Endpoint /loan_types [(Back to content)](#content)
 
 **Create a new type of loan.**
 
@@ -669,7 +690,7 @@ Content-Type: application/json
 
 ```
 
-## Endpoint /max_available_amount <a name="endpoints-max-available-amount"></a> [(Back to content)](#content)
+## Endpoint /max_available_amount [(Back to content)](#content)
 
 **Worker save information about max available loan amount for a client with requested loan type.**
 
@@ -798,7 +819,7 @@ Content-Type: application/json
 
 ```
 
-## Endpoint /applications <a name="endpoints-applications"></a> [(Back to content)](#content)
+## Endpoint /applications [(Back to content)](#content)
 
 **Create a new loan application.**
 
@@ -928,7 +949,7 @@ Content-Type: application/json
 
 ```
 
-## Endpoint /documents <a name="endpoints-documents"></a> [(Back to content)](#content)
+## Endpoint /documents [(Back to content)](#content)
 
 **Create a new document.**
 
@@ -1054,7 +1075,7 @@ Content-Type: application/json
 
 ```
 
-## Endpoint /application/{application_id}/approved <a name="endpoints-applications-approved"></a> [(Back to content)](#content)
+## Endpoint /application/{application_id}/approved [(Back to content)](#content)
 
 **Approve the application with the loan amount desired by the client if the required documents are attached to the application.**
 
@@ -1109,7 +1130,7 @@ Content-Type: application/json
 }
 ```
 
-## Endpoint /repayment_schedule <a name="endpoints-repayment_schedule"></a> [(Back to content)](#content)
+## Endpoint /repayment_schedule [(Back to content)](#content)
 
 **Add a repayment schedule for a specific application.**
 
@@ -1296,7 +1317,7 @@ Content-Type: application/json
 
 ```
 
-## Endpoint /repayment_notes <a name="endpoints-repayment-notes"></a> [(Back to content)](#content)
+## Endpoint /repayment_notes [(Back to content)](#content)
 
 **Add a payment note for a client about payment amount and the payment date.**
 
@@ -1432,5 +1453,10 @@ Content-Type: application/json
 }
 
 ```
+
+## Testing
+
+To run tests and for coverage analysis execute `npm test`.
+Ensure Docker is running. These commands integrate seamlessly into your development workflow, ensuring code reliability and overall application quality.
 
 [⬆ Go Up ⬆](#content)
