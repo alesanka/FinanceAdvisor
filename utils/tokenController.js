@@ -1,12 +1,14 @@
 import * as dotenv from 'dotenv';
 import * as model from './tokenModel.js';
-import OAuthServer from '@node-oauth/express-oauth-server';
 import pkg from '@node-oauth/oauth2-server';
 import { TokenDTO } from '../src/dto/tokenDTO.js';
 dotenv.config();
 
-const { Request, Response } = pkg;
-const oauth = new OAuthServer({
+const OAuth2Server = pkg;
+const Request = OAuth2Server.Request;
+const Response = OAuth2Server.Response;
+
+const oauth = new OAuth2Server({
   model: model,
 });
 

@@ -25,7 +25,12 @@ export const passwordHash = async (pswrd) => {
 };
 
 export const passwordValidation = async (pswrd, reposPswrd) => {
-  await bcrypt.compare(pswrd, reposPswrd);
+  const validPassword = await bcrypt.compare(pswrd, reposPswrd);
+
+  if (!validPassword) {
+    return false;
+  }
+
   return true;
 };
 
@@ -112,11 +117,14 @@ export class UserModel {
 
       assertValueExists(user, 'Username is incorrect.');
 
-      const validPassword = passwordValidation(passwordRaw, user.password);
+      const validPassword = await passwordValidation(
+        passwordRaw,
+        user.password
+      );
 
       assertValueExists(validPassword, 'Password is incorrect.');
 
-      const role = await this.userRepos.checkRoleByUserId(user.user_id);
+      const role = await this.userRepos.checkRoleByUserId(user.userDTO.id_user);
 
       return role;
     } catch (err) {

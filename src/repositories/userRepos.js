@@ -41,11 +41,12 @@ export class UserRepos {
   async findUserByUsername(username) {
     try {
       const result = await this.connection.query(
-        'SELECT user_id, username, password FROM users WHERE username = $1;',
+        'SELECT * FROM users WHERE username = $1;',
         [username]
       );
       if (result.rows.length > 0) {
         const user = result.rows[0];
+        const password = user.password;
         const userDTO = new UserDTO(
           user.user_id,
           user.username,
@@ -55,7 +56,9 @@ export class UserRepos {
           user.phone_number,
           user.role
         );
-        return userDTO;
+        console.log(userDTO.user_id);
+
+        return { userDTO, password };
       } else {
         return null;
       }

@@ -23,10 +23,10 @@ export class UserDTO {
 
   static validateEmail(email) {
     const emailSchema = z.string().email();
+    console.log('HERE', email);
     try {
       return emailSchema.parse(email);
     } catch (e) {
-      console.error(e);
       throw new Error('Invalid email format');
     }
   }
