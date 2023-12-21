@@ -29,7 +29,6 @@ export class AuthenticationController {
       checkAllRequiredParamsForToken(req.body);
 
       const role = await this.userModel.loginUser(username, password);
-      console.log('HERE', role);
       if (role === 'admin' || role === 'worker') {
         next();
       } else {

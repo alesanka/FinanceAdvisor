@@ -13,7 +13,6 @@ export const initializeDatabase = async () => {
     try {
       await pool.connect();
       connected = true;
-      console.log('Successfully connected with PostgreSQL.');
     } catch (err) {
       console.error(
         'Error in connection with PostgreSQL, new attempt after 5s:',

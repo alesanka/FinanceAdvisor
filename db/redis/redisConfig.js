@@ -15,6 +15,7 @@ db.on('error', (err) => console.log('Redis Client Error', err));
 (async () => {
   try {
     await db.connect();
+    console.log('Redis connected');
   } catch (err) {
     console.error('Redis connection error:', err);
   }

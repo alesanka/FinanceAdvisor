@@ -56,7 +56,6 @@ export class UserRepos {
           user.phone_number,
           user.role
         );
-        console.log(userDTO.user_id);
 
         return { userDTO, password };
       } else {

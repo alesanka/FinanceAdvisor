@@ -86,6 +86,7 @@ export async function getRefreshToken(bearerToken) {
 }
 
 export async function saveToken(token, client, user) {
+  console.log(user);
   let saveUser = user;
   if (typeof saveUser === 'string') {
     saveUser = { id: user };
@@ -126,8 +127,8 @@ export async function getUser(username) {
     }
 
     return {
-      id: user.user_id,
-      username: user.username,
+      id: user.userDTO.id_user,
+      username: user.userDTO.username,
     };
   } catch (error) {
     console.error('Error fetching user:', error);
